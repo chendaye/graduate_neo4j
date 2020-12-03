@@ -15,7 +15,7 @@ cd sdn-rx
 ----
 
 If you want to only try out the examples with the currently released version,
-pick out the example you like (for example the `reactive-web` example) and build it like this:
+pick out the top.chendaye666.top.chendaye666.example you like (for top.chendaye666.top.chendaye666.example the `reactive-web` top.chendaye666.top.chendaye666.example) and build it like this:
 
 [source,bash]
 ----
@@ -75,7 +75,7 @@ curl http://localhost:8080/movies/by-title\?title\=Aeon%20Flux
 ----
 
 [source,bash]
-.Delete a movie by id (use the one returned above for example)
+.Delete a movie by id (use the one returned above for top.chendaye666.top.chendaye666.example)
 ----
 curl -X DELETE http://localhost:8080/movies/847
 ----
@@ -86,9 +86,9 @@ To make playing with the examples a bit easier, we have support for https://code
 Please follow the instructions at the link above for setting up your Visual Studio Code environment.
 
 Open `reactive-web` in Visual Studio Code and let it build the container.
-The container will for now contain a locally build snapshot of SDN/RX that serves as dependencies for the example.
-The example than can be build and run via Visual Studios support for Spring Boot, which is automatically added to the development container.
+The container will for now contain a locally build snapshot of SDN/RX that serves as dependencies for the top.chendaye666.top.chendaye666.example.
+The top.chendaye666.top.chendaye666.example than can be build and run via Visual Studios support for Spring Boot, which is automatically added to the development container.
 
-The running example can be accessed from the outside as shown above without any further actions.
+The running top.chendaye666.top.chendaye666.example can be accessed from the outside as shown above without any further actions.
 
 At the moment, a locally running Neo4j 4.0 instance is still required, as there is no officially available image yet.

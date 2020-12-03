@@ -12,6 +12,8 @@
 
     <artifactId>rest</artifactId>
 
+
+
     <properties>
         <maven-deploy-plugin.version>3.0.0-M1</maven-deploy-plugin.version>
         <maven-failsafe-plugin.version>3.0.0-M3</maven-failsafe-plugin.version>
