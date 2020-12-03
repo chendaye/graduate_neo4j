@@ -95,7 +95,6 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <!--suppress UnresolvedMavenProperty -->
                     <encoding>${project.build.sourceEncoding}</encoding>
                     <keepBlankLines>true</keepBlankLines>
                     <nrOfIndentSpace>-1</nrOfIndentSpace>
