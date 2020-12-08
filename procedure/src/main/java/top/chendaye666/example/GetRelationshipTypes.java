@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 /**
- * This is an top.chendaye666.top.chendaye666.example showing how you could expose Neo4j's full text indexes as
+ * This is an top.chendaye666.example showing how you could expose Neo4j's full text indexes as
  * two procedures - one for updating indexes, and one for querying by label and
  * the lucene query language.
  */
@@ -21,12 +21,13 @@ public class GetRelationshipTypes {
     public Log log;
 
     /**
+     * todo: MATCH (u:Movie) CALL top.chendaye666.example.getRelationshipTypes(u) YIELD outgoing, incoming RETURN outgoing, incoming
      * This procedure takes a Node and gets the relationships going in and out of it
      *
      * @param node  The node to get the relationships for
      * @return  A RelationshipTypes instance with the relations (incoming and outgoing) for a given node.
      */
-    @Procedure(value = "top.chendaye666.top.chendaye666.example.getRelationshipTypes")
+    @Procedure(value = "top.chendaye666.example.getRelationshipTypes")
     @Description("Get the different relationships going in and out of a node.")
     public Stream<RelationshipTypes> getRelationshipTypes(@Name("node") Node node) {
         List<String> outgoing = new ArrayList<>();

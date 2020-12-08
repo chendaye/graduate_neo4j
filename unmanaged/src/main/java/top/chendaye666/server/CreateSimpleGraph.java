@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package top.chendaye666;
+package top.chendaye666.server;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;

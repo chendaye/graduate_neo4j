@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package top.chendaye666.unmanaged;
+package top.chendaye666.server.unmanaged;
 
 import com.fasterxml.jackson.core.JsonEncoding;
 import com.fasterxml.jackson.core.JsonGenerator;

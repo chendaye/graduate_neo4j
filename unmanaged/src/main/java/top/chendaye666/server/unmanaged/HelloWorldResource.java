@@ -16,10 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package top.chendaye666.unmanaged;
-
-import org.neo4j.dbms.api.DatabaseManagementService;
-import org.neo4j.string.UTF8;
+package top.chendaye666.server.unmanaged;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -29,6 +26,9 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+
+import org.neo4j.dbms.api.DatabaseManagementService;
+import org.neo4j.string.UTF8;
 
 // tag::HelloWorldResource[]
 @Path( "/helloworld" )
