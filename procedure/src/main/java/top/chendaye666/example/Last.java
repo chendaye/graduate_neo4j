@@ -3,12 +3,12 @@ package top.chendaye666.example;
 import org.neo4j.procedure.*;
 
 /**
- * This is an top.chendaye666.top.chendaye666.example how you can create a simple user-defined function for Neo4j.
+ * This is an top.chendaye666.example how you can create a simple user-defined function for Neo4j.
  */
 public class Last {
 
-    @UserAggregationFunction("top.chendaye666.top.chendaye666.example.last")
-    @Description("top.chendaye666.top.chendaye666.example.last(value) - returns last non-null row")
+    @UserAggregationFunction("top.chendaye666.example.last")
+    @Description("top.chendaye666.example.last(value) - returns last non-null row")
     public LastFunction last() {
         return new LastFunction();
     }

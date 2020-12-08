@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package top.chendaye666;
+package top.chendaye666.server;
 
 public class Relation
 {

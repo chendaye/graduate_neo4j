@@ -48,7 +48,12 @@
             <groupId>org.neo4j.test</groupId>
             <artifactId>neo4j-harness</artifactId>
         </dependency>
-<!--        <dependency>-->
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!--        <dependency>-->
 <!--            <groupId>org.neo4j.doc</groupId>-->
 <!--            <artifactId>test-framework</artifactId>-->
 <!--            <version>${neo4j.version}</version>-->
