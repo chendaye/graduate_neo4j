@@ -8,7 +8,6 @@ git clone --depth 1  https://github.com/neo4j/neo4j-documentation.git
 git config --global credential.helper store
 ```
 
-[neo4j 案例仓库](https://github.com/neo4j/neo4j-documentation/tree/4.2)
 
 
 # 配置扩展目录
