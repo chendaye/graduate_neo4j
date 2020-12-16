@@ -26,16 +26,12 @@ sed -i -e '1i\
 sed -e "s/ //g" physician-shared-patient-patterns-2015-days30.txt > shared_members.csv
 
 # 导入数据
-neo4j-enterprise-2.3.2/bin/neo4j-import 
---into neo4j-enterprise-2.3.2/data/graph.db 
---nodes:Provider providers.csv 
---relationships:SHARE_MEMBER shared_members.csv
-
+./neo4j-admin import --database graduate --nodes=..//import/providers.csv --relationships=SHARE_MEMBER=../import/shared_members.csv
 ```
 
 ```bash
 # 原始数据
-    :START_ID(Provider),:END_ID(Provider),transactions:int,patients:int,max_day:int
+ :START_ID(Provider),:END_ID(Provider),transactions:int,patients:int,max_day:int
 1000026017,1598773715,56        ,23        ,29
 1000310429,1144645573,68        ,12        ,36
 1003000126,1003951625,147       ,53        ,28
@@ -44,7 +40,7 @@ neo4j-enterprise-2.3.2/bin/neo4j-import
 
 
 # provider
-            npi:ID(Provider)
+npi:ID(Provider)
 1000026017
 1000310429
 1003000126
