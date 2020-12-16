@@ -27,6 +27,13 @@ sed -e "s/ //g" physician-shared-patient-patterns-2015-days30.txt > shared_membe
 
 # 导入数据
 ./neo4j-admin import --database graduate --nodes=..//import/providers.csv --relationships=SHARE_MEMBER=../import/shared_members.csv
+
+
+# 数据量
+mported:
+  961309 nodes
+  34856901 relationships
+  105532012 properties
 ```
 
 ```bash
