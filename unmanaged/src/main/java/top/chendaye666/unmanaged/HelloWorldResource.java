@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package top.chendaye666.server.unmanaged;
+package top.chendaye666.unmanaged;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

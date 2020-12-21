@@ -3,9 +3,6 @@ package server.unmanaged;
 import org.junit.Rule;
 import org.junit.Test;
 
-import org.junit.Rule;
-import org.junit.Test;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -13,8 +10,8 @@ import java.util.Map;
 //import org.neo4j.doc.server.HTTP;
 import org.neo4j.harness.junit.rule.Neo4jRule;
 import org.neo4j.test.server.HTTP;
-import top.chendaye666.server.unmanaged.ColleaguesCypherExecutionResource;
-import top.chendaye666.server.unmanaged.ColleaguesResource;
+import top.chendaye666.unmanaged.ColleaguesCypherExecutionResource;
+import top.chendaye666.unmanaged.ColleaguesResource;
 
 import static junit.framework.TestCase.assertEquals;
 import static org.hamcrest.CoreMatchers.equalTo;

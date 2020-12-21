@@ -2,7 +2,11 @@ package top.chendaye666.physiciansharedpatient;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.neo4j.string.UTF8;
+import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Transaction;
+import org.neo4j.procedure.Context;
+
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -17,8 +21,8 @@ import java.util.Map;
 /**
  * 算法实现
  */
-@Path( "/louvain" )
-public class Louvain {
+@Path( "/starter" )
+public class Starter {
     // jackson
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -39,4 +43,18 @@ public class Louvain {
         }};
         return Response.ok().entity(objectMapper.writeValueAsString(results)).build();
     }
+
+//    @GET
+//    @Path("/useNeo4j")
+//    public Response useNeo4j(@Context GraphDatabaseService db) throws IOException{
+//        HashMap<String, String> results = new HashMap<>() {
+//            {
+//                put("use", "neo4j");
+//            }
+//        };
+//
+//        try(Transaction tx = db.beginTx()) {
+//            for (Node n : Global)
+//        }
+//    }
 }

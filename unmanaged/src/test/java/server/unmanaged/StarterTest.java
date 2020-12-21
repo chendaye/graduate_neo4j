@@ -6,19 +6,18 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.neo4j.harness.junit.rule.Neo4jRule;
 import org.neo4j.test.server.HTTP;
-import top.chendaye666.physiciansharedpatient.Louvain;
+import top.chendaye666.physiciansharedpatient.Starter;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertTrue;
 
-public class LouvainTest {
+public class StarterTest {
     // jackson
     private static final ObjectMapper objectMapper = new ObjectMapper();
     @Rule
-    public Neo4jRule neo4jRule = new Neo4jRule().withFixture(MODEL_STATEMENT).withUnmanagedExtension("/algorithm", Louvain.class);
+    public Neo4jRule neo4jRule = new Neo4jRule().withFixture(MODEL_STATEMENT).withUnmanagedExtension("/algorithm", Starter.class);
 
     // 构建测试图
     public static final String MODEL_STATEMENT =
@@ -44,7 +43,7 @@ public class LouvainTest {
 
     @Test
     public void respondTest() {
-        HTTP.Response response = HTTP.GET(neo4jRule.httpURI().resolve("/algorithm/louvain/hello/123").toString());
+        HTTP.Response response = HTTP.GET(neo4jRule.httpURI().resolve("/algorithm/starter/hello/123").toString());
 
         System.out.println(response.content().toString());
 //        assertTrue(actual.equals(expected));
@@ -56,7 +55,7 @@ public class LouvainTest {
 
     @Test
     public void helloTest() throws JsonProcessingException {
-        HTTP.Response response = HTTP.GET(neo4jRule.httpURI().resolve("/algorithm/louvain/helloworld").toString());
+        HTTP.Response response = HTTP.GET(neo4jRule.httpURI().resolve("/algorithm/starter/helloworld").toString());
         HashMap actual = response.content();
         System.out.println(actual.get("hello"));
     }
