@@ -35,7 +35,6 @@
         <dependency>
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-client</artifactId>
-            <version>1.19.3</version>
             <exclusions>
                 <exclusion>
                     <groupId>javax.ws.rs</groupId>
@@ -49,12 +48,14 @@
             <artifactId>neo4j-harness</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.hamcrest/hamcrest -->
         <dependency>
             <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest</artifactId>
-            <version>${neo4j.version}</version>
+            <artifactId>hamcrest-core</artifactId>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.neo4j</groupId>
             <artifactId>neo4j-kernel</artifactId>
@@ -75,10 +76,17 @@
             <version>${neo4j.version}</version>
             <type>test-jar</type>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId></groupId>-->
-<!--            <artifactId>junit</artifactId>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.hamcrest</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
     </dependencies>
 
