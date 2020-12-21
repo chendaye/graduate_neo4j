@@ -89,7 +89,7 @@ CREATE INDEX index_physicianId FOR (n:Physician) ON (n.physicianId);
 
 sed -i '1i startId,endId,transactions,patients,max_day' ./shared_members.csv
 
-LOAD CSV WITH HEADERS FROM 'file:///shared_members.csv' AS row MATCH (e:Physician {physicianId: row.startId}) MATCH (c:Physician {physicianId: row.endId}) CREATE  (e)-[:SHARE_MEMBER { transactions:toInteger(row.transactions), patients:toInteger(row.patients), max_day:toInteger(row.max_day)}]->(c);
+LOAD CSV WITH HEADERS FROM 'file:///shared_members_mini_0.csv' AS row MATCH (e:Physician {physicianId: row.startId}) MATCH (c:Physician {physicianId: row.endId}) MERGE  (e)-[:SHARE_MEMBER { transactions:toInteger(row.transactions), patients:toInteger(row.patients), max_day:toInteger(row.max_day)}]->(c);
 
 # 建立一个关系
 MATCH (e:Physician {physicianId: "1003001017"}) MATCH (c:Physician {physicianId: "1003001108"}) MERGE  (e)-[:SHARE_MEMBER { transactions:12, patients:8, max_day:2}]->(c);

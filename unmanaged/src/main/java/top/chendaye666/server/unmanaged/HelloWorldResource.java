@@ -43,7 +43,7 @@ public class HelloWorldResource
 
     @GET
     @Produces( MediaType.TEXT_PLAIN )
-    @Path( "/{nodeId}" )
+    @Path( "/{nodeId}" ) // http://www.lengo.top:7474/unmanaged/test/helloworld/123
     public Response hello( @PathParam( "nodeId" ) long nodeId )
     {
         // Do stuff with the database
