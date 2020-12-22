@@ -45,7 +45,7 @@ public class Starter {
     }
 
     @GET
-    @Path("/useNeo4j")
+    @Path("/useneo4j")
     public Response useNeo4j(@Context GraphDatabaseService db) throws IOException{
         HashMap<String, String> results = new HashMap<>() {
             {

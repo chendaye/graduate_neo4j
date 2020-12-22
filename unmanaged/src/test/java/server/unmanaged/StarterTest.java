@@ -17,7 +17,9 @@ public class StarterTest {
     // jackson
     private static final ObjectMapper objectMapper = new ObjectMapper();
     @Rule
-    public Neo4jRule neo4jRule = new Neo4jRule().withFixture(MODEL_STATEMENT).withUnmanagedExtension("/algorithm", Starter.class);
+    public Neo4jRule neo4jRule = new Neo4jRule()
+            .withFixture(MODEL_STATEMENT)
+            .withUnmanagedExtension("/algorithm", Starter.class);
 
     // 构建测试图
     public static final String MODEL_STATEMENT =
@@ -46,18 +48,21 @@ public class StarterTest {
         HTTP.Response response = HTTP.GET(neo4jRule.httpURI().resolve("/algorithm/starter/hello/123").toString());
 
         System.out.println(response.content().toString());
-//        assertTrue(actual.equals(expected));
-//
-//        response = HTTP.GET(neo4j.httpURI().resolve("/v1/service/dump").toString());
-//        ArrayList<HashMap<String, Object>> results  = response.content();
-//        assertArrayEquals(nodes.toArray(), results.toArray());
     }
 
     @Test
     public void helloTest() throws JsonProcessingException {
         HTTP.Response response = HTTP.GET(neo4jRule.httpURI().resolve("/algorithm/starter/helloworld").toString());
         HashMap actual = response.content();
-        System.out.println(actual.get("hello"));
+        System.out.println(actual);
+    }
+
+
+    @Test
+    public void tmpTest() {
+        HTTP.Response response = HTTP.GET(neo4jRule.httpURI().resolve("/algorithm/starter/useneo4j").toString());
+        HashMap actual = response.content();
+        System.out.println(actual);
     }
 
 

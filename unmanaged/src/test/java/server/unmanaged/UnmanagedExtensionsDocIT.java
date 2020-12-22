@@ -55,6 +55,7 @@ public class UnmanagedExtensionsDocIT
         HTTP.Response response = HTTP.GET( neo4j.httpURI().resolve(
                 "/path/to/my/extension2/colleagues/Keanu%20Reeves" ).toString() );
 
+        System.out.println(response.toString());
         // Then
         assertEquals( 200, response.status() );
 
