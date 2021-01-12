@@ -1,0 +1,35 @@
+#
+## Makefile for non-Microsoft compilers
+#
+
+CFLAGS = -std=c++11
+CFLAGS += -ggdb
+
+all: $(MAIN)
+
+# COMPILE
+
+# compile Snap
+$(EXSNAP)/Snap.o:
+	make -C $(EXSNAP)
+            
+fptree.o: fptree.cpp fptree.h def.h
+	g++ -c fptree.cpp -o fptree.o  -I$(EXGLIB) -I$(EXSNAP) -I$(EXGLIBADV) -I$(EXSNAPADV)
+
+common.o: common.cpp common.h def.h
+		g++ -c common.cpp -o common.o  -I$(EXGLIB) -I$(EXSNAP) -I$(EXGLIBADV) -I$(EXSNAPADV)
+
+EquiTrussAttribute.o: EquiTrussAttribute.cpp EquiTrussAttribute.h def.h
+		g++ -c EquiTrussAttribute.cpp -o EquiTrussAttribute.o  -I$(EXGLIB) -I$(EXSNAP) -I$(EXGLIBADV) -I$(EXSNAPADV)
+
+	
+$(MAIN): $(MAIN).cpp fptree.o common.o  EquiTrussAttribute.o    $(EXSNAP)/Snap.o
+	$(CC) $(CXXFLAGS) $(CFLAGS) -o $(MAIN) $(MAIN).cpp common.o  \
+	 EquiTrussAttribute.cpp  fptree.o  $(EXSNAP)/Snap.o -I$(EXGLIB) -I$(EXSNAP) -I$(EXGLIBADV) -I$(EXSNAPADV) \
+	  $(LDFLAGS) $(LIBS)
+
+clean:
+	rm -f *.o  $(MAIN)  $(MAIN).exe
+	rm -rf Debug Release
+
+    

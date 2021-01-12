@@ -1,0 +1,28 @@
+#
+## Makefile for non-Microsoft compilers
+#
+
+CFLAGS = -std=c++11
+CFLAGS += -ggdb
+
+all: $(MAIN)
+
+# COMPILE
+
+$(EXSNAP)/Snap.o:
+	make -C $(EXSNAP)
+            
+fptree.o: fptree.cpp
+	g++ -c fptree.cpp -o fptree.o 
+
+#dblp.o: dblp.cpp
+#	g++ -c dblp.cpp -o dblp.o
+	
+$(MAIN): $(MAIN).cpp dblp.cpp EquiTrussAttribute.cpp DataProcess.cpp EquiTree.cpp SetIter.cpp fptree.o $(DEPH) $(DEPCPP) $(EXSNAP)/Snap.o
+	$(CC) $(CXXFLAGS) $(CFLAGS) -o $(MAIN) $(MAIN).cpp dblp.cpp EquiTrussAttribute.cpp EquiTree.cpp SetIter.cpp fptree.o $(DEPCPP) $(EXSNAP)/Snap.o -I$(EXSNAP) -I$(EXSNAPADV) -I$(EXGLIB) -I$(EXSNAPEXP) $(LDFLAGS) $(LIBS)
+
+clean:
+	rm -f *.o  $(MAIN)  $(MAIN).exe
+	rm -rf Debug Release
+
+    
