@@ -192,9 +192,9 @@ gcc -pipe -o hello.exe hello.c
 
 ```bash
 # equiTruss
-./main.o /data/code/graduate_neo4j/unmanaged/src/main/resources/equitruss/dblp_datasets/Graph/dblp20%_vertices.txt \
- /data/code/graduate_neo4j/unmanaged/src/main/resources/equitruss/dblp_datasets/Attribute/dblp_attributes_int.txt \
- /data/code/graduate_neo4j/unmanaged/src/main/resources/equitruss/dblp_datasets/Queries/vertices_rand300_6truss_dblp.txt \
+./main.o ./dblp_datasets/Graph/dblp20%_vertices.txt \
+ ./dblp_datasets/Attribute/dblp_attributes_int.txt \
+ ./dblp_datasets/Queries/vertices_rand300_6truss_dblp.txt \
 ./dblp_datasets/result \
 4 \
 3 \
@@ -205,8 +205,8 @@ gcc -pipe -o hello.exe hello.c
 ./dblp_datasets/minim/attr.txt \
 ./dblp_datasets/minim/query.txt \
  ./dblp_datasets/result \
-1 \
-1 \
+3 \
+3 \
 1
 ```
 
