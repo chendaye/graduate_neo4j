@@ -1,4 +1,5 @@
-﻿#include "EquiTrussAttribute.h"
+﻿
+#include "EquiTrussAttribute.h"
 #include "common.h"
 
 using namespace std;
