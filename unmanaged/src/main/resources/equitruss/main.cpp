@@ -120,9 +120,9 @@ int main(int argc, char **argv)
 
     /*****************************************************************************************************/
 
-	FILE* TestDataFile = fopen(query, "r");
-	FILE* resultFile = fopen(result, "w");
-	FILE* detailFile = fopen(detail, "w");
+	FILE* TestDataFile = fopen(query, "r"); // query vertex
+	FILE* resultFile = fopen(result, "w"); // attr community
+	FILE* detailFile = fopen(detail, "w"); // all community
 	fprintf(resultFile, "index\tvertex\tquery_k\ttime\tresult_community_count\tquery_attribute_set\n");
 	while (!feof(TestDataFile))
 	{
