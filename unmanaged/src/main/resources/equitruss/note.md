@@ -205,8 +205,8 @@ gcc -pipe -o hello.exe hello.c
 ./dblp_datasets/minim/attr.txt \
 ./dblp_datasets/minim/query.txt \
  ./dblp_datasets/result \
-3 \
-2 \
+1 \
+1 \
 1
 ```
 

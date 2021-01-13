@@ -16,6 +16,9 @@ $(EXSNAP)/Snap.o:
 fptree.o: fptree.cpp fptree.h def.h
 	g++ -c fptree.cpp -o fptree.o  -I$(EXGLIB) -I$(EXSNAP) -I$(EXGLIBADV) -I$(EXSNAPADV)
 
+algo.o: EquiTrussAttribute.cpp common.h
+	g++ -c algo.cpp -o algo.o  -I$(EXGLIB) -I$(EXSNAP) -I$(EXGLIBADV) -I$(EXSNAPADV)
+
 common.o: common.cpp common.h def.h
 		g++ -c common.cpp -o common.o  -I$(EXGLIB) -I$(EXSNAP) -I$(EXGLIBADV) -I$(EXSNAPADV)
 
@@ -23,9 +26,9 @@ EquiTrussAttribute.o: EquiTrussAttribute.cpp EquiTrussAttribute.h def.h
 		g++ -c EquiTrussAttribute.cpp -o EquiTrussAttribute.o  -I$(EXGLIB) -I$(EXSNAP) -I$(EXGLIBADV) -I$(EXSNAPADV)
 
 	
-$(MAIN): $(MAIN).cpp fptree.o common.o  EquiTrussAttribute.o    $(EXSNAP)/Snap.o
+$(MAIN): $(MAIN).cpp fptree.o common.o algo.o  EquiTrussAttribute.o    $(EXSNAP)/Snap.o
 	$(CC) $(CXXFLAGS) $(CFLAGS) -o $(MAIN).o $(MAIN).cpp  \
-	 EquiTrussAttribute.o common.o  fptree.o  $(EXSNAP)/Snap.o -I$(EXGLIB) -I$(EXSNAP) -I$(EXGLIBADV) -I$(EXSNAPADV) \
+	 EquiTrussAttribute.o common.o algo.o  fptree.o  $(EXSNAP)/Snap.o -I$(EXGLIB) -I$(EXSNAP) -I$(EXGLIBADV) -I$(EXSNAPADV) \
 	  $(LDFLAGS) $(LIBS)
 
 clean:
