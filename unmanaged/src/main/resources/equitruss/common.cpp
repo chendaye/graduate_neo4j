@@ -208,3 +208,42 @@ string ShowCommunitySize(vector<pair<Community, set<int> > > R, FILE* file)
 	}
     return communities_str;
 }
+
+// vector<edge_pair, attr_set>
+string ShowCommunitySizeNeo4j(vector<pair<Community, set<int> > > R)
+{
+    string communities_str = "";
+    if (R.size() != 0)
+    {
+        // R: communities
+        for (int i = 0; i < R.size(); i++) {
+            // nodes
+            set<int> nodes; // nodes
+            for (vector<edgePair>::iterator it = R[i].first.begin(); it != R[i].first.end(); it++)
+            {
+                nodes.insert(it->first);
+                nodes.insert(it->second);
+            }
+            string nodes_str;
+            for(auto node : nodes){
+                nodes_str.append(to_string(node));
+                nodes_str.append(",");
+            }
+            nodes_str.pop_back();
+            nodes_str.append("#"); // split node and attr
+            // attr
+            for (attrType str :	R[i].second)
+            {
+                nodes_str.append(to_string(str));
+                nodes_str.append(",");
+            }
+            nodes_str.pop_back();
+            communities_str.append(nodes_str);
+            communities_str.append("@");
+            nodes.clear();
+        }
+        communities_str.pop_back();
+    }
+    return communities_str;
+}
+

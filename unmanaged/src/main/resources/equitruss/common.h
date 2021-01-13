@@ -8,3 +8,4 @@ void EdgeSupport(PUNGraph graph, unordered_map<edgePair, int, pair_hash>& sup, s
 int TrussDecomposition(PUNGraph G, unordered_map<int, int>& nodeTrussness, unordered_map<edgePair, int, pair_hash>& edgeTrussness);
 bool cmp(node a, node b);
 string ShowCommunitySize(vector<pair<Community, set<int> > > R, FILE* file);
+string ShowCommunitySizeNeo4j(vector<pair<Community, set<int> > > R);
