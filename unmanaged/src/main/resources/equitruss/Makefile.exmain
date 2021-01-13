@@ -5,9 +5,10 @@
 CFLAGS = -std=c++11
 CFLAGS += -ggdb
 
-all: $(MAIN)
+.PHONY: all
+all: $(MAIN) $(NEO4J)
 
-# COMPILE
+
 
 # compile Snap
 $(EXSNAP)/Snap.o:
@@ -25,9 +26,16 @@ common.o: common.cpp common.h def.h
 EquiTrussAttribute.o: EquiTrussAttribute.cpp EquiTrussAttribute.h def.h
 		g++ $(CXXFLAGS) -c EquiTrussAttribute.cpp -o EquiTrussAttribute.o  -I$(EXGLIB) -I$(EXSNAP) -I$(EXGLIBADV) -I$(EXSNAPADV)
 
-	
+# main
 $(MAIN): $(MAIN).cpp fptree.o common.o algo.o  EquiTrussAttribute.o    $(EXSNAP)/Snap.o
 	$(CC) $(CXXFLAGS) $(CFLAGS) -o $(MAIN).o $(MAIN).cpp  \
+	 EquiTrussAttribute.o common.o algo.o  fptree.o  $(EXSNAP)/Snap.o -I$(EXGLIB) -I$(EXSNAP) -I$(EXGLIBADV) -I$(EXSNAPADV) \
+	  $(LDFLAGS) $(LIBS)
+
+
+# neo4j
+$(NEO4J): $(NEO4J).cpp fptree.o common.o algo.o  EquiTrussAttribute.o    $(EXSNAP)/Snap.o
+	$(CC) $(CXXFLAGS) $(CFLAGS) -o $(NEO4J).o $(NEO4J).cpp  \
 	 EquiTrussAttribute.o common.o algo.o  fptree.o  $(EXSNAP)/Snap.o -I$(EXGLIB) -I$(EXSNAP) -I$(EXGLIBADV) -I$(EXSNAPADV) \
 	  $(LDFLAGS) $(LIBS)
 

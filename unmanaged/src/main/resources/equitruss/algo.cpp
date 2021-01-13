@@ -96,11 +96,11 @@ string searchNeo4j(EquiTrussAttribute obj, int q_vertex,  int k_value = 3, int a
     }
     attrStr.pop_back();
     string res;
-    res.append(to_string(q_vertex)+",");
-    res.append(to_string(k_value)+",");
-    res.append(to_string(time)+",");
-    res.append(to_string(resultSize)+",");
-    res.append(attrStr+",");
+    res.append(to_string(q_vertex)+":");
+    res.append(to_string(k_value)+":");
+    res.append(to_string(time)+":");
+    res.append(to_string(resultSize)+":");
+    res.append(attrStr+":");
     res.append(communities_str);
     return res;
 }

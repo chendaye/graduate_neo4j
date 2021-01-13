@@ -200,12 +200,29 @@ gcc -pipe -o hello.exe hello.c
 3 \
 1
 
+# neo4j
+./neo4j.o ./dblp_datasets/Graph/dblp20%_vertices.txt \
+ ./dblp_datasets/Attribute/dblp_attributes_int.txt \
+ 304565 \
+./dblp_datasets/result \
+4 \
+3 \
+1
+
 # minim
 ./main.o ./dblp_datasets/minim/graph.txt \
 ./dblp_datasets/minim/attr.txt \
 ./dblp_datasets/minim/query.txt \
  ./dblp_datasets/result \
+4 \
 3 \
+1
+
+./neo4j.o ./dblp_datasets/minim/graph.txt \
+./dblp_datasets/minim/attr.txt \
+4 \
+ ./dblp_datasets/result \
+4 \
 3 \
 1
 ```
