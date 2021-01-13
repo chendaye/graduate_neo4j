@@ -24,8 +24,8 @@ EquiTrussAttribute.o: EquiTrussAttribute.cpp EquiTrussAttribute.h def.h
 
 	
 $(MAIN): $(MAIN).cpp fptree.o common.o  EquiTrussAttribute.o    $(EXSNAP)/Snap.o
-	$(CC) $(CXXFLAGS) $(CFLAGS) -o $(MAIN) $(MAIN).cpp common.o  \
-	 EquiTrussAttribute.cpp  fptree.o  $(EXSNAP)/Snap.o -I$(EXGLIB) -I$(EXSNAP) -I$(EXGLIBADV) -I$(EXSNAPADV) \
+	$(CC) $(CXXFLAGS) $(CFLAGS) -o $(MAIN) $(MAIN).cpp  \
+	 EquiTrussAttribute.o common.o  fptree.o  $(EXSNAP)/Snap.o -I$(EXGLIB) -I$(EXSNAP) -I$(EXGLIBADV) -I$(EXSNAPADV) \
 	  $(LDFLAGS) $(LIBS)
 
 clean:
