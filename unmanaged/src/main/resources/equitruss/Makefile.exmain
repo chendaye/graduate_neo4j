@@ -24,12 +24,13 @@ EquiTrussAttribute.o: EquiTrussAttribute.cpp EquiTrussAttribute.h def.h
 
 	
 $(MAIN): $(MAIN).cpp fptree.o common.o  EquiTrussAttribute.o    $(EXSNAP)/Snap.o
-	$(CC) $(CXXFLAGS) $(CFLAGS) -o $(MAIN) $(MAIN).cpp  \
+	$(CC) $(CXXFLAGS) $(CFLAGS) -o $(MAIN).o $(MAIN).cpp  \
 	 EquiTrussAttribute.o common.o  fptree.o  $(EXSNAP)/Snap.o -I$(EXGLIB) -I$(EXSNAP) -I$(EXGLIBADV) -I$(EXSNAPADV) \
 	  $(LDFLAGS) $(LIBS)
 
 clean:
 	rm -f *.o  $(MAIN)  $(MAIN).exe
 	rm -rf Debug Release
+	rm -f *.o.Err
 
     

@@ -28,28 +28,48 @@ int main(int argc, char **argv)
 	const char* query = str3.data(); // 1114924	7
 
 	/*******************************write******************************************/
+    // result path
+    string str4 = string(argv[4]);
 
-	string str4 = string(argv[4]); // time result file； write
-	const char* result = str4.data();
+    // create result path
+    string cmd1 = "rm -rf  " + str4;
+    system(cmd1.data());
+    string cmd2 = "mkdir -p -m 777 " + str4;
+    system(cmd2.data());
 
 
-	string str6 = string(argv[6]); // result detail file； write
-	const char* detail = str6.data();
 
-    // Build MTIndex
-    string str5 = string(argv[5]); // attribute equitruss index file； write
-    const char* attrTruss = str5.data();
+	 // time result file； write
+	string query_result = str4 + string("/query_result.txt");
+	const char* result = query_result.data();
 
-	// Build the equitruss index
-	string equi_index_path = string(argv[7]); // the path where to save equitruss index
-	string SEdge = equi_index_path + string("SEdge.txt");
-	string SNode = equi_index_path + string("SNode.txt");
-	string SEdgeTruss = equi_index_path + string("SEdgeTruss.txt");
-	string SNodeTruss = equi_index_path + string("SNodeTruss.txt");
-	const char* SEdge_c = SEdge.data(); // superNode_file
-	const char* SNode_c = SNode.data(); // superEdge_file
-	const char* SEdgeTruss_c = SEdgeTruss.data(); // nodeTruss_file
-	const char* SNodeTruss_c = SNodeTruss.data(); // edgeTruss_file
+
+	// result detail file； write
+	string community_result = str4 + string("/community_result.txt");
+	const char* detail = community_result.data();
+
+    // Build MTIndex attribute equitruss index file； write
+    string mt_index = str4 + string("/mt_index.txt");
+    const char* attrTruss = mt_index.data();
+
+	// Build the equitruss index the path where to save equitruss index
+	// superNode_file
+	string SEdge = str4 + string("/SEdge.txt");
+	const char* SEdge_c = SEdge.data();
+
+    // superEdge_file
+	string SNode = str4 + string("/SNode.txt");
+	const char* SNode_c = SNode.data();
+
+    // nodeTruss_file
+	string SEdgeTruss = str4 + string("/SEdgeTruss.txt");
+	const char* SEdgeTruss_c = SEdgeTruss.data();
+
+    // edgeTruss_file
+	string SNodeTruss = str4 + string("/SNodeTruss.txt");
+	const char* SNodeTruss_c = SNodeTruss.data();
+
+
 
 	/*****************************************************************************************************/
 
@@ -86,14 +106,17 @@ int main(int argc, char **argv)
 
 	int attrNumMax = 20, number = 0, attr_count, k_value, selection;
 
-	cout << "Please specify the query k value: ";
-	cin >> k_value;
+    k_value = stoi(argv[5]);
+//	cout << "Please specify the query k value: ";
+//	cin >> k_value;
 
-	cout << "Please specify the amount of query attribute: ";
-	cin >> attr_count;
+    attr_count = stoi(argv[6]);
+//	cout << "Please specify the amount of query attribute: ";
+//	cin >> attr_count;
 
-	cout << "Enter 1 for CAC-MTIndexI, and 2 for CAC-MTIndexD: ";
-	cin >> selection;
+    selection = stoi(argv[7]);
+//	cout << "Enter 1 for CAC-MTIndexI, and 2 for CAC-MTIndexD: ";
+//	cin >> selection;
 
     /*****************************************************************************************************/
 
