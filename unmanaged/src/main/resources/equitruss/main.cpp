@@ -3,6 +3,67 @@
 
 using namespace std;
 
+
+void search(EquiTrussAttribute obj, int q_vertex,  FILE* resultFile, FILE* detailFile, int k_value = 3, int attr_count = 3, int selection = 1){
+    int attr_cnt;
+    int attrNumMax = 20; // max number attr
+    // Generate the query attribute set SATR, based on the attribute set of the query vertex
+    set<attrType> SAttr;
+    for (auto attr : obj.attributesOfVertex[q_vertex])
+    {
+        SAttr.insert(attr);
+    }
+    int maxn_attr = SAttr.size();
+    maxn_attr = min(maxn_attr, attrNumMax);
+    attr_cnt = attr_count > maxn_attr ? maxn_attr : attr_count;
+    set<attrType> SATR;
+    int cnt = 0;
+    for (auto attr : SAttr)
+    {
+        if (cnt >= attr_cnt)
+        {
+            break;
+        }
+        SATR.insert(attr);
+        cnt++;
+    }
+
+    double time = -1;
+    int resultSize = -1;
+    clock_t startTime = clock();
+    string communities_str;
+    auto communities = selection == 2 ? obj.CAC_MTIndexD(k_value, q_vertex, SATR) : obj.CAC_MTIndexI(k_value, q_vertex, SATR);
+    time = (double)(clock() - startTime) / CLOCKS_PER_SEC;
+    if (communities.size() > 0)
+    {
+        fprintf(detailFile, "Query vertex: %d\n", q_vertex);
+        communities_str = ShowCommunitySize(communities, detailFile);
+        fprintf(detailFile, "\n");
+    }
+    resultSize = communities.size();
+
+
+    // Output the query attribute set
+    string attrStr;
+    for (auto attr: SATR)
+    {
+        attrStr.append(to_string(attr));
+        attrStr.append(",");
+    }
+    attrStr.pop_back();
+    fprintf(resultFile, "%d\t%d\t%lf\t%d\t%s\t%s\n", q_vertex, k_value, time, resultSize, attrStr.data(), communities_str.data());
+}
+
+void clearResult(char *path){
+    string str4 = string(path);
+    // create result path
+    string cmd1 = "rm -rf  " + str4;
+    system(cmd1.data());
+    string cmd2 = "mkdir -p -m 777 " + str4;
+    system(cmd2.data());
+}
+
+
 /**
  * todo: input:
  *  - graph data file : argv[1]
@@ -29,20 +90,12 @@ int main(int argc, char **argv)
 
 	/*******************************write******************************************/
     // result path
+    clearResult(argv[4]);
+
     string str4 = string(argv[4]);
-
-    // create result path
-    string cmd1 = "rm -rf  " + str4;
-    system(cmd1.data());
-    string cmd2 = "mkdir -p -m 777 " + str4;
-    system(cmd2.data());
-
-
-
 	 // time result file； write
 	string query_result = str4 + string("/query_result.txt");
 	const char* result = query_result.data();
-
 
 	// result detail file； write
 	string community_result = str4 + string("/community_result.txt");
@@ -68,15 +121,11 @@ int main(int argc, char **argv)
     // edgeTruss_file
 	string SNodeTruss = str4 + string("/SNodeTruss.txt");
 	const char* SNodeTruss_c = SNodeTruss.data();
-
-
-
-	/*****************************************************************************************************/
-
+	
 	EquiTrussAttribute obj;
 	
 	printf("==========Read graph data file==========\n");
-	obj.G = TSnap::LoadEdgeList<PUNGraph>(ungraph, 0, 1);  
+	obj.G = TSnap::LoadEdgeList<PUNGraph>(ungraph, 0, 1);
 	printf("nodes = %d\n", obj.G->GetNodes());
 	printf("edges = %d\n", obj.G->GetEdges());
 	printf("Run Time: %f s\n\n", ((double)(clock() - startTime) / CLOCKS_PER_SEC));
@@ -102,96 +151,22 @@ int main(int argc, char **argv)
 
 	printf("==========Start querying==========\n");
 
-
-
-	int attrNumMax = 20, number = 0, attr_count, k_value, selection;
-
-    k_value = stoi(argv[5]);
-//	cout << "Please specify the query k value: ";
-//	cin >> k_value;
-
-    attr_count = stoi(argv[6]);
-//	cout << "Please specify the amount of query attribute: ";
-//	cin >> attr_count;
-
-    selection = stoi(argv[7]);
-//	cout << "Enter 1 for CAC-MTIndexI, and 2 for CAC-MTIndexD: ";
-//	cin >> selection;
-
-    /*****************************************************************************************************/
+    int k_value = stoi(argv[5]);
+    int attr_count = stoi(argv[6]);
+    int selection = stoi(argv[7]);
 
 	FILE* TestDataFile = fopen(query, "r"); // query vertex
 	FILE* resultFile = fopen(result, "w"); // attr community
 	FILE* detailFile = fopen(detail, "w"); // all community
-	fprintf(resultFile, "index\tvertex\tquery_k\ttime\tresult_community_count\tquery_attribute_set\n");
+	fprintf(resultFile, "vertex\tquery_k\ttime\tresult_community_count\tquery_attribute_set\tcommunities_set\n");
 	while (!feof(TestDataFile))
 	{
-		int q_vertex, attr_cnt;
+		int q_vertex;
 		fscanf(TestDataFile, "%d", &q_vertex);
-		
 		if (!obj.G->IsNode(q_vertex))
-		{
-			continue;
-		}
-		
-		// Generate the query attribute set SATR, based on the attribute set of the query vertex
-		set<attrType> SAttr; 
-		for (auto attr : obj.attributesOfVertex[q_vertex])
-		{
-			SAttr.insert(attr);
-		}
-		int maxn_attr = SAttr.size();
-		maxn_attr = min(maxn_attr, attrNumMax);
-		attr_cnt = attr_count > maxn_attr ? maxn_attr : attr_count;
-		set<attrType> SATR;
-		int cnt = 0;
-		for (auto attr : SAttr)
-		{
-			if (cnt >= attr_cnt)
-			{
-				break;
-			}
-			SATR.insert(attr);
-			cnt++;
-		}
-
-		double time = -1;
-		int resultSize = -1;
-		clock_t startTime = clock();
-		if (selection == 2)
-		{
-			auto communities = obj.CAC_MTIndexD(k_value, q_vertex, SATR);
-			time = (double)(clock() - startTime) / CLOCKS_PER_SEC;
-			if (communities.size() > 0)
-			{
-				fprintf(detailFile, "Query vertex: %d\n", q_vertex);
-				ShowCommunitySize(communities, detailFile);
-				fprintf(detailFile, "\n");
-			}
-			resultSize = communities.size();
-		}
-		else if (selection == 1)
-		{
-			auto communities = obj.CAC_MTIndexI(k_value, q_vertex, SATR);
-			time = (double)(clock() - startTime) / CLOCKS_PER_SEC;
-			if (communities.size() > 0)
-			{
-				fprintf(detailFile, "Query vertex: %d\n", q_vertex);
-				ShowCommunitySize(communities, detailFile);
-				fprintf(detailFile, "\n");
-			}
-			resultSize = communities.size();
-		}
-		
-		// Output the query attribute set
-		string attrStr;
-		for (auto attr: SATR)
-		{
-			attrStr.append(to_string(attr));
-			attrStr.append(",");
-		}
-		attrStr.pop_back();
-		fprintf(resultFile, "%d\t%d\t%d\t%lf\t%d\t%s\n", ++number, q_vertex, k_value, time, resultSize, attrStr.data());
+            continue;
+        // search community
+		search(obj, q_vertex, resultFile, detailFile, k_value, attr_count, selection);
 	}
 	printf("==========Finish querying==========\n");
 	return 0;

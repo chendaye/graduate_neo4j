@@ -1,5 +1,7 @@
 #include "common.h"
 
+using namespace std;
+
 edgePair EdgePair(int u, int v)
 {
 	if (u < v) return make_pair(u, v);
@@ -164,25 +166,45 @@ int TrussDecomposition(PUNGraph G, unordered_map<int, int>& nodeTrussness, unord
 }
 
 // Output the size and the shared attributes of every community
-void ShowCommunitySize(vector<pair<Community, set<int> > > R, FILE* file)
+string ShowCommunitySize(vector<pair<Community, set<int> > > R, FILE* file)
 {
-	if (R.size() != 0) 
+    string communities_str = "";
+    if (R.size() != 0)
 	{
+	    // R: communities
 		fprintf(file, "Community Count = %d\n", R.size());
 		for (int i = 0; i < R.size(); i++) {
-			set<int> nodes;
-			for (vector<edgePair>::iterator it = R[i].first.begin(); it != R[i].first.end(); it++) 
+			// nodes
+		    set<int> nodes; // nodes
+			for (vector<edgePair>::iterator it = R[i].first.begin(); it != R[i].first.end(); it++)
 			{
 				nodes.insert(it->first);
 				nodes.insert(it->second);
 			}
-			fprintf(file, "\tCommunity %d: Node Count(%d) Edge Count(%d) Attributes(", i + 1, nodes.size(), R[i].first.size());
+            string nodes_str;
+            for(auto node : nodes){
+                nodes_str.append(to_string(node));
+                nodes_str.append(",");
+            }
+            nodes_str.pop_back();
+
+			fprintf(file, "\tCommunity %d: Node Count(%d) Nodes %s Edge Count(%d) Attributes(", i + 1, nodes.size(), nodes_str.data(),  R[i].first.size());
+
+            nodes_str.append("#"); // split node and attr
+            // attr
 			for (attrType str :	R[i].second)
 			{
-				fprintf(file, "%d ", str);
+                nodes_str.append(to_string(str));
+                nodes_str.append(",");
+                fprintf(file, "%d ", str);
 			}
+            nodes_str.pop_back();
 			fprintf(file, ")\n");
+			communities_str.append(nodes_str);
+			communities_str.append("@");
 			nodes.clear();
 		}
+		communities_str.pop_back();
 	}
+    return communities_str;
 }

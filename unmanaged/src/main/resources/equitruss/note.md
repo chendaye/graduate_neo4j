@@ -195,15 +195,18 @@ gcc -pipe -o hello.exe hello.c
 ./main.o /data/code/graduate_neo4j/unmanaged/src/main/resources/equitruss/dblp_datasets/Graph/dblp20%_vertices.txt \
  /data/code/graduate_neo4j/unmanaged/src/main/resources/equitruss/dblp_datasets/Attribute/dblp_attributes_int.txt \
  /data/code/graduate_neo4j/unmanaged/src/main/resources/equitruss/dblp_datasets/Queries/vertices_rand300_6truss_dblp.txt \
-./dblp_datasets/result
+./dblp_datasets/result \
+4 \
+3 \
+1
 
 # minim
 ./main.o ./dblp_datasets/minim/graph.txt \
 ./dblp_datasets/minim/attr.txt \
 ./dblp_datasets/minim/query.txt \
  ./dblp_datasets/result \
-4 \
 3 \
+2 \
 1
 ```
 
