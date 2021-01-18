@@ -43,7 +43,7 @@ public class LouvainImpl {
     public Response implLimit(@PathParam("limit") int limit) throws IOException {
         long start = System.currentTimeMillis();
         System.out.println("Louvain Algorithm run in "+ start);
-        final GraphDatabaseService db = dbms.database("equitruss");
+        final GraphDatabaseService db = dbms.database("neo4j");
         Map<String, String> results = new HashMap<String,String>(){{
             put("algorithm","ans");
         }};
@@ -70,7 +70,7 @@ public class LouvainImpl {
     public Response impl() throws IOException {
         long start = System.currentTimeMillis();
         System.out.println("Louvain Algorithm run in "+ start);
-        final GraphDatabaseService db = dbms.database("equitruss");
+        final GraphDatabaseService db = dbms.database("neo4j");
         Map<String, String> results = new HashMap<String,String>(){{
             put("algorithm","ans");
         }};

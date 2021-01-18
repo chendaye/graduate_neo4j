@@ -9,10 +9,7 @@ import org.neo4j.harness.junit.rule.Neo4jRule;
 import org.neo4j.test.server.HTTP;
 import top.chendaye666.equitruss.TestJniHttp;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 
 // dbms.unmanaged_extension_classes=top.chendaye666.unmanaged=/unmanaged/test,top.chendaye666.physiciansharedpatient=/algorithm
@@ -84,18 +81,37 @@ public class AlgoTest {
     }
 
     /**
-     * 测试文件生成
+     * 测试文件生成(node)
      * @throws JsonProcessingException
      */
     @Test
-    public void dumpTest() throws JsonProcessingException {
+    public void dumpnodeTest() throws JsonProcessingException {
         // node_id, k_value, attr_count, selection
-        HTTP.Response response = HTTP.GET(neo4jRule.httpURI().resolve("/equitruss/test/dump/1/4/4/2").toString());
+        HTTP.Response response = HTTP.GET(neo4jRule.httpURI().resolve("/equitruss/test/dumpnode/1/4/4/2").toString());
         System.out.println("dumpTest start");
         ArrayList<Object> actual = response.content();
         System.out.println(actual.toString());
+
         System.out.println("dumpTest end");
 
     }
+
+    /**
+     * 测试文件生成(node)
+     * @throws JsonProcessingException
+     */
+    @Test
+    public void dumprelationshipTest() throws JsonProcessingException {
+        // node_id, k_value, attr_count, selection
+        HTTP.Response response = HTTP.GET(neo4jRule.httpURI().resolve("/equitruss/test/dumprelationship/1/4/4/2").toString());
+        System.out.println("dumpTest start");
+        ArrayList<Object> actual = response.content();
+        System.out.println(actual.toString());
+
+        System.out.println("dumpTest end");
+
+    }
+
+
 
 }

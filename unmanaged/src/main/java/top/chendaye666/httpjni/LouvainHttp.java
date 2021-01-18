@@ -68,7 +68,7 @@ public class LouvainHttp {
     @GET
     @Path("/dump")
     public Response dump() throws IOException {
-        final GraphDatabaseService db = dbms.database("equitruss");
+        final GraphDatabaseService db = dbms.database("neo4j");
         ArrayList<String> resp = new ArrayList<>();
         String query = "MATCH p=()-[r:SHARE_MEMBER]->() RETURN p LIMIT 6";
         try (Transaction tx = db.beginTx() ) {
