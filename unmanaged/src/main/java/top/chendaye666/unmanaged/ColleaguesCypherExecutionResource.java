@@ -69,7 +69,7 @@ public class ColleaguesCypherExecutionResource
                 jg.writeFieldName( "colleagues" );
                 jg.writeStartArray();
 
-                final GraphDatabaseService graphDb = dbms.database( "neo4j" );
+                final GraphDatabaseService graphDb = dbms.database( "equitruss" );
                 try ( Transaction tx = graphDb.beginTx();
                       Result result = tx.execute( colleaguesQuery(), params ) )
                 {

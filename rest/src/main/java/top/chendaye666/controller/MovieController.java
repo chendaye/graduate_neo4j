@@ -54,7 +54,7 @@ public class MovieController {
 		this.movieRepository = movieRepository;
 
 		// 初始化客户端
-		Driver driver = GraphDatabase.driver("bolt://www.lengo.top:7687", AuthTokens.basic("neo4j", "lengo"));
+		Driver driver = GraphDatabase.driver("bolt://www.lengo.top:7687", AuthTokens.basic("equitruss", "lengo"));
 		client = Neo4jClient.create(driver);
 		reactiveClient = ReactiveNeo4jClient.create(driver);  // reactive
 	}

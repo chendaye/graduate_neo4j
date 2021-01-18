@@ -63,7 +63,7 @@
         </dependency>
 
 <!--        <dependency>-->
-<!--            <groupId>org.neo4j.doc</groupId>-->
+<!--            <groupId>org.equitruss.doc</groupId>-->
 <!--            <artifactId>server-test-utils</artifactId>-->
 <!--            <version></version>-->
 <!--            <scope>test</scope>-->

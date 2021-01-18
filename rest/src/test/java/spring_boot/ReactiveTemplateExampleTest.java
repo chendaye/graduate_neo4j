@@ -47,12 +47,12 @@ import static java.util.Collections.singletonList;
 class ReactiveTemplateExampleTest {
 
 	@Container
-	private static Neo4jContainer<?> neo4jContainer = new Neo4jContainer<>("neo4j:4.1");
+	private static Neo4jContainer<?> neo4jContainer = new Neo4jContainer<>("equitruss:4.1");
 
 	@DynamicPropertySource
 	static void neo4jProperties(DynamicPropertyRegistry registry) {
 		registry.add("org.neo4j.driver.uri", neo4jContainer::getBoltUrl);
-		registry.add("org.neo4j.driver.authentication.username", () -> "neo4j");
+		registry.add("org.neo4j.driver.authentication.username", () -> "equitruss");
 		registry.add("org.neo4j.driver.authentication.password", neo4jContainer::getAdminPassword);
 	}
 

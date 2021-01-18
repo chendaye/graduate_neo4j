@@ -68,7 +68,7 @@ public class ColleaguesResource
                 jg.writeFieldName( "colleagues" );
                 jg.writeStartArray();
 
-                final GraphDatabaseService graphDb = dbms.database( "neo4j" );
+                final GraphDatabaseService graphDb = dbms.database( "equitruss" );
                 try ( Transaction tx = graphDb.beginTx();
                       ResourceIterator<Node> persons = tx.findNodes( PERSON, "name", personName ) )
                 {

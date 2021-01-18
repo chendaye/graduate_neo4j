@@ -215,7 +215,7 @@ gcc -pipe -o hello.exe hello.c
 ./dblp_datasets/minim/paper_example/query.txt \
  ./dblp_datasets/result \
 4 \
-3 \
+2 \
 1
 
 ./neo4j.o ./dblp_datasets/minim/paper_example/graph.txt \

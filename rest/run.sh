@@ -1,4 +1,4 @@
 java -jar /home/hadoop/code/whu_neo4j/target/movie-api.jar \
---org.neo4j.driver.uri=bolt://whu1.top.chendaye666.top:7687 \
---org.neo4j.driver.authentication.username=neo4j \
---org.neo4j.driver.authentication.password=lengo > /tmp/neo4j.log 2>&1 &
+--org.equitruss.driver.uri=bolt://whu1.top.chendaye666.top:7687 \
+--org.equitruss.driver.authentication.username=equitruss \
+--org.equitruss.driver.authentication.password=lengo > /tmp/equitruss.log 2>&1 &
