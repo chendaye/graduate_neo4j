@@ -1,0 +1,54 @@
+#
+#	Global configuration for SNAP makefiles
+#
+MAIN = main
+NEO4J = neo4j
+
+EXGLIB = /usr/local/snap/glib-core
+EXSNAP = /usr/local/snap/snap-core
+EXGLIBADV = /usr/local/snap/glib-adv
+EXSNAPADV = /usr/local/snap/snap-adv
+EXSNAPEXP = /usr/local/snap/snap-exp
+
+UNAME := $(shell uname)
+
+ifeq ($(UNAME), Linux)
+  # Linux flags
+  CC = g++
+  CXXFLAGS += -std=c++98 -Wall
+  CXXFLAGS += -O3 -DNDEBUG -fopenmp
+  # turn on for crash debugging, get symbols with <prog> 2>&1 | c++filt
+  #CXXFLAGS += -g -rdynamic
+  #CXXFLAGS += -ggdb
+  # turn on for OpenMP
+  CXXOPENMP =
+  LDFLAGS +=
+  LIBS += -lrt
+
+else ifeq ($(UNAME), Darwin)
+  # MacOS X flags
+  CC = g++
+  CXXFLAGS += -std=c++11 -Wall -Wno-unknown-pragmas
+  CXXFLAGS += -O3 -DNDEBUG
+  # clang
+  CLANG := $(shell g++ -v 2>&1 | grep clang | cut -d " " -f 2)
+  ifneq ($(CLANG), LLVM)
+    #CXXFLAGS += -fopenmp
+  else
+    CXXFLAGS += -DNOMP
+    CXXOPENMP =
+  endif
+  LDFLAGS +=
+  LIBS +=
+
+else ifeq ($(shell uname -o), Cygwin)
+  # Cygwin flags
+  CC = g++
+  CXXFLAGS += -Wall -D__STDC_LIMIT_MACROS
+  CXXFLAGS += -O3 -DNDEBUG
+  CXXOPENMP = -fopenmp
+  LDFLAGS +=
+  LIBS +=
+
+endif
+

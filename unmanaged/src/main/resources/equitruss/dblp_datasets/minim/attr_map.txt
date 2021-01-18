@@ -1,6 +1,0 @@
-DB 1
-CV 2
-ML 3
-DM 4
-DB 5
-AI 6

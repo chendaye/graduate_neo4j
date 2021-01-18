@@ -210,21 +210,41 @@ gcc -pipe -o hello.exe hello.c
 1
 
 # minim
-./main.o ./dblp_datasets/minim/graph.txt \
-./dblp_datasets/minim/attr.txt \
-./dblp_datasets/minim/query.txt \
+./main.o ./dblp_datasets/minim/paper_example/graph.txt \
+./dblp_datasets/minim/paper_example/attr.txt \
+./dblp_datasets/minim/paper_example/query.txt \
  ./dblp_datasets/result \
 4 \
 3 \
 1
 
-./neo4j.o ./dblp_datasets/minim/graph.txt \
-./dblp_datasets/minim/attr.txt \
-4 \
+./neo4j.o ./dblp_datasets/minim/paper_example/graph.txt \
+./dblp_datasets/minim/paper_example/attr.txt \
+3 \
  ./dblp_datasets/result \
 4 \
 3 \
 1
+
+
+# sub_graph
+./neo4j.o ./dblp_datasets/minim/sub_graph/relationship.txt \
+ ./dblp_datasets/minim/sub_graph/node.txt \
+ 304565 \
+./dblp_datasets/result \
+4 \
+3 \
+1
+
+./main.o ./dblp_datasets/minim/sub_graph/relationship.txt \
+ ./dblp_datasets/minim/sub_graph/node.txt \
+  ./dblp_datasets/minim/sub_graph/query.txt \
+./dblp_datasets/result \
+4 \
+3 \
+1
+
+
 ```
 
 
