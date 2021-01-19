@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.neo4j.graphdb.*;
 import org.neo4j.harness.junit.rule.Neo4jRule;
 import org.neo4j.test.server.HTTP;
+import top.chendaye666.equitruss.EquitrussJniHttp;
 import top.chendaye666.equitruss.TestJniHttp;
 
 import java.util.*;
@@ -20,6 +21,7 @@ public class AlgoTest {
     @Rule
     public Neo4jRule neo4jRule = new Neo4jRule()
             .withUnmanagedExtension("/equitruss", TestJniHttp.class)
+            .withUnmanagedExtension("/search", EquitrussJniHttp.class)
             .withFixture(MODEL_STATEMENT);
 
 
@@ -111,6 +113,18 @@ public class AlgoTest {
     public void dumprelationshipTest() throws JsonProcessingException {
         // node_id, k_value, attr_count, selection
         HTTP.Response response = HTTP.GET(neo4jRule.httpURI().resolve("/equitruss/test/dumprelationship/4/4/4/2").toString());
+        System.out.println("dumpTest start");
+        ArrayList<Object> actual = response.content();
+        System.out.println(actual.toString());
+
+        System.out.println("dumpTest end");
+
+    }
+
+    @Test
+    public void searchTest() throws JsonProcessingException {
+        // node_id, k_value, attr_count, selection
+        HTTP.Response response = HTTP.GET(neo4jRule.httpURI().resolve("/search/equitruss/search/4/4/4/2").toString());
         System.out.println("dumpTest start");
         ArrayList<Object> actual = response.content();
         System.out.println(actual.toString());
