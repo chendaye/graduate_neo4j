@@ -13,6 +13,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -98,23 +100,55 @@ public class TestJniHttp {
     public Response dumprelationship(@PathParam( "node_id" ) String node_id, @PathParam( "k_value" ) int k_value, @PathParam("attr_count") int attr_count, @PathParam("selection") int selection ) throws IOException {
         final GraphDatabaseService db = dbms.database("neo4j");
         ArrayList<String> resp = new ArrayList<>();
-        // MATCH p=(n:Author)-[r:ARTICLE]-() where n.authorId="3369894700" RETURN n,p LIMIT 25
-        // match res=(p:Author{authorId:'3369894700'})-[:ARTICLE*1..2]-() return res  从一个点出发，深度为 3
-        String query = "match res=(p:Author{authorId:'4'})-[:Article*1..2]-() return res";
-        try (Transaction tx = db.beginTx() ) {
-            Result result = tx.execute(query);
-            while (result.hasNext()){
-                Map<String,Object> row = result.next();
-                for ( Map.Entry<String,Object> column : row.entrySet() ){
-                    System.out.println(column.getKey()+":"+column.getValue());
-                    String s = column.getValue().toString();
+        ArrayList<Long> relationships = new ArrayList<>();
+        ArrayList<Long> nodes = new ArrayList<>();
+        String nodePath = "./node_"+readWriteTxtUtils.generateStr(5)+".txt";
+        readWriteTxtUtils.fileExist(nodePath);
+        final File nodeFile = new File(nodePath);
+        final FileOutputStream nodeOutputStream = new FileOutputStream(nodeFile);
+        String relationshipPath = "./relationship_"+readWriteTxtUtils.generateStr(5)+".txt";
+        final File relationshipFile = new File(relationshipPath);
+        final FileOutputStream relationshipOutputStream = new FileOutputStream(relationshipFile);
+        readWriteTxtUtils.fileExist(relationshipPath);
+        String query = "match res=(p:Author{authorId:'"+node_id+"'})-[r1:Article]-()-[r2:Article]-() return r1,r2";
+        try {
+            try (Transaction tx = db.beginTx() ) {
+                Result result = tx.execute(query);
+                while (result.hasNext()){
+                    Map<String,Object> row = result.next();
+                    for ( Map.Entry<String,Object> column : row.entrySet() ){
+                        String key = column.getKey();
+                        Relationship relationship = (Relationship) column.getValue();
+                        long id = relationship.getId();
+                        Node start = (Node)relationship.getStartNode();
+                        Node end = (Node)relationship.getEndNode();
+//                    System.out.println(key+":"+relationship.getStartNodeId()+"->"+relationship.getEndNodeId());
+                        if (!relationships.contains(id)){
+                            relationships.add(id);
+                            String r = start.getProperty("authorId")+"\t"+end.getProperty("authorId");
+                            relationshipOutputStream.write(r.getBytes());
+                            if (!nodes.contains(start.getId())){
 
-                    resp.add(s);
+                            }
+                            if(!nodes.contains(end.getId())){
+
+                            }
+                        }
+//                    resp.add(s);
+                    }
                 }
-            }
 
-            tx.commit();
+                tx.commit();
+            }
+        }catch (IOException e){
+            e.printStackTrace();
+        }finally {
+            nodeOutputStream.flush();
+            nodeOutputStream.close();
+            relationshipOutputStream.flush();
+            relationshipOutputStream.close();
         }
+
         return Response.ok().entity(objectMapper.writeValueAsString(resp)).build();
     }
 
