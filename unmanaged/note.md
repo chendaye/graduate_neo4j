@@ -82,7 +82,7 @@ RETURN *;
 sed -i '1i physicianId' ./providers.csv
 
 
-LOAD CSV WITH HEADERS  FROM 'file:///node_3.csv' AS row CREATE (:Author {authorId:row.author_id,name:row.node,articles:row.articles});
+LOAD CSV WITH HEADERS  FROM 'file:///node_0.csv' AS row CREATE (:Author {authorId:row.author_id,name:row.node,articles:row.articles,words:row.articles});
 
 
 # 建索引(很重要)
