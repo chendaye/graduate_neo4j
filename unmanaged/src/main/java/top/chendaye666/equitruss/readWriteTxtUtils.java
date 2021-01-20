@@ -43,12 +43,45 @@ public class readWriteTxtUtils {
     }
 
     /**
+     * 判断文件夹是否存在
+     * @param path
+     */
+    public static void dictExist(String path){
+        File folder = new File(path);
+        if (!folder.exists() && !folder.isDirectory()) {
+            folder.mkdirs();
+        }
+
+    }
+
+    /**
      * 删除文件
      * @param path
      */
     public static void fileDel(String path){
         File file = new File(path);
         if (file.exists()) file.delete();
+    }
+
+    /**
+     * 删除文件夹
+     * @param path
+     */
+    public static void folderDel(String path){
+        File file = new File(path);
+        deleteAll(file);
+    }
+
+    public static void deleteAll(File file) {
+
+        if (file.isFile() || file.list().length == 0) {
+            file.delete();
+        } else {
+            for (File f : file.listFiles()) {
+                deleteAll(f); // 递归删除每一个文件
+            }
+            file.delete(); // 删除文件夹
+        }
     }
 
     /**

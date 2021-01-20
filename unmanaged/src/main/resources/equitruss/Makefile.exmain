@@ -15,16 +15,16 @@ $(EXSNAP)/Snap.o:
 	make -C $(EXSNAP)
             
 fptree.o: fptree.cpp fptree.h def.h
-	g++  $(CXXFLAGS) $(CFLAGS)  -c fptree.cpp -o fptree.o  -I$(EXGLIB) -I$(EXSNAP) -I$(EXGLIBADV) -I$(EXSNAPADV)
+	$(CC)  $(CXXFLAGS) $(CFLAGS)  -c fptree.cpp -o fptree.o  -I$(EXGLIB) -I$(EXSNAP) -I$(EXGLIBADV) -I$(EXSNAPADV)
 
-algo.o: EquiTrussAttribute.cpp common.h
-	g++  $(CXXFLAGS) $(CFLAGS)  -c algo.cpp -o algo.o  -I$(EXGLIB) -I$(EXSNAP) -I$(EXGLIBADV) -I$(EXSNAPADV)
+algo.o: EquiTrussAttribute.cpp common.h jni.h jni_md.h top_chendaye666_equitruss_JniUtil.h
+	$(CC)  $(CXXFLAGS) $(CFLAGS)  -c algo.cpp -o algo.o  -I$(EXGLIB) -I$(EXSNAP) -I$(EXGLIBADV) -I$(EXSNAPADV)
 
 common.o: common.cpp common.h def.h
-		g++  $(CXXFLAGS) $(CFLAGS)  -c common.cpp -o common.o  -I$(EXGLIB) -I$(EXSNAP) -I$(EXGLIBADV) -I$(EXSNAPADV)
+		$(CC)  $(CXXFLAGS) $(CFLAGS)  -c common.cpp -o common.o  -I$(EXGLIB) -I$(EXSNAP) -I$(EXGLIBADV) -I$(EXSNAPADV)
 
 EquiTrussAttribute.o: EquiTrussAttribute.cpp EquiTrussAttribute.h def.h
-		g++  $(CXXFLAGS) $(CFLAGS)  -c EquiTrussAttribute.cpp -o EquiTrussAttribute.o  -I$(EXGLIB) -I$(EXSNAP) -I$(EXGLIBADV) -I$(EXSNAPADV)
+		$(CC)  $(CXXFLAGS) $(CFLAGS)  -c EquiTrussAttribute.cpp -o EquiTrussAttribute.o  -I$(EXGLIB) -I$(EXSNAP) -I$(EXGLIBADV) -I$(EXSNAPADV)
 
 # main
 $(MAIN): $(MAIN).cpp fptree.o common.o algo.o  EquiTrussAttribute.o    $(EXSNAP)/Snap.o
@@ -35,7 +35,7 @@ $(MAIN): $(MAIN).cpp fptree.o common.o algo.o  EquiTrussAttribute.o    $(EXSNAP)
 
 # neo4j
 $(NEO4J): $(NEO4J).cpp fptree.o common.o algo.o  EquiTrussAttribute.o    $(EXSNAP)/Snap.o
-	$(CC) $(CXXFLAGS) $(CFLAGS) -o $(NEO4J).o $(NEO4J).cpp  \
+	$(CC) -c  -fPIC $(CXXFLAGS) $(CFLAGS) $(NEO4J).cpp -o $(NEO4J).o   \
 	 EquiTrussAttribute.o common.o algo.o  fptree.o  $(EXSNAP)/Snap.o -I$(EXGLIB) -I$(EXSNAP) -I$(EXGLIBADV) -I$(EXSNAPADV) \
 	  $(LDFLAGS) $(LIBS)
 
@@ -43,5 +43,13 @@ clean:
 	rm -f *.o  $(MAIN)  $(MAIN).exe
 	rm -rf Debug Release
 	rm -f *.o.Err
+	rm -f *.dylib
+	rm -f *.so
 
-    
+# 编译动态链接库
+dylib:
+ifeq ($(UNAME), Darwin)
+	$(CC) -dynamiclib -o libEquitruss.dylib neo4j.o fptree.o common.o algo.o  EquiTrussAttribute.o    $(EXSNAP)/Snap.o
+else
+    $(CC) -shared neo4j.o fptree.o common.o algo.o  EquiTrussAttribute.o    $(EXSNAP)/Snap.o -o libEquitruss.so
+endif

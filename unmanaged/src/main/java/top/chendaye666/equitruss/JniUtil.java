@@ -5,7 +5,7 @@ package top.chendaye666.equitruss;
  */
 public class JniUtil {
     static {
-        System.loadLibrary("equitruss_search");
+        System.loadLibrary("Equitruss");
     }
 
     public String query(String relationshipPath, String nodePath, int vertexId,
@@ -24,7 +24,7 @@ public class JniUtil {
      * @param algoType
      * @return
      */
-    private native String getNativeQuery(String relationshipPath, String nodePath, long vertexId,
+    private native String getNativeQuery(String relationshipPath, String nodePath, int vertexId,
                                          String resultPath, int queryK, int attrCnt, int algoType);
 
 

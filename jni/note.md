@@ -81,6 +81,7 @@ JNIEXPORT void JNICALL Java_top_chendaye666_test_JniTest_hello
 
 ```bash
 # 生成 .o 文件
+[-fPIC](https://blog.csdn.net/huangkangying/article/details/90521151)
 gcc -c -fPIC -I /home/pi/jdk-11/include -I /home/pi/jdk-11/include/linux ./jni/JNIDemo.c -o JNIDemo.o
 
 # 注意动态链接库取名 必须以 lib作为前缀
@@ -102,7 +103,7 @@ gcc -dynamiclib -I /Library/Java/JavaVirtualMachines/jdk1.8.0_144.jdk/Contents/H
 
 > 一设置要调用的C++动态链接库的位置
  
-- IDEA vm options : -Djava.library.path=/Users/lengo/code/cpp
+- IDEA vm options : -Djava.library.path=/Users/lengo/code/graduate_neo4j/unmanaged/src/main/resources/equitruss
 - 程序执行是显示指定: java -jar -Djava.library.path=/home/fly/Desktop/sound_dream sound.war
 
 ## 参数传递

@@ -81,17 +81,20 @@ RETURN *;
 ```html
 sed -i '1i physicianId' ./providers.csv
 
+sed -i '1i startId,endId,transactions,patients,max_day' ./shared_members.csv
 
-LOAD CSV WITH HEADERS  FROM 'file:///node_3.csv' AS row CREATE (:Author {authorId:row.author_id,name:row.node,articles:row.articles});
+
+# 建立节点
+LOAD CSV WITH HEADERS  FROM 'file:///node_0.csv' AS row CREATE (:Author {authorId:row.author_id,name:row.node,articles:row.articles,words:row.words});
+
 
 
 # 建索引(很重要)
 CREATE INDEX index_authorId FOR (n:Author) ON (n.authorId);
 
-sed -i '1i startId,endId,transactions,patients,max_day' ./shared_members.csv
-
-LOAD CSV WITH HEADERS FROM 'file:///relationship_0.csv' AS row MATCH (e:Author {authorId: row.start}) MATCH (c:Author {authorId: row.end}) MERGE  (e)-[:ARTICLE { weight:toInteger(row.weight)}]-(c);
-LOAD CSV WITH HEADERS FROM 'file:///relationship_7.csv' AS row MATCH (e:Author {authorId: row.start}),(c:Author {authorId: row.end}) MERGE  (e)-[:ARTICLE { weight:toInteger(row.weight)}]-(c);
+# 建立边
+LOAD CSV WITH HEADERS FROM 'file:///relationship_0.csv' AS row MATCH (e:Author {authorId: row.start}) MATCH (c:Author {authorId: row.end}) MERGE  (e)-[:Article { weight:toInteger(row.weight)}]-(c);
+LOAD CSV WITH HEADERS FROM 'file:///relationship_0.csv' AS row MATCH (e:Author {authorId: row.start}),(c:Author {authorId: row.end}) MERGE  (e)-[:Article { weight:toInteger(row.weight)}]-(c);
 
 
 MATCH (e:Author {authorId: "3038149328"}),(c:Author {authorId: "2307802211"}) MERGE  (e)-[:ARTICLE { weight:7}]->(c);
