@@ -218,7 +218,7 @@ gcc -pipe -o hello.exe hello.c
 2 \
 1
 
-./neo4j.o ./dblp_datasets/minim/paper_example/graph.txt \
+./equitruss.o ./dblp_datasets/minim/paper_example/graph.txt \
 ./dblp_datasets/minim/paper_example/attr.txt \
 3 \
  ./dblp_datasets/result \
@@ -228,12 +228,12 @@ gcc -pipe -o hello.exe hello.c
 
 
 # sub_graph
-./neo4j.o ./dblp_datasets/minim/sub_graph/relationship.txt \
- ./dblp_datasets/minim/sub_graph/node.txt \
- 304565 \
-./dblp_datasets/result \
+./main.o relationship_gdrxg.txt \
+node_pbrt8.txt \
+ query.txt \
+result/ \
 4 \
-3 \
+2 \
 1
 
 ./main.o ./dblp_datasets/minim/sub_graph/relationship.txt \
@@ -248,3 +248,18 @@ gcc -pipe -o hello.exe hello.c
 ```
 
 
+# neo4j & equitruss
+
+```bash
+./equitruss.o /tmp/relationship_gdrxg.txt \
+/tmp/node_pbrt8.txt \
+0 \
+ /tmp/result \
+3 \
+10 \
+1
+
+# vertex query_k time result_community_count query_attribute_set communities_set
+0:3:0.403624:1:1,2,3,4,5,6,7,8,9,10:0,1848467,2120931#1,2,3,4,5,6,7,8,9,10
+
+```

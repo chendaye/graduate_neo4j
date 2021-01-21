@@ -5,3 +5,5 @@ target/
 *Store
 *lib
 *iml*
+*.so
+*.o

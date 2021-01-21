@@ -98,7 +98,8 @@ LOAD CSV WITH HEADERS FROM 'file:///relationship_21.csv' AS row
 MATCH (e:Author {authorId: row.start}),(c:Author {authorId: row.end}) 
 MERGE  (e)-[:Article { weight:toInteger(row.weight)}]-(c);
 
-
+# 去除自环
+match (n:Author)-[r:Article]-(m:Author) where n.authorId=m.authorId delete r;
 
 
 

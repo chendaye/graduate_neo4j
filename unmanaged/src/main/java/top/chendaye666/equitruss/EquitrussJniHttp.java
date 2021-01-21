@@ -114,7 +114,7 @@ public class EquitrussJniHttp {
 
     @GET
     @Path("/txt/{node_id}")
-    public Response txt(@PathParam( "node_id" ) int node_id) throws IOException {
+    public Response txt(@PathParam( "node_id" ) String node_id) throws IOException {
         final GraphDatabaseService db = dbms.database("neo4j");
         ArrayList<String> resp = new ArrayList<>();
         ArrayList<Long> relationships = new ArrayList<>();
@@ -135,9 +135,9 @@ public class EquitrussJniHttp {
         resp.add(resultPath);
         // 从一个起点出发
         String query = "match res=(p:Author{authorId:'"+node_id+"'})-[r1:Article]-(p1:Author)-[r2:Article]-(p2:Author)" +
-                " match (p1)-[r3:Article]-()-[r4:Article]-() "+
-                " match (p2)-[r5:Article]-()-[r6:Article]-() "
-                +" return r1,r2,r3,r4,r5,r6";
+                " match (p1)-[r3:Article]-() "+
+                " match (p2)-[r5:Article]-() "+
+                " return r1,r2,r3,r5";
         try {
             try (Transaction tx = db.beginTx() ) {
                 Result result = tx.execute(query);
@@ -177,14 +177,24 @@ public class EquitrussJniHttp {
             nodeOutputStream.close();
             relationshipOutputStream.flush();
             relationshipOutputStream.close();
-            readWriteTxtUtils.fileDel(relationshipPath);
-            readWriteTxtUtils.fileDel(nodePath);
-            readWriteTxtUtils.folderDel(resultPath);
+//            readWriteTxtUtils.fileDel(relationshipPath);
+//            readWriteTxtUtils.fileDel(nodePath);
+//            readWriteTxtUtils.folderDel(resultPath);
         }
 
         return Response.ok().entity(objectMapper.writeValueAsString(resp)).build();
     }
 
-
+    @GET
+    @Produces( MediaType.APPLICATION_JSON )
+    @Path( "/hello/{nodeId}" )
+    public Response hello(@PathParam( "nodeId" ) int nodeId ) throws JsonProcessingException {
+//        // 调用Jni代码
+//        top.chendaye666.httpjni.JniUtil jniUtil = new top.chendaye666.httpjni.JniUtil();
+//        nodeId = jniUtil.getNum(nodeId);
+        String msg = "Hello World, nodeId=" + nodeId;
+        // Do stuff with the database
+        return Response.ok().entity(objectMapper.writeValueAsString(msg)).build();
+    }
 
 }

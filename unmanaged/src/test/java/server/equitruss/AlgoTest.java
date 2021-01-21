@@ -63,16 +63,6 @@ public class AlgoTest {
                     .append("MERGE (p8)-[:Article {weight: toInteger(21)}]->(p9)")
                     .toString();
 
-    /**
-     * 测试基础请求
-     * @throws JsonProcessingException
-     */
-    @Test
-    public void helloTest() throws JsonProcessingException {
-        HTTP.Response response = HTTP.GET(neo4jRule.httpURI().resolve("/equitruss/test/helloworld").toString());
-        HashMap actual = response.content();
-        System.out.println(actual.get("hello"));
-    }
 
     /**
      * 测试参数传递
@@ -136,15 +126,26 @@ public class AlgoTest {
     @Test
     public void txtTest() throws JsonProcessingException {
         // node_id
-//        HTTP.Response response = HTTP.GET(neo4jRule.httpURI().resolve("/search/equitruss/test/4").toString());
-//        System.out.println("dumpTest start");
-//        ArrayList<Object> actual = response.content();
-//        System.out.println(actual.toString());
-//
-//        System.out.println("dumpTest end");
-
+        HTTP.Response response = HTTP.GET(neo4jRule.httpURI().resolve("/search/equitruss/txt/4").toString());
+        try {
+            System.out.println(response.toString());
+            ArrayList<Object> actual = response.content();
+            System.out.println(actual.toString());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
+    /**
+     * 测试基础请求
+     * todo：http://localhost:7474/search/equitruss/hello/6
+     * @throws JsonProcessingException
+     */
+    @Test
+    public void helloTest() throws JsonProcessingException {
+        HTTP.Response response = HTTP.GET(neo4jRule.httpURI().resolve("/search/equitruss/hello/6").toString());
+        System.out.println(response.content().toString());
+    }
 
 
 }
