@@ -133,6 +133,18 @@ public class AlgoTest {
 
     }
 
+    @Test
+    public void txtTest() throws JsonProcessingException {
+        // node_id
+//        HTTP.Response response = HTTP.GET(neo4jRule.httpURI().resolve("/search/equitruss/test/4").toString());
+//        System.out.println("dumpTest start");
+//        ArrayList<Object> actual = response.content();
+//        System.out.println(actual.toString());
+//
+//        System.out.println("dumpTest end");
+
+    }
+
 
 
 }
