@@ -2,6 +2,7 @@
 #include "EquiTrussAttribute.h"
 #include "common.h"
 
+
 void search(EquiTrussAttribute obj, int q_vertex,  FILE* resultFile, FILE* detailFile, int k_value, int attr_count, int selection);
 string searchNeo4j(EquiTrussAttribute obj, int q_vertex, int k_value, int attr_count, int selection);
 void clearResult(char *path);
