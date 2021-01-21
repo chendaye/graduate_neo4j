@@ -51,5 +51,5 @@ dylib:
 ifeq ($(UNAME), Darwin)
 	$(CC) -dynamiclib -o libEquitruss.dylib neo4j.o fptree.o common.o algo.o  EquiTrussAttribute.o    $(EXSNAP)/Snap.o
 else
-    $(CC) -shared neo4j.o fptree.o common.o algo.o  EquiTrussAttribute.o    $(EXSNAP)/Snap.o -o libEquitruss.so
+	$(CC) -shared neo4j.o fptree.o common.o algo.o  EquiTrussAttribute.o    $(EXSNAP)/Snap.o -o libEquitruss.so
 endif
