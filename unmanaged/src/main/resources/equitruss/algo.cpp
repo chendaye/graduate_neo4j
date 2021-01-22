@@ -53,7 +53,7 @@ void search(EquiTrussAttribute obj, int q_vertex,  FILE* resultFile, FILE* detai
 
 string searchNeo4j(EquiTrussAttribute obj, int q_vertex,  int k_value = 3, int attr_count = 3, int selection = 1){
     int attr_cnt;
-    int attrNumMax = 20; // max number attr
+    int attrNumMax = 200; // max number attr
     set<attrType> SAttr;
     for (auto attr : obj.attributesOfVertex[q_vertex])
     {

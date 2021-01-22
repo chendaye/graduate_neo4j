@@ -191,6 +191,16 @@ mported:
 
 ```
 
+## 查询搜素数据
 
+```sql
+match res=(p:Author{authorId:'2045129800'})-[r1:Article]-(p1:Author)-[r2:Article]-(p2:Author)
+match (p1)-[r3:Article]-() 
+match (p2)-[r5:Article]-()
+return r1,r2,r3,r5,p,p1,p2;
+
+
+match res=(p:Author{authorId:'2045129800'})-[r1:Article]-(p1:Author)-[r2:Article]-(p2:Author) return r1,r2,p,p1,p2;
+```
 
 

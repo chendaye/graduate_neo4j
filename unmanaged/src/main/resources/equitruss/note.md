@@ -225,6 +225,13 @@ gcc -pipe -o hello.exe hello.c
 4 \
 3 \
 1
+./equitruss.o /tmp/relationship_53xnk.txt \
+/tmp/node_yqvbh.txt \
+3 \
+ /tmp/result/ \
+1 \
+3 \
+1
 
 
 # sub_graph
@@ -236,26 +243,18 @@ result/ \
 2 \
 1
 
-./main.o ./dblp_datasets/minim/sub_graph/relationship.txt \
- ./dblp_datasets/minim/sub_graph/node.txt \
-  ./dblp_datasets/minim/sub_graph/query.txt \
-./dblp_datasets/result \
-4 \
-3 \
-1
-
-
 ```
 
 
 # neo4j & equitruss
 
 ```bash
+# 2045129800
 ./equitruss.o /tmp/relationship_gdrxg.txt \
 /tmp/node_pbrt8.txt \
-0 \
+1 \
  /tmp/result \
-3 \
+29 \
 10 \
 1
 

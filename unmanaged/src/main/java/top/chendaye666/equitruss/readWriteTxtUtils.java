@@ -111,4 +111,35 @@ public class readWriteTxtUtils {
         index = index.substring(0, index.length() - 1);
         return node.getId()+"\t"+index+"\n";
     }
+
+    public static boolean isLinux() {
+        return System.getProperty("os.name").toLowerCase().contains("linux");
+    }
+
+    public static boolean isWindows() {
+        return System.getProperty("os.name").toLowerCase().contains("windows");
+    }
+
+    public static String JudgeSystem() {
+        if (isLinux()) {
+            return "linux";
+        } else if (isWindows()) {
+            return "windows";
+        } else {
+            return "other system";
+        }
+    }
+
+    public static String path(){
+        if (isLinux()) {
+            return "/tmp";
+        } else if (isWindows()) {
+            return "E:\\code";
+        } else {
+            return "";
+        }
+    }
+
+
+
 }

@@ -135,6 +135,18 @@ public class AlgoTest {
             e.printStackTrace();
         }
     }
+    @Test
+    public void txtv2Test() throws JsonProcessingException {
+        // node_id
+        HTTP.Response response = HTTP.GET(neo4jRule.httpURI().resolve("/search/equitruss/txtv2/4").toString());
+        try {
+            System.out.println(response.toString());
+            ArrayList<Object> actual = response.content();
+            System.out.println(actual.toString());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 
     /**
      * 测试基础请求
