@@ -112,18 +112,6 @@ public class AlgoTest {
     }
 
     @Test
-    public void searchTest() throws JsonProcessingException {
-        // node_id, k_value, attr_count, selection
-        HTTP.Response response = HTTP.GET(neo4jRule.httpURI().resolve("/search/equitruss/search/4/4/4/2").toString());
-        System.out.println("dumpTest start");
-        ArrayList<Object> actual = response.content();
-        System.out.println(actual.toString());
-
-        System.out.println("dumpTest end");
-
-    }
-
-    @Test
     public void txtTest() throws JsonProcessingException {
         // node_id
         HTTP.Response response = HTTP.GET(neo4jRule.httpURI().resolve("/search/equitruss/txt/4").toString());
@@ -140,7 +128,7 @@ public class AlgoTest {
         // node_id
         HTTP.Response response = HTTP.GET(neo4jRule.httpURI().resolve("/search/equitruss/txtv2/4").toString());
         try {
-            System.out.println(response.toString());
+            System.out.println(response.content().toString());
             ArrayList<Object> actual = response.content();
             System.out.println(actual.toString());
         }catch (Exception e){
@@ -159,5 +147,14 @@ public class AlgoTest {
         System.out.println(response.content().toString());
     }
 
+    @Test
+    public void searchTest() throws JsonProcessingException {
+        // node_id, k_value, attr_count, selection
+        HTTP.Response response = HTTP.GET(neo4jRule.httpURI().resolve("/search/equitruss/search/4/3/2/2").toString());
+
+        System.out.println(response.content().toString());
+//        ArrayList<Object> actual = response.content();
+//        System.out.println(actual.toString());
+    }
 
 }

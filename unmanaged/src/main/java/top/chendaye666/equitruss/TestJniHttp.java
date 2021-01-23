@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.neo4j.dbms.api.DatabaseManagementService;
 import org.neo4j.graphdb.*;
-import top.chendaye666.httpjni.JniUtil;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -102,14 +101,14 @@ public class TestJniHttp {
         ArrayList<String> resp = new ArrayList<>();
         ArrayList<Long> relationships = new ArrayList<>();
         ArrayList<Long> nodes = new ArrayList<>();
-        String nodePath = "./node_"+readWriteTxtUtils.generateStr(5)+".txt";
-        readWriteTxtUtils.fileExist(nodePath);
+        String nodePath = "./node_"+ ReadWriteTxtUtils.generateStr(5)+".txt";
+        ReadWriteTxtUtils.fileExist(nodePath);
         final File nodeFile = new File(nodePath);
         final FileOutputStream nodeOutputStream = new FileOutputStream(nodeFile);
-        String relationshipPath = "./relationship_"+readWriteTxtUtils.generateStr(5)+".txt";
+        String relationshipPath = "./relationship_"+ ReadWriteTxtUtils.generateStr(5)+".txt";
         final File relationshipFile = new File(relationshipPath);
         final FileOutputStream relationshipOutputStream = new FileOutputStream(relationshipFile);
-        readWriteTxtUtils.fileExist(relationshipPath);
+        ReadWriteTxtUtils.fileExist(relationshipPath);
         // 从一个起点出发
         String query = "match res=(p:Author{authorId:'"+node_id+"'})-[r1:Article]-(p1:Author)-[r2:Article]-(p2:Author)" +
                 " match (p1)-[r3:Article]-()-[r4:Article]-()-[r7:Article]-() "+
@@ -133,12 +132,12 @@ public class TestJniHttp {
                             String r = start.getId()+"\t"+end.getId()+"\n";
                             relationshipOutputStream.write(r.getBytes());
                             if (!nodes.contains(start.getId())){
-                                String startStr = readWriteTxtUtils.parseNode(start);
+                                String startStr = ReadWriteTxtUtils.parseNode(start);
                                 nodeOutputStream.write(startStr.getBytes());
                                 nodes.add(start.getId());
                             }
                             if(!nodes.contains(end.getId())){
-                                String endStr = readWriteTxtUtils.parseNode(end);
+                                String endStr = ReadWriteTxtUtils.parseNode(end);
                                 nodeOutputStream.write(endStr.getBytes());
                                 nodes.add(end.getId());
                             }

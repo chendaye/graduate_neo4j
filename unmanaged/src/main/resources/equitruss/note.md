@@ -250,8 +250,8 @@ result/ \
 
 ```bash
 # 2045129800
-./equitruss.o /tmp/relationship_gdrxg.txt \
-/tmp/node_pbrt8.txt \
+./equitruss.o /tmp/relationship_c5vn8.txt \
+node_flkgq.txt \
 1 \
  /tmp/result \
 29 \

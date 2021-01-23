@@ -2,6 +2,7 @@ package top.chendaye666.equitruss;
 
 /**
  * 调用社区搜索算法
+ * /Users/lengo/Library/Java/Extensions
  */
 public class JniUtil {
     static {
