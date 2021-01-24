@@ -60,8 +60,13 @@ public class EquitrussJniHttp {
     @GET
     @Path("/search/{node_id}/{k_value}/{attr_count}/{selection}")
     public Response search(@PathParam( "node_id" ) int node_id, @PathParam( "k_value" ) int k_value, @PathParam("attr_count") int attr_count, @PathParam("selection") int selection ) throws IOException {
-        if (node_id < 0 || node_id > 2718655) return Response.ok().entity(objectMapper.writeValueAsString("node not exists!")).build();
         final GraphDatabaseService db = dbms.database("neo4j");
+        // 判断节点是否存在
+        try(Transaction tx = db.beginTx()) {
+            Result execute = tx.execute("match (n:Author) where id(n)=" + node_id + " return n");
+//            tx.commit();
+            if (!execute.hasNext()) return Response.ok().entity(objectMapper.writeValueAsString("node not exists!")).build();
+        }
         // 获取数据
         String query = "match res=(p:Author)-[r1:Article]-(p1:Author) where id(p)="+node_id+" return p,p1";
         String[] path = DataUtils.communityGenerate(db, query, node_id);

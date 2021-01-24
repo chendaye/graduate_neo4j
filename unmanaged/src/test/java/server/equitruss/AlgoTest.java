@@ -119,7 +119,7 @@ public class AlgoTest {
     @Test
     public void searchTest() throws JsonProcessingException {
         // node_id, k_value, attr_count, selection
-        HTTP.Response response = HTTP.GET(neo4jRule.httpURI().resolve("/search/equitruss/search/4/3/2/2").toString());
+        HTTP.Response response = HTTP.GET(neo4jRule.httpURI().resolve("/search/equitruss/search/49/3/2/2").toString());
 
         System.out.println(response.content().toString());
 //        ArrayList<Object> actual = response.content();
