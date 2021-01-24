@@ -3,9 +3,12 @@ package top.chendaye666.equitruss;
 
 import org.junit.jupiter.api.*;
 import org.neo4j.driver.*;
+import org.neo4j.graphdb.Node;
 import org.neo4j.harness.Neo4j;
 import org.neo4j.harness.Neo4jBuilders;
 import top.chendaye666.example.GetRelationshipTypes;
+
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -90,9 +93,18 @@ public class SearchTests {
             session.run(MODEL_STATEMENT);
             //Execute our procedure against it.
             Result result = session.run("MATCH (u:Author {id:4}) CALL top.chendaye666.equitruss.getNeighbor(u) YIELD community RETURN community");
-
-            System.out.println(result.toString());
-            assertThat(2 < 1);
+            result.forEachRemaining(res -> {
+                System.out.println(res.toString());
+            });
+//            while (result.hasNext()){
+//                Map<String,Object> row = (Map<String, Object>) result.next();
+//                for ( Map.Entry<String,Object> column : row.entrySet() ){
+//                    Node author = (Node) column.getValue();
+//                    System.out.println(author.toString());
+//                }
+//            }
+//            System.out.println(result.toString());
+//            assertThat(2 < 1);
         }
     }
 }
