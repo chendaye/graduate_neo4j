@@ -84,6 +84,7 @@ public class DataUtils {
         ArrayList<Long> nodes = new ArrayList<>();
         try (Transaction tx = db.beginTx() ) {
             Result result = tx.execute(query);
+            System.out.println("fuck"+result.hasNext());
             while (result.hasNext()){
                 Map<String,Object> row = result.next();
                 // 所有 node

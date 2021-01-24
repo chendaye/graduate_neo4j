@@ -79,42 +79,11 @@ public class AlgoTest {
         System.out.println(str.toLowerCase());
     }
 
-    /**
-     * 测试文件生成(node)
-     * @throws JsonProcessingException
-     */
-    @Test
-    public void dumpnodeTest() throws JsonProcessingException {
-        // node_id, k_value, attr_count, selection
-        HTTP.Response response = HTTP.GET(neo4jRule.httpURI().resolve("/equitruss/test/dumpnode/1/4/4/2").toString());
-        System.out.println("dumpTest start");
-        ArrayList<Object> actual = response.content();
-        System.out.println(actual.toString());
-
-        System.out.println("dumpTest end");
-
-    }
-
-    /**
-     * 测试文件生成(node)
-     * @throws JsonProcessingException
-     */
-    @Test
-    public void dumprelationshipTest() throws JsonProcessingException {
-        // node_id, k_value, attr_count, selection
-        HTTP.Response response = HTTP.GET(neo4jRule.httpURI().resolve("/equitruss/test/dumprelationship/4/4/4/2").toString());
-        System.out.println("dumpTest start");
-        ArrayList<Object> actual = response.content();
-        System.out.println(actual.toString());
-
-        System.out.println("dumpTest end");
-
-    }
 
     @Test
     public void txtTest() throws JsonProcessingException {
         // node_id
-        HTTP.Response response = HTTP.GET(neo4jRule.httpURI().resolve("/search/equitruss/txt/4").toString());
+        HTTP.Response response = HTTP.GET(neo4jRule.httpURI().resolve("/search/equitruss/txt/40").toString());
         try {
             System.out.println(response.toString());
             ArrayList<Object> actual = response.content();

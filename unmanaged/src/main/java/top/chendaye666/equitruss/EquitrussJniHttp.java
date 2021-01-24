@@ -46,6 +46,7 @@ public class EquitrussJniHttp {
         return Response.ok().entity(objectMapper.writeValueAsString(msg)).build();
     }
 
+
     /**
      * http://localhost:7474/search/equitruss/search/1/15/10/1
      * match (p:Author{authorId:'2045129800'}) set p:LONG set p.community=1 return  p.name,p.community, labels(p) AS labels;
@@ -59,6 +60,7 @@ public class EquitrussJniHttp {
     @GET
     @Path("/search/{node_id}/{k_value}/{attr_count}/{selection}")
     public Response search(@PathParam( "node_id" ) int node_id, @PathParam( "k_value" ) int k_value, @PathParam("attr_count") int attr_count, @PathParam("selection") int selection ) throws IOException {
+        if (node_id < 0 || node_id > 2718655) return Response.ok().entity(objectMapper.writeValueAsString("node not exists!")).build();
         final GraphDatabaseService db = dbms.database("neo4j");
         // 获取数据
         String query = "match res=(p:Author)-[r1:Article]-(p1:Author) where id(p)="+node_id+" return p,p1";
@@ -76,15 +78,15 @@ public class EquitrussJniHttp {
             }
             current_id_str.deleteCharAt(current_id_str.length() - 1);
             current_id_str.append(']');
-            writeCommunity(db, node_id, current_id_str.toString(), ans.split(":")[5].split("#")[1]);
+            writeCommunity(db, node_id, k_value, attr_count, selection, current_id_str.toString(), ans.split(":")[5].split("#")[1]);
         }
         // 搜索结果
         return Response.ok().entity(objectMapper.writeValueAsString(ints)).build();
     }
 
     // 设置社区编号
-    public void writeCommunity(GraphDatabaseService db, int node_id, String current_id_str, String attr_str){
-        String query = "match (p:Author) where id(p) in "+current_id_str+"  set p.community_"+node_id+"="+node_id+", p.common_attribute_"+node_id+"='"+attr_str+"'";
+    public void writeCommunity(GraphDatabaseService db, int node_id, int k_value, int attr_count, int selection, String current_id_str, String attr_str){
+        String query = "match (p:Author) where id(p) in "+current_id_str+"  set p.community_"+node_id+"_"+k_value+"_"+attr_count+"_"+selection+"="+node_id+", p.common_attribute_"+node_id+"='"+attr_str+"'";
         System.out.println(query);
         try (Transaction tx = db.beginTx()){
             tx.execute(query);
@@ -94,14 +96,18 @@ public class EquitrussJniHttp {
 
     @GET
     @Path("/txt/{node_id}")
-    public Response txt(@PathParam( "node_id" ) String node_id) throws IOException {
+    public Response txt(@PathParam( "node_id" ) int node_id) throws IOException {
         final GraphDatabaseService db = dbms.database("neo4j");
-        String query = "match res=(p:Author{authorId:'"+node_id+"'})-[r1:Article]-(p1:Author)-[r2:Article]-(p2:Author)" +
-//                " match (p1)-[r3:Article]-() "+
-//                " match (p2)-[r5:Article]-() "+
-                " return r1,r2";
-        String[] path = DataUtils.mutilStepGenerate(db, query);
-        return Response.ok().entity(objectMapper.writeValueAsString(path)).build();
+        String query = "match res=(p:Author{authorId:'"+node_id+"'})-[r1:Article]-(p1:Author) return p,p1";
+        try (Transaction tx = db.beginTx()){
+            Result result = tx.execute(query);
+
+            System.out.println(result.hasNext());
+
+            tx.commit();
+        }
+//        String[] path = DataUtils.mutilStepGenerate(db, query);
+        return Response.ok().entity(objectMapper.writeValueAsString("ok")).build();
     }
 
     @GET
