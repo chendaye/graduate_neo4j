@@ -14,6 +14,8 @@ public class GetRelationshipTypesTests {
     private static Driver driver;
     private Neo4j embeddedDatabaseServer;
 
+
+
     @BeforeAll
     void initializeNeo4j() {
         this.embeddedDatabaseServer = Neo4jBuilders.newInProcessBuilder()
