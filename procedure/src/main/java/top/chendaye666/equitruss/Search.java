@@ -87,9 +87,24 @@ public class Search {
         String[] path = DataUtils.communityGenerate(db, query, node_id);
         //调用 Jni： relationship.txt node.txt vertex  resultPath query_k attr_cnt algo_type
         JniUtil jni = new JniUtil();
-        String ans = jni.query(path[0], path[1], node_id, path[2], k_value, attr_count, selection);
-        //        ans = "4:3:0.000023:0:1,2:1,2,3,4#1,2";
+//        String ans = jni.query(path[0], path[1], node_id, path[2], k_value, attr_count, selection);
+        String ans = "4:3:0.000023:0:1,2:1,2,3,4#1,2";
         ArrayList<int[]> ints = DataUtils.parseCommunity(ans);
+        String[] split = ans.split(":");
+        if (split.length < 5) return null;
+        final String[] cm = split[5].split("#");
+        // 遍历所有社区节点
+        ArrayList<Equitruss> res = new ArrayList<>();
+        try(Transaction tx = db.beginTx()) {
+            Result result = tx.execute("match (p:Author) where id(p) in [" + cm[0] + "] return p");
+            while (result.hasNext()){
+                Map<String,Object> row = result.next();
+                for ( Map.Entry<String,Object> column : row.entrySet() ){
+                    Node author = (Node) column.getValue();
+                    res.add(new Equitruss(author.getId(), (String) author.getProperty("authorId"), (String) author.getProperty("name"), cm[0], cm[1]));
+                }
+            }
+        }
         if (ints.size() == 3){
             StringBuilder current_id_str = new StringBuilder();
             current_id_str.append('[');
@@ -100,7 +115,6 @@ public class Search {
             current_id_str.append(']');
             writeCommunity(db, node_id, k_value, attr_count, selection, current_id_str.toString(), ans.split(":")[5].split("#")[1]);
         }
-        ArrayList<Equitruss> res = new ArrayList<>();
 
         return res.stream();
     }
@@ -142,10 +156,10 @@ public class Search {
         public Long id;
         public String authorId;
         public String name;
-        public List<Long> community;
-        public List<String> words;
+        public String community;
+        public String words;
 
-        public Equitruss(Long id, String authorId, String name, List<Long> community, List<String> words) {
+        public Equitruss(Long id, String authorId, String name, String community, String words) {
             this.id = id;
             this.authorId = authorId;
             this.name = name;

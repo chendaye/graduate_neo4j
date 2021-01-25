@@ -124,6 +124,26 @@ public class SearchTests {
             }
         }
     }
+
+
+    @Test
+    public void search() {
+        // In a try-block, to make sure we close the session after the test
+        try(Session session = driver.session()) {
+            //Create our data in the database.
+            session.run(MODEL_STATEMENT);
+            //Execute our procedure against it.
+            final Result result = session.run("MATCH (u:Author {authorId:'4'}) CALL top.chendaye666.equitruss.search(u) YIELD authorId, word RETURN authorId, word");
+            while (result.hasNext()){
+                Record next = result.next();
+                Iterator<Value> iterator = next.values().iterator();
+                while (iterator.hasNext()){
+                    final Value val = iterator.next();
+                    System.out.println("test="+val.toString());
+                }
+            }
+        }
+    }
 }
 
 
