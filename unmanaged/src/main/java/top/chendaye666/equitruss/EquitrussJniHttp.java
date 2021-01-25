@@ -83,15 +83,16 @@ public class EquitrussJniHttp {
             }
             current_id_str.deleteCharAt(current_id_str.length() - 1);
             current_id_str.append(']');
-            writeCommunity(db, node_id, k_value, attr_count, selection, current_id_str.toString(), ans.split(":")[5].split("#")[1]);
+            String key = node_id+"_"+k_value+"_"+attr_count+"_"+selection;
+            writeCommunity(db, node_id, current_id_str.toString(), ans.split(":")[5].split("#")[1], key);
         }
         // 搜索结果
         return Response.ok().entity(objectMapper.writeValueAsString(ints)).build();
     }
 
     // 设置社区编号
-    public void writeCommunity(GraphDatabaseService db, int node_id, int k_value, int attr_count, int selection, String current_id_str, String attr_str){
-        String query = "match (p:Author) where id(p) in "+current_id_str+"  set p.community_"+node_id+"_"+k_value+"_"+attr_count+"_"+selection+"="+node_id+", p.common_attribute_"+node_id+"='"+attr_str+"'";
+    public void writeCommunity(GraphDatabaseService db, int node_id, String current_id_str, String attr_str, String key){
+        String query = "match (p:Author) where id(p) in "+current_id_str+"  set p.community_"+key+"="+node_id+",p.common_attribute_"+key+"='"+attr_str+"'";
         System.out.println(query);
         try (Transaction tx = db.beginTx()){
             tx.execute(query);

@@ -21,18 +21,18 @@ public class SearchTests {
     // 构建测试图
     public static final String MODEL_STATEMENT =
             new StringBuilder() // 词的索引:词:词频
-                    .append("CREATE (p1:Author {authorId: '1', words: '1:DB:2@2:CV:1'})")
-                    .append("CREATE (p2:Author {authorId: '2', words: '4:MD:7@2:CV:1'})")
-                    .append("CREATE (p3:Author {authorId: '3', words: '5:AI:1@2:CV:1@4:DM:4'})")
-                    .append("CREATE (p4:Author {authorId: '4', words: '2:CV:1@3:ML:2@4:DM:1'})")
-                    .append("CREATE (p5:Author {authorId: '5', words: '2:CV:1@1:DB:2@4:DM:1'})")
-                    .append("CREATE (p6:Author {authorId: '6', words: '2:CV:1@4:DM:1'})")
-                    .append("CREATE (p7:Author {authorId: '7', words: '2:CV:8@4:DM:6'})")
-                    .append("CREATE (p8:Author {authorId: '8', words: '2:CV:1@4:DM:1@3:ML:4'})")
-                    .append("CREATE (p9:Author {authorId: '9', words: '2:CV:5@4:DM:2'})")
-                    .append("CREATE (p10:Author {authorId: '10', words: '2:CV:3@4:DM:6'})")
-                    .append("CREATE (p11:Author {authorId: '11', words: '2:CV:1@4:DM:1@5:AI:1'})")
-                    .append("CREATE (p12:Author {authorId: '12', words: '2:CV:1@4:DM:1'})")
+                    .append("CREATE (p1:Author {name: 'aa', authorId: '1', words: '1:DB:2@2:CV:1'})")
+                    .append("CREATE (p2:Author {name: 'aa', authorId: '2', words: '4:MD:7@2:CV:1'})")
+                    .append("CREATE (p3:Author {name: 'aa', authorId: '3', words: '5:AI:1@2:CV:1@4:DM:4'})")
+                    .append("CREATE (p4:Author {name: 'aa', authorId: '4', words: '2:CV:1@3:ML:2@4:DM:1'})")
+                    .append("CREATE (p5:Author {name: 'aa', authorId: '5', words: '2:CV:1@1:DB:2@4:DM:1'})")
+                    .append("CREATE (p6:Author {name: 'aa', authorId: '6', words: '2:CV:1@4:DM:1'})")
+                    .append("CREATE (p7:Author {name: 'aa', authorId: '7', words: '2:CV:8@4:DM:6'})")
+                    .append("CREATE (p8:Author {name: 'aa', authorId: '8', words: '2:CV:1@4:DM:1@3:ML:4'})")
+                    .append("CREATE (p9:Author {name: 'aa', authorId: '9', words: '2:CV:5@4:DM:2'})")
+                    .append("CREATE (p10:Author {name: 'aa', authorId: '10', words: '2:CV:3@4:DM:6'})")
+                    .append("CREATE (p11:Author {name: 'aa', authorId: '11', words: '2:CV:1@4:DM:1@5:AI:1'})")
+                    .append("CREATE (p12:Author {name: 'aa', authorId: '12', words: '2:CV:1@4:DM:1'})")
                     .append("MERGE (p1)-[:Article {weight: toInteger(1)}]->(p2)")
                     .append("MERGE (p1)-[:Article {weight: toInteger(2)}]->(p3)")
                     .append("MERGE (p1)-[:Article {weight: toInteger(3)}]->(p4)")
@@ -133,7 +133,7 @@ public class SearchTests {
             //Create our data in the database.
             session.run(MODEL_STATEMENT);
             //Execute our procedure against it.
-            final Result result = session.run("MATCH (u:Author {authorId:'4'}) CALL top.chendaye666.equitruss.search(u) YIELD authorId, word RETURN authorId, word");
+            final Result result = session.run("MATCH (u:Author) where id(u) = 1 CALL top.chendaye666.equitruss.search(u,15,10,1) YIELD id,authorId,name,community,words RETURN id,authorId,name,community,words");
             while (result.hasNext()){
                 Record next = result.next();
                 Iterator<Value> iterator = next.values().iterator();

@@ -77,24 +77,33 @@ public class Search {
     }
 
 
+    /**
+     * 社区搜索存储过程(只读权限)
+     * @param node
+     * @param k_value
+     * @param attr_count
+     * @param selection
+     * @return
+     */
     @Procedure(value = "top.chendaye666.equitruss.search")
     @Description("Get community by equitruss.")
-    public Stream<Equitruss> search(@Name("node") Node node, int k_value, int attr_count, int selection) {
+    public Stream<Equitruss> search(@Name("node") Node node, @Name("k_value") long k_value, @Name("attr_count") long attr_count, @Name("selection") long selection) {
         if (node == null) return null;
         int node_id = (int) node.getId(); // 查询的节点id
+        ArrayList<Equitruss> res = new ArrayList<>();
         // 获取数据
         String query = "match res=(p:Author)-[r1:Article]-(p1:Author) where id(p)="+node_id+" return p,p1";
         String[] path = DataUtils.communityGenerate(db, query, node_id);
         //调用 Jni： relationship.txt node.txt vertex  resultPath query_k attr_cnt algo_type
         JniUtil jni = new JniUtil();
-//        String ans = jni.query(path[0], path[1], node_id, path[2], k_value, attr_count, selection);
-        String ans = "4:3:0.000023:0:1,2:1,2,3,4#1,2";
+        String ans = jni.query(path[0], path[1], node_id, path[2], (int)k_value, (int)attr_count, (int)selection);
+//        String ans = "4:3:0.000023:0:1,2:1,2,3,4#1,2";
         ArrayList<int[]> ints = DataUtils.parseCommunity(ans);
         String[] split = ans.split(":");
-        if (split.length < 5) return null;
+//        System.out.println(split.length);
+        if (split.length != 6) return res.stream();
         final String[] cm = split[5].split("#");
         // 遍历所有社区节点
-        ArrayList<Equitruss> res = new ArrayList<>();
         try(Transaction tx = db.beginTx()) {
             Result result = tx.execute("match (p:Author) where id(p) in [" + cm[0] + "] return p");
             while (result.hasNext()){
@@ -105,29 +114,9 @@ public class Search {
                 }
             }
         }
-        if (ints.size() == 3){
-            StringBuilder current_id_str = new StringBuilder();
-            current_id_str.append('[');
-            for (int current_id : ints.get(2)){
-                current_id_str.append(String.valueOf(current_id)+',');
-            }
-            current_id_str.deleteCharAt(current_id_str.length() - 1);
-            current_id_str.append(']');
-            writeCommunity(db, node_id, k_value, attr_count, selection, current_id_str.toString(), ans.split(":")[5].split("#")[1]);
-        }
-
         return res.stream();
     }
 
-    // 设置社区编号
-    public void writeCommunity(GraphDatabaseService db, int node_id, int k_value, int attr_count, int selection, String current_id_str, String attr_str){
-        String query = "match (p:Author) where id(p) in "+current_id_str+"  set p.community_"+node_id+"_"+k_value+"_"+attr_count+"_"+selection+"="+node_id+", p.common_attribute_"+node_id+"='"+attr_str+"'";
-        System.out.println(query);
-        try (Transaction tx = db.beginTx()){
-            tx.execute(query);
-            tx.commit();
-        }
-    }
 
     /**
      * This is the output record for our search procedure. All procedures
