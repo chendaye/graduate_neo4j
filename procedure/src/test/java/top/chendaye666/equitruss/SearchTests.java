@@ -8,6 +8,7 @@ import org.neo4j.harness.Neo4j;
 import org.neo4j.harness.Neo4jBuilders;
 import top.chendaye666.example.GetRelationshipTypes;
 
+import java.util.Iterator;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -92,19 +93,35 @@ public class SearchTests {
             //Create our data in the database.
             session.run(MODEL_STATEMENT);
             //Execute our procedure against it.
-            Result result = session.run("MATCH (u:Author {id:4}) CALL top.chendaye666.equitruss.getNeighbor(u) YIELD community RETURN community");
-            result.forEachRemaining(res -> {
-                System.out.println(res.toString());
-            });
-//            while (result.hasNext()){
-//                Map<String,Object> row = (Map<String, Object>) result.next();
-//                for ( Map.Entry<String,Object> column : row.entrySet() ){
-//                    Node author = (Node) column.getValue();
-//                    System.out.println(author.toString());
-//                }
-//            }
-//            System.out.println(result.toString());
-//            assertThat(2 < 1);
+            final Result result = session.run("MATCH (u:Author {authorId:'4'}) CALL top.chendaye666.equitruss.getNeighbor(u) YIELD neighbor, word RETURN neighbor, word");
+            System.out.println("result-count="+result.hasNext());
+            while (result.hasNext()){
+                Record next = result.next();
+                Iterator<Value> iterator = next.values().iterator();
+                while (iterator.hasNext()){
+                    final Value val = iterator.next();
+                    System.out.println("test="+val.toString());
+                }
+            }
+        }
+    }
+
+    @Test
+    public void neighborField() {
+        // In a try-block, to make sure we close the session after the test
+        try(Session session = driver.session()) {
+            //Create our data in the database.
+            session.run(MODEL_STATEMENT);
+            //Execute our procedure against it.
+            final Result result = session.run("MATCH (u:Author {authorId:'4'}) CALL top.chendaye666.equitruss.neighborField(u) YIELD authorId, word RETURN authorId, word");
+            while (result.hasNext()){
+                Record next = result.next();
+                Iterator<Value> iterator = next.values().iterator();
+                while (iterator.hasNext()){
+                    final Value val = iterator.next();
+                    System.out.println("test="+val.toString());
+                }
+            }
         }
     }
 }
