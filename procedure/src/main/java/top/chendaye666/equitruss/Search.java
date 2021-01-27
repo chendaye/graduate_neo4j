@@ -102,7 +102,8 @@ public class Search {
         String[] split = ans.split(":");
 //        System.out.println(split.length);
         if (split.length != 6) return res.stream();
-        final String[] cm = split[5].split("#");
+        String[] communities = split[5].split("@"); // 多个结果
+        final String[] cm = communities[0].split("#"); // 取第一个
         // 遍历所有社区节点
         try(Transaction tx = db.beginTx()) {
             Result result = tx.execute("match (p:Author) where id(p) in [" + cm[0] + "] return p");
@@ -110,7 +111,7 @@ public class Search {
                 Map<String,Object> row = result.next();
                 for ( Map.Entry<String,Object> column : row.entrySet() ){
                     Node author = (Node) column.getValue();
-                    res.add(new Equitruss(author.getId(), (String) author.getProperty("authorId"), (String) author.getProperty("name"), cm[0], cm[1]));
+                    res.add(new Equitruss(author.getId(), (String) author.getProperty("authorId"), (String) author.getProperty("name"), (long) communities.length, cm[0], cm[1], split[5]));
                 }
             }
         }
@@ -145,15 +146,19 @@ public class Search {
         public Long id;
         public String authorId;
         public String name;
+        public Long count;
         public String community;
         public String words;
+        public String raw;
 
-        public Equitruss(Long id, String authorId, String name, String community, String words) {
+        public Equitruss(Long id, String authorId, String name, Long count, String community, String words, String raw) {
             this.id = id;
             this.authorId = authorId;
             this.name = name;
+            this.count = count;
             this.community = community;
             this.words = words;
+            this.raw = raw;
         }
 
     }

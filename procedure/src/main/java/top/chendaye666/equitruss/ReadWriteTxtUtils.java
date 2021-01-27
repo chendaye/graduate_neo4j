@@ -108,15 +108,15 @@ public class ReadWriteTxtUtils {
      * @return
      */
     public static String parseNode(Node node){
-//        String authorId = (String)node.getProperty("authorId");
-        String words = (String) node.getProperty("words");
-        String[] split = words.split("@");
-        String index = "";
-        for (String str : split){
-            String[] word = str.split(":");
-            index += word[0]+",";
-        }
-        index = index.substring(0, index.length() - 1);
+//        String words = (String) node.getProperty("words");
+//        String[] split = words.split("@");
+//        String index = "";
+//        for (String str : split){
+//            String[] word = str.split(":");
+//            index += word[0]+",";
+//        }
+//        index = index.substring(0, index.length() - 1);
+        String index = (String)node.getProperty("attribute");
         return node.getId()+"\t"+index+"\n";
     }
 

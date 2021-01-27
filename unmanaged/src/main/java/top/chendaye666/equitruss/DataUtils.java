@@ -130,7 +130,10 @@ public class DataUtils {
         ArrayList<int[]> list = new ArrayList<>();
         list.add(strToIntArray(result[4])); // 全部的属性集合
         if (result.length == 6){
-            String[] split = result[5].split("#");
+            //todo： 可能查询到多个社区
+            String[] communities = result[5].split("@");
+            //TODO: 处理多个社区
+            String[] split = communities[0].split("#");
             list.add(strToIntArray(split[1])); // 公共的属性集合
             list.add(strToIntArray(split[0])); // 社区节点集合
         }

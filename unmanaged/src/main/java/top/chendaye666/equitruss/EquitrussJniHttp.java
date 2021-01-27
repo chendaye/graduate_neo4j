@@ -73,7 +73,10 @@ public class EquitrussJniHttp {
         //调用 Jni： relationship.txt node.txt vertex  resultPath query_k attr_cnt algo_type
         JniUtil jni = new JniUtil();
         String ans = jni.query(path[0], path[1], node_id, path[2], k_value, attr_count, selection);
-//        ans = "4:3:0.000023:0:1,2:1,2,3,4#1,2";
+//        String ans = "881893:4:0.042062:2:1,2,3,4:15,190868,522503,637353,664837,743606,881893#1,2,3,4@419175,533944,881893,1457212#1,2,3,4";
+        String[] split = ans.split(":");
+//        System.out.println(split.length);
+        if (split.length != 6) return Response.ok().entity(objectMapper.writeValueAsString("没有符合条件的community！")).build();
         ArrayList<int[]> ints = DataUtils.parseCommunity(ans);
         if (ints.size() == 3){
             StringBuilder current_id_str = new StringBuilder();
@@ -87,7 +90,12 @@ public class EquitrussJniHttp {
             writeCommunity(db, node_id, current_id_str.toString(), ans.split(":")[5].split("#")[1], key);
         }
         // 搜索结果
-        return Response.ok().entity(objectMapper.writeValueAsString(ints)).build();
+        String[] communities = split[5].split("@");
+        ArrayList<String[]> answer = new ArrayList<>();
+        for (String s : communities){
+            answer.add(s.split("#"));
+        }
+        return Response.ok().entity(objectMapper.writeValueAsString(answer)).build();
     }
 
     // 设置社区编号

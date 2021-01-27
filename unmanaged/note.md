@@ -84,7 +84,13 @@ sed -i '1i physicianId' ./providers.csv
 sed -i '1i startId,endId,transactions,patients,max_day' ./shared_members.csv
 
 # 建立节点
-LOAD CSV WITH HEADERS  FROM 'file:///node_0.csv' AS row CREATE (:Author {authorId:row.author_id,name:row.node,articles:row.articles,words:row.words});
+LOAD CSV WITH HEADERS  FROM 'file:///node_1.csv' AS row CREATE (:Author {authorId:row.author_id,name:row.node,articles:row.articles,words:row.words,attribute:row.attribute});
+LOAD CSV WITH HEADERS  FROM 'file:///node_2.csv' AS row CREATE (:Author {authorId:row.author_id,name:row.node,articles:row.articles,words:row.words,attribute:row.attribute});
+LOAD CSV WITH HEADERS  FROM 'file:///node_3.csv' AS row CREATE (:Author {authorId:row.author_id,name:row.node,articles:row.articles,words:row.words,attribute:row.attribute});
+LOAD CSV WITH HEADERS  FROM 'file:///node_4.csv' AS row CREATE (:Author {authorId:row.author_id,name:row.node,articles:row.articles,words:row.words,attribute:row.attribute});
+LOAD CSV WITH HEADERS  FROM 'file:///node_5.csv' AS row CREATE (:Author {authorId:row.author_id,name:row.node,articles:row.articles,words:row.words,attribute:row.attribute});
+LOAD CSV WITH HEADERS  FROM 'file:///node_6.csv' AS row CREATE (:Author {authorId:row.author_id,name:row.node,articles:row.articles,words:row.words,attribute:row.attribute});
+LOAD CSV WITH HEADERS  FROM 'file:///node_7.csv' AS row CREATE (:Author {authorId:row.author_id,name:row.node,articles:row.articles,words:row.words,attribute:row.attribute});
 
 # 建索引(很重要)
 CREATE INDEX index_authorId FOR (n:Author) ON (n.authorId);
@@ -94,9 +100,16 @@ LOAD CSV WITH HEADERS FROM 'file:///relationship_0.csv' AS row
 MATCH (e:Author {authorId: row.start}) MATCH (c:Author {authorId: row.end}) 
 MERGE  (e)-[:Article { weight:toInteger(row.weight)}]-(c);
 
-LOAD CSV WITH HEADERS FROM 'file:///relationship_21.csv' AS row 
-MATCH (e:Author {authorId: row.start}),(c:Author {authorId: row.end}) 
-MERGE  (e)-[:Article { weight:toInteger(row.weight)}]-(c);
+LOAD CSV WITH HEADERS FROM 'file:///relationship_0.csv' AS row MATCH (e:Author {authorId: row.start}),(c:Author {authorId: row.end}) MERGE  (e)-[:Article { weight:toInteger(row.weight)}]-(c);
+LOAD CSV WITH HEADERS FROM 'file:///relationship_1.csv' AS row MATCH (e:Author {authorId: row.start}),(c:Author {authorId: row.end}) MERGE  (e)-[:Article { weight:toInteger(row.weight)}]-(c);
+LOAD CSV WITH HEADERS FROM 'file:///relationship_2.csv' AS row MATCH (e:Author {authorId: row.start}),(c:Author {authorId: row.end}) MERGE  (e)-[:Article { weight:toInteger(row.weight)}]-(c);
+LOAD CSV WITH HEADERS FROM 'file:///relationship_3.csv' AS row MATCH (e:Author {authorId: row.start}),(c:Author {authorId: row.end}) MERGE  (e)-[:Article { weight:toInteger(row.weight)}]-(c);
+LOAD CSV WITH HEADERS FROM 'file:///relationship_4.csv' AS row MATCH (e:Author {authorId: row.start}),(c:Author {authorId: row.end}) MERGE  (e)-[:Article { weight:toInteger(row.weight)}]-(c);
+LOAD CSV WITH HEADERS FROM 'file:///relationship_5.csv' AS row MATCH (e:Author {authorId: row.start}),(c:Author {authorId: row.end}) MERGE  (e)-[:Article { weight:toInteger(row.weight)}]-(c);
+LOAD CSV WITH HEADERS FROM 'file:///relationship_6.csv' AS row MATCH (e:Author {authorId: row.start}),(c:Author {authorId: row.end}) MERGE  (e)-[:Article { weight:toInteger(row.weight)}]-(c);
+LOAD CSV WITH HEADERS FROM 'file:///relationship_7.csv' AS row MATCH (e:Author {authorId: row.start}),(c:Author {authorId: row.end}) MERGE  (e)-[:Article { weight:toInteger(row.weight)}]-(c);
+LOAD CSV WITH HEADERS FROM 'file:///relationship_8.csv' AS row MATCH (e:Author {authorId: row.start}),(c:Author {authorId: row.end}) MERGE  (e)-[:Article { weight:toInteger(row.weight)}]-(c);
+LOAD CSV WITH HEADERS FROM 'file:///relationship_9.csv' AS row MATCH (e:Author {authorId: row.start}),(c:Author {authorId: row.end}) MERGE  (e)-[:Article { weight:toInteger(row.weight)}]-(c);
 
 # 去除自环
 match (n:Author)-[r:Article]-(m:Author) where n.authorId=m.authorId delete r;

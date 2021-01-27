@@ -5,6 +5,8 @@ import org.neo4j.graphdb.*;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 public class DataUtils {
@@ -75,21 +77,24 @@ public class DataUtils {
         }
         return resp;
     }
-
-    public static void depthOne(GraphDatabaseService db, String query, FileOutputStream nodeOutputStream, FileOutputStream relationshipOutputStream) throws IOException {
+    //todo: 生成equitruss查询所需要的数据 ArrayList
+    public static void _depthOne(GraphDatabaseService db, String query, FileOutputStream nodeOutputStream, FileOutputStream relationshipOutputStream) throws IOException {
         ArrayList<Long> relationships = new ArrayList<>();
         ArrayList<Long> nodes = new ArrayList<>();
         try (Transaction tx = db.beginTx() ) {
+            // match res=(p:Author)-[r1:Article]-(p1:Author) where id(p)="+node_id+" return p,p1
             Result result = tx.execute(query);
-            System.out.println("fuck"+result.hasNext());
+            // p的所有邻接点
             while (result.hasNext()){
                 Map<String,Object> row = result.next();
                 // 所有 node
                 for ( Map.Entry<String,Object> column : row.entrySet() ){
                     Node author = (Node) column.getValue();
-                    dealNode(author, nodeOutputStream, nodes); // 处理node
+                    //todo： 处理node, 耗费时间的点（考虑写入图中）
+                    dealNode(author, nodeOutputStream, nodes);
                     // node 直接相连的边
                     for (Relationship relationship : author.getRelationships(Direction.BOTH, RelationshipTypes.Article)){
+                        // 当前节点的边
                         dealRelationShip(relationship, relationshipOutputStream, relationships);
                         // 边的另一个节点
                         Node otherNode = relationship.getOtherNode(author);
@@ -105,6 +110,41 @@ public class DataUtils {
         }
     }
 
+    //todo: 生成equitruss查询所需要的数据 HashSet
+    public static void depthOne(GraphDatabaseService db, String query, FileOutputStream nodeOutputStream, FileOutputStream relationshipOutputStream) throws IOException {
+        HashSet<Long> relationships = new HashSet<>();
+        HashSet<Long> nodes = new HashSet<>();
+        try (Transaction tx = db.beginTx() ) {
+            // match res=(p:Author)-[r1:Article]-(p1:Author) where id(p)="+node_id+" return p,p1
+            Result result = tx.execute(query);
+            // p的所有邻接点
+            while (result.hasNext()){
+                Map<String,Object> row = result.next();
+                // 所有 node
+                for ( Map.Entry<String,Object> column : row.entrySet() ){
+                    Node author = (Node) column.getValue();
+                    //todo： 处理node, 耗费时间的点（考虑写入图中）
+                    dealNode(author, nodeOutputStream, nodes);
+                    // node 直接相连的边
+                    for (Relationship relationship : author.getRelationships(Direction.BOTH, RelationshipTypes.Article)){
+                        // 当前节点的边
+                        dealRelationShip(relationship, relationshipOutputStream, relationships);
+                        // 边的另一个节点
+                        Node otherNode = relationship.getOtherNode(author);
+                        dealNode(otherNode, nodeOutputStream, nodes); // 处理node
+                        // 另一个节点的边
+                        for (Relationship r : otherNode.getRelationships(Direction.BOTH, RelationshipTypes.Article)){
+                            dealRelationShip(r, relationshipOutputStream, relationships);
+                        }
+                    }
+                }
+            }
+            tx.commit();
+        }
+    }
+
+
+    // ArrayList
     public static void dealNode(Node node, FileOutputStream nodeOutputStream, ArrayList<Long> nodes) throws IOException {
         if (!nodes.contains(node.getId())) {
             String endStr = ReadWriteTxtUtils.parseNode(node);
@@ -112,10 +152,24 @@ public class DataUtils {
             nodes.add(node.getId());
         }
     }
-
+    // HashSet (底层是HashMap)
+    public static void dealNode(Node node, FileOutputStream nodeOutputStream, HashSet<Long> nodes) throws IOException {
+        if (nodes.add(node.getId())) {
+            String endStr = ReadWriteTxtUtils.parseNode(node);
+            nodeOutputStream.write(endStr.getBytes());
+        }
+    }
+    // ArrayList
     public static void dealRelationShip(Relationship relationship, FileOutputStream relationshipOutputStream, ArrayList<Long> relationships) throws IOException {
         if (!relationships.contains(relationship.getId())){
             relationships.add(relationship.getId());
+            String r = relationship.getStartNode().getId()+"\t"+relationship.getEndNode().getId()+"\n";
+            relationshipOutputStream.write(r.getBytes());
+        }
+    }
+    // HashSet
+    public static void dealRelationShip(Relationship relationship, FileOutputStream relationshipOutputStream, HashSet<Long> relationships) throws IOException {
+        if (relationships.add(relationship.getId())){
             String r = relationship.getStartNode().getId()+"\t"+relationship.getEndNode().getId()+"\n";
             relationshipOutputStream.write(r.getBytes());
         }
@@ -138,7 +192,10 @@ public class DataUtils {
         ArrayList<int[]> list = new ArrayList<>();
         list.add(strToIntArray(result[4])); // 全部的属性集合
         if (result.length == 6){
-            String[] split = result[5].split("#");
+            //todo： 可能查询到多个社区
+            String[] communities = result[5].split("@");
+            //TODO: 处理多个社区
+            String[] split = communities[0].split("#");
             list.add(strToIntArray(split[1])); // 公共的属性集合
             list.add(strToIntArray(split[0])); // 社区节点集合
         }
@@ -156,13 +213,13 @@ public class DataUtils {
     }
 
     public static void main(String[] args) {
-        String commubity = "1:" +
-                "15:" +
-                "0.826373:" +
-                "1:" +
-                "1,2,3,4,5,6,12,14,17,18:" +
-                "1,54347,110775,381840,384015,490642,490648,492815,547069,599205,708217,737579,762478,845949,979500,1006881,1009145,1033820,1069769,1115209,1278104,1278590,1359585,1495279,1633037,1794206,1821467,1875810,1877848,1986787,2284301,2474620#1,2,3,4,5,6,12,14,17,18";
-        commubity = "4:3:0.000023:0:1,2:1,54347,110775,381840#1,2";
+        String  commubity = "" +
+                "881893" +
+                ":4" +
+                ":0.042062" +
+                ":2" +
+                ":1,2,3,4" +
+                ":15,190868,522503,637353,664837,743606,881893#1,2,3,4@419175,533944,881893,1457212#1,2,3,4";
 
         ArrayList<int[]> ints = parseCommunity(commubity);
         for (int[] arr : ints){
