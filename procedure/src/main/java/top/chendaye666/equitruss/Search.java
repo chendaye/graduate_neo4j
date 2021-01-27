@@ -97,7 +97,7 @@ public class Search {
         //调用 Jni： relationship.txt node.txt vertex  resultPath query_k attr_cnt algo_type
         JniUtil jni = new JniUtil();
         String ans = jni.query(path[0], path[1], node_id, path[2], (int)k_value, (int)attr_count, (int)selection);
-//        String ans = "4:3:0.000023:0:1,2:1,2,3,4#1,2";
+//        String ans = "881893:4:0.042062:2:1,2,3,4:15,190868,522503,637353,664837,743606,881893#1,2,3,4@419175,533944,881893,1457212#1,2,3,4";
         ArrayList<int[]> ints = DataUtils.parseCommunity(ans);
         String[] split = ans.split(":");
 //        System.out.println(split.length);

@@ -121,8 +121,19 @@ public class DataUtils {
         }
     }
 
-    // vertex	query_k	time	result_community_count	query_attribute_set	communities_set
+    /*
+     * vertex	query_k	time	result_community_count	query_attribute_set	communities_set
+     * 881893:4:0.042062:2:1,2,3,4:15,190868,522503,637353,664837,743606,881893#1,2,3,4@419175,533944,881893,1457212#1,2,3,4
+     *
+     * result[0]= 881893 vertex
+     * result[1]= 4 query_k
+     * result[2]= 0.042062  time
+     * result[3]= 2 result_community_count
+     * result[4]= 1,2,3,4 query_attribute_set
+     * result[5]= 15,190868,522503,637353,664837,743606,881893#1,2,3,4@419175,533944,881893,1457212#1,2,3,4 communities_set
+     */
     public static ArrayList<int[]> parseCommunity(String commubity){
+        System.out.println("search result="+commubity);
         String[] result = commubity.split(":");
         ArrayList<int[]> list = new ArrayList<>();
         list.add(strToIntArray(result[4])); // 全部的属性集合

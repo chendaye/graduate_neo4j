@@ -188,77 +188,29 @@ gcc -pipe -o hello.exe hello.c
 
 [Makefile 详解](https://seisman.github.io/how-to-write-makefile/overview.html)
 
-# Test
-
-```bash
-# equiTruss
-./main.o ./dblp_datasets/Graph/dblp20%_vertices.txt \
- ./dblp_datasets/Attribute/dblp_attributes_int.txt \
- ./dblp_datasets/Queries/vertices_rand300_6truss_dblp.txt \
-./dblp_datasets/result \
-4 \
-3 \
-1
-
-# neo4j
-./neo4j.o ./dblp_datasets/Graph/dblp20%_vertices.txt \
- ./dblp_datasets/Attribute/dblp_attributes_int.txt \
- 304565 \
-./dblp_datasets/result \
-4 \
-3 \
-1
-
-# minim
-./main.o ./dblp_datasets/minim/paper_example/graph.txt \
-./dblp_datasets/minim/paper_example/attr.txt \
-./dblp_datasets/minim/paper_example/query.txt \
- ./dblp_datasets/result \
-4 \
-2 \
-1
-
-./equitruss.o ./dblp_datasets/minim/paper_example/graph.txt \
-./dblp_datasets/minim/paper_example/attr.txt \
-3 \
- ./dblp_datasets/result \
-4 \
-3 \
-1
-./equitruss.o /tmp/relationship_53xnk.txt \
-/tmp/node_yqvbh.txt \
-3 \
- /tmp/result/ \
-1 \
-3 \
-1
-
-
-# sub_graph
-./main.o relationship_gdrxg.txt \
-node_pbrt8.txt \
- query.txt \
-result/ \
-4 \
-2 \
-1
-
-```
-
 
 # neo4j & equitruss
 
 ```bash
-# 2045129800
-./equitruss.o /tmp/relationship_c5vn8.txt \
-node_flkgq.txt \
-1 \
+# 881893
+./main.o /tmp/relationship_881893.txt \
+/tmp/node_881893.txt \
+/tmp/query.txt \
  /tmp/result \
-29 \
-10 \
+4 \ 
+4 \ 
 1
 
+ ./equitruss.o /tmp/relationship_881893.txt \
+/tmp/node_881893.txt \
+881893 \        
+ /tmp/result \
+4 \
+4 \
+1
+
+
 # vertex query_k time result_community_count query_attribute_set communities_set
-0:3:0.403624:1:1,2,3,4,5,6,7,8,9,10:0,1848467,2120931#1,2,3,4,5,6,7,8,9,10
+881893:4:0.042062:2:1,2,3,4:15,190868,522503,637353,664837,743606,881893#1,2,3,4@419175,533944,881893,1457212#1,2,3,4
 
 ```

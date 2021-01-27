@@ -125,7 +125,15 @@ public class SearchTests {
         }
     }
 
-
+    /**
+     * 选边少的点测试
+     * 15
+     * 743606 4-4-1 6-4-1
+     * match (p:Author) where id(p) in [136251,222871,222872,522503,631176,658499,743606,1038642,1723353,2614998] return p;
+     *
+     * 查询到多个社区
+     * MATCH (u:Author) where id(u) = 881893 CALL top.chendaye666.equitruss.search(u,4,4,1) YIELD id,authorId,name,community,words RETURN id,authorId,name,community,words
+     */
     @Test
     public void search() {
         // In a try-block, to make sure we close the session after the test
@@ -143,6 +151,10 @@ public class SearchTests {
                 }
             }
         }
+    }
+
+    public static void main(String[] args) {
+        System.out.println(Integer.parseInt("4@419175"));
     }
 }
 
