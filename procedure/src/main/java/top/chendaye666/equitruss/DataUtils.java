@@ -133,9 +133,9 @@ public class DataUtils {
                         Node otherNode = relationship.getOtherNode(author);
                         dealNode(otherNode, nodeOutputStream, nodes); // 处理node
                         // 另一个节点的边
-                        for (Relationship r : otherNode.getRelationships(Direction.BOTH, RelationshipTypes.Article)){
-                            dealRelationShip(r, relationshipOutputStream, relationships);
-                        }
+//                        for (Relationship r : otherNode.getRelationships(Direction.BOTH, RelationshipTypes.Article)){
+//                            dealRelationShip(r, relationshipOutputStream, relationships);
+//                        }
                     }
                 }
             }
