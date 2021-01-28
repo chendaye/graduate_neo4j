@@ -94,6 +94,7 @@ public class Search {
         // 获取数据
         String query = "match res=(p:Author)-[r1:Article]-(p1:Author) where id(p)="+node_id+" return p1";
         String[] path = DataUtils.communityGenerate(db, query, node_id);
+        if (path == null) return res.stream();
         //调用 Jni： relationship.txt node.txt vertex  resultPath query_k attr_cnt algo_type
         JniUtil jni = new JniUtil();
         String ans = jni.query(path[0], path[1], node_id, path[2], (int)k_value, (int)attr_count, (int)selection);

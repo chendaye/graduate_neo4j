@@ -33,6 +33,7 @@ public class SearchTests {
                     .append("CREATE (p10:Author {name: 'aa', authorId: '10', words: '2:CV:3@4:DM:6', attribute:'1,2,3'})")
                     .append("CREATE (p11:Author {name: 'aa', authorId: '11', words: '2:CV:1@4:DM:1@5:AI:1', attribute:'1,2,3'})")
                     .append("CREATE (p12:Author {name: 'aa', authorId: '12', words: '2:CV:1@4:DM:1', attribute:'1,2,3'})")
+                    .append("CREATE (p13:Author {name: 'aa', authorId: '13', words: '2:CV:1@4:DM:1', attribute:'1,2,3'})")
                     .append("MERGE (p1)-[:Article {weight: toInteger(1)}]->(p2)")
                     .append("MERGE (p1)-[:Article {weight: toInteger(2)}]->(p3)")
                     .append("MERGE (p1)-[:Article {weight: toInteger(3)}]->(p4)")
@@ -113,7 +114,7 @@ public class SearchTests {
             //Create our data in the database.
             session.run(MODEL_STATEMENT);
             //Execute our procedure against it.
-            final Result result = session.run("MATCH (u:Author {authorId:'4'}) CALL top.chendaye666.equitruss.neighborField(u) YIELD authorId, word RETURN authorId, word");
+            final Result result = session.run("MATCH (u:Author {authorId:'13'}) CALL top.chendaye666.equitruss.neighborField(u) YIELD authorId, word RETURN authorId, word");
             while (result.hasNext()){
                 Record next = result.next();
                 Iterator<Value> iterator = next.values().iterator();
@@ -143,7 +144,7 @@ public class SearchTests {
             //Execute our procedure against it.
             // MATCH (u:Author) where id(u) = 15 CALL top.chendaye666.equitruss.search(u,4,4,1) YIELD id,authorId,name,count,community,words,raw RETURN id,authorId,name,count,community,words,raw
             // MATCH (u:Author) where id(u) = 1 CALL top.chendaye666.equitruss.search(u,15,10,1) YIELD id,authorId,name,count,community,words,raw RETURN id,authorId,name,count,community,words,raw
-            final Result result = session.run("MATCH (u:Author) where id(u) = 1 CALL top.chendaye666.equitruss.search(u,4,4,1) YIELD id,authorId,name,count,community,words,raw RETURN id,authorId,name,count,community,words,raw");
+            final Result result = session.run("MATCH (u:Author {authorId:'13'})  CALL top.chendaye666.equitruss.search(u,4,4,1) YIELD id,authorId,name,count,community,words,raw RETURN id,authorId,name,count,community,words,raw");
             while (result.hasNext()){
                 Record next = result.next();
                 Iterator<Value> iterator = next.values().iterator();

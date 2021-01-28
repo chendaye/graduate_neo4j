@@ -68,7 +68,14 @@ public class DataUtils {
             // (没有缓存数据)处理生成数据
             if(fs != null) {
                 // 处理数据
-                depthOne(db, query, fs[0], fs[1]);
+                boolean hasNor = depthOne(db, query, fs[0], fs[1]);
+                System.out.println("hasNor="+hasNor);
+                if (!hasNor) {
+                    ReadWriteTxtUtils.fileDel(resp[0]);
+                    ReadWriteTxtUtils.fileDel(resp[1]);
+                    ReadWriteTxtUtils.folderDel(resp[2]);
+                    return null;
+                }
                 ReadWriteTxtUtils.endFile(resp, fs);
                 return resp;
             }
@@ -111,9 +118,10 @@ public class DataUtils {
     }
 
     //todo: 生成equitruss查询所需要的数据 HashSet
-    public static void depthOne(GraphDatabaseService db, String query, FileOutputStream nodeOutputStream, FileOutputStream relationshipOutputStream) throws IOException {
+    public static boolean depthOne(GraphDatabaseService db, String query, FileOutputStream nodeOutputStream, FileOutputStream relationshipOutputStream) throws IOException {
         HashSet<Long> relationships = new HashSet<>();
         HashSet<Long> nodes = new HashSet<>();
+        boolean hasNor = false;
         try (Transaction tx = db.beginTx() ) {
             // match res=(p:Author)-[r1:Article]-(p1:Author) where id(p)="+node_id+" return p,p1
             Result result = tx.execute(query);
@@ -123,6 +131,7 @@ public class DataUtils {
                 // 所有 node
                 for ( Map.Entry<String,Object> column : row.entrySet() ){
                     Node author = (Node) column.getValue();
+                    hasNor = true;
                     //todo： 处理node, 耗费时间的点（考虑写入图中）
                     dealNode(author, nodeOutputStream, nodes);
                     // node 直接相连的边
@@ -141,6 +150,7 @@ public class DataUtils {
             }
             tx.commit();
         }
+        return hasNor;
     }
 
 
@@ -152,13 +162,7 @@ public class DataUtils {
             nodes.add(node.getId());
         }
     }
-    // HashSet (底层是HashMap)
-    public static void dealNode(Node node, FileOutputStream nodeOutputStream, HashSet<Long> nodes) throws IOException {
-        if (nodes.add(node.getId())) {
-            String endStr = ReadWriteTxtUtils.parseNode(node);
-            nodeOutputStream.write(endStr.getBytes());
-        }
-    }
+
     // ArrayList
     public static void dealRelationShip(Relationship relationship, FileOutputStream relationshipOutputStream, ArrayList<Long> relationships) throws IOException {
         if (!relationships.contains(relationship.getId())){
@@ -167,6 +171,15 @@ public class DataUtils {
             relationshipOutputStream.write(r.getBytes());
         }
     }
+
+    // HashSet (底层是HashMap)
+    public static void dealNode(Node node, FileOutputStream nodeOutputStream, HashSet<Long> nodes) throws IOException {
+        if (nodes.add(node.getId())) {
+            String endStr = ReadWriteTxtUtils.parseNode(node);
+            nodeOutputStream.write(endStr.getBytes());
+        }
+    }
+
     // HashSet
     public static void dealRelationShip(Relationship relationship, FileOutputStream relationshipOutputStream, HashSet<Long> relationships) throws IOException {
         if (relationships.add(relationship.getId())){
