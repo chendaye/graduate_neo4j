@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
 
 public class DataUtils {
     public static String[] mutilStepGenerate(GraphDatabaseService db, String query){
@@ -226,11 +227,14 @@ public class DataUtils {
         ArrayList<int[]> ans = parseCommunity(community);
         if (ans.size() < 3) return null; // 没有找到社区
         int[] communityInfo = ans.get(2);
+        StringUtils.join(communityInfo, ",");
         try (Transaction tx = db.beginTx()){
             
         }
         return null;
     }
+
+
 
     public static int[] strToIntArray(String str){
         String[] split = str.split(",");
@@ -251,13 +255,15 @@ public class DataUtils {
                 ":1,2,3,4" +
                 ":15,190868,522503,637353,664837,743606,881893#1,2,3,4@419175,533944,881893,1457212#1,2,3,4";
 
-        ArrayList<int[]> ints = parseCommunity(community);
-        for (int[] arr : ints){
-            String s = "";
-            for (int i : arr){
-                s += i+" ";
-            }
-            System.out.println(s);
-        }
+//        ArrayList<int[]> ints = parseCommunity(community);
+//        for (int[] arr : ints){
+//            String s = "";
+//            for (int i : arr){
+//                s += i+" ";
+//            }
+//            System.out.println(s);
+//        }
+        int[] a = new int[]{1,2,3,4};
+        System.out.println(StringUtils.join(a, ","));
     }
 }
