@@ -199,9 +199,9 @@ public class DataUtils {
      * result[4]= 1,2,3,4 query_attribute_set
      * result[5]= 15,190868,522503,637353,664837,743606,881893#1,2,3,4@419175,533944,881893,1457212#1,2,3,4 communities_set
      */
-    public static ArrayList<int[]> parseCommunity(String commubity){
-        System.out.println("search result="+commubity);
-        String[] result = commubity.split(":");
+    public static ArrayList<int[]> parseCommunity(String community){
+        System.out.println("search result="+community);
+        String[] result = community.split(":");
         ArrayList<int[]> list = new ArrayList<>();
         list.add(strToIntArray(result[4])); // 全部的属性集合
         if (result.length == 6){
@@ -215,6 +215,23 @@ public class DataUtils {
        return list;
     }
 
+    /**
+     * todo: 按时间筛选文章 or 作者
+     *   - 不直接用最近几年数据构造图，来进行社区搜索的原因：为了用历史数据尽可能完整的展示作者之间的合作关系。（用最近的数据构图也不存在技术困难）
+     * @param community
+     * @return
+     */
+    public static int[] recentCommunity(GraphDatabaseService db, String community, long year){
+        // 加上时间筛选
+        ArrayList<int[]> ans = parseCommunity(community);
+        if (ans.size() < 3) return null; // 没有找到社区
+        int[] communityInfo = ans.get(2);
+        try (Transaction tx = db.beginTx()){
+            
+        }
+        return null;
+    }
+
     public static int[] strToIntArray(String str){
         String[] split = str.split(",");
         int[] ans = new int[split.length];
@@ -226,7 +243,7 @@ public class DataUtils {
     }
 
     public static void main(String[] args) {
-        String  commubity = "" +
+        String  community = "" +
                 "881893" +
                 ":4" +
                 ":0.042062" +
@@ -234,7 +251,7 @@ public class DataUtils {
                 ":1,2,3,4" +
                 ":15,190868,522503,637353,664837,743606,881893#1,2,3,4@419175,533944,881893,1457212#1,2,3,4";
 
-        ArrayList<int[]> ints = parseCommunity(commubity);
+        ArrayList<int[]> ints = parseCommunity(community);
         for (int[] arr : ints){
             String s = "";
             for (int i : arr){

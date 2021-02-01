@@ -142,7 +142,6 @@ public class SearchTests {
             //Create our data in the database.
             session.run(MODEL_STATEMENT);
             //Execute our procedure against it.
-            // MATCH (u:Author) where id(u) = 15 CALL top.chendaye666.equitruss.search(u,4,4,1) YIELD id,authorId,name,count,community,words,raw RETURN id,authorId,name,count,community,words,raw
             // MATCH (u:Author) where id(u) = 1 CALL top.chendaye666.equitruss.search(u,15,10,1) YIELD id,authorId,name,count,community,words,raw RETURN id,authorId,name,count,community,words,raw
             final Result result = session.run("MATCH (u:Author {authorId:'13'})  CALL top.chendaye666.equitruss.search(u,4,4,1) YIELD id,authorId,name,count,community,words,raw RETURN id,authorId,name,count,community,words,raw");
             while (result.hasNext()){

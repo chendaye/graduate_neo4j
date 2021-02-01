@@ -99,12 +99,12 @@ public class Search {
         JniUtil jni = new JniUtil();
         String ans = jni.query(path[0], path[1], node_id, path[2], (int)k_value, (int)attr_count, (int)selection);
 //        String ans = "881893:4:0.042062:2:1,2,3,4:15,190868,522503,637353,664837,743606,881893#1,2,3,4@419175,533944,881893,1457212#1,2,3,4";
-        ArrayList<int[]> ints = DataUtils.parseCommunity(ans);
+//        ArrayList<int[]> ints = DataUtils.parseCommunity(ans);
         String[] split = ans.split(":");
 //        System.out.println(split.length);
         if (split.length != 6) return res.stream();
-        String[] communities = split[5].split("@"); // 多个结果
-        final String[] cm = communities[0].split("#"); // 取第一个
+        String[] communities = split[5].split("@"); //todo: 多个结果,取第一个
+        final String[] cm = communities[0].split("#");
         // 遍历所有社区节点
         try(Transaction tx = db.beginTx()) {
             Result result = tx.execute("match (p:Author) where id(p) in [" + cm[0] + "] return p");
@@ -118,6 +118,51 @@ public class Search {
         }
         return res.stream();
     }
+
+
+    /**
+     * 社区搜索存储过程，某年之后有合作
+     * @param node
+     * @param k_value
+     * @param attr_count
+     * @param selection
+     * @param year  某年之后有合作关系的
+     * @return
+     */
+    @Procedure(value = "top.chendaye666.equitruss.time")
+    @Description("Get community by equitruss.")
+    public Stream<Equitruss> time(@Name("node") Node node, @Name("k_value") long k_value, @Name("attr_count") long attr_count, @Name("selection") long selection, @Name("year") long year) {
+        if (node == null) return null;
+        int node_id = (int) node.getId(); // 查询的节点id
+        ArrayList<Equitruss> res = new ArrayList<>();
+        // 获取数据
+        String query = "match res=(p:Author)-[r1:Article]-(p1:Author) where id(p)="+node_id+" return p1";
+        String[] path = DataUtils.communityGenerate(db, query, node_id);
+        if (path == null) return res.stream();
+        //调用 Jni： relationship.txt node.txt vertex  resultPath query_k attr_cnt algo_type
+        JniUtil jni = new JniUtil();
+        String ans = jni.query(path[0], path[1], node_id, path[2], (int)k_value, (int)attr_count, (int)selection);
+//        String ans = "881893:4:0.042062:2:1,2,3,4:15,190868,522503,637353,664837,743606,881893#1,2,3,4@419175,533944,881893,1457212#1,2,3,4";
+        int[] recentCommunity = DataUtils.recentCommunity(db, ans, year); // 近年合作的社区
+        String[] split = ans.split(":");
+//        System.out.println(split.length);
+        if (split.length != 6) return res.stream();
+        String[] communities = split[5].split("@"); //todo: 多个结果,取第一个
+        final String[] cm = communities[0].split("#");
+        // 遍历所有社区节点
+        try(Transaction tx = db.beginTx()) {
+            Result result = tx.execute("match (p:Author) where id(p) in [" + cm[0] + "] return p");
+            while (result.hasNext()){
+                Map<String,Object> row = result.next();
+                for ( Map.Entry<String,Object> column : row.entrySet() ){
+                    Node author = (Node) column.getValue();
+                    res.add(new Equitruss(author.getId(), (String) author.getProperty("authorId"), (String) author.getProperty("name"), (long) communities.length, cm[0], cm[1], split[5]));
+                }
+            }
+        }
+        return res.stream();
+    }
+
 
 
     /**
