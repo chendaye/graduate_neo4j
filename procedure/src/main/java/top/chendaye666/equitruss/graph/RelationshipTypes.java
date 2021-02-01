@@ -1,4 +1,4 @@
-package top.chendaye666.equitruss;
+package top.chendaye666.equitruss.graph;
 
 import org.neo4j.graphdb.RelationshipType;
 

@@ -1,14 +1,13 @@
-package top.chendaye666.equitruss;
+package top.chendaye666.equitruss.util;
 
 import org.neo4j.graphdb.*;
+import top.chendaye666.equitruss.graph.RelationshipTypes;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import org.apache.commons.lang3.StringUtils;
 
 public class DataUtils {
     public static String[] mutilStepGenerate(GraphDatabaseService db, String query){
@@ -189,6 +188,7 @@ public class DataUtils {
         }
     }
 
+
     /*
      * vertex	query_k	time	result_community_count	query_attribute_set	communities_set
      * 881893:4:0.042062:2:1,2,3,4:15,190868,522503,637353,664837,743606,881893#1,2,3,4@419175,533944,881893,1457212#1,2,3,4
@@ -217,21 +217,30 @@ public class DataUtils {
     }
 
     /**
-     * todo: 按时间筛选文章 or 作者
-     *   - 不直接用最近几年数据构造图，来进行社区搜索的原因：为了用历史数据尽可能完整的展示作者之间的合作关系。（用最近的数据构图也不存在技术困难）
+     * todo: 按时间筛选文章 or 作者:不直接用最近几年数据构造图，来进行社区搜索的原因：为了用历史数据尽可能完整的展示作者之间的合作关系。（用最近的数据构图也不存在技术困难）
      * @param community
      * @return
      */
-    public static int[] recentCommunity(GraphDatabaseService db, String community, long year){
-        // 加上时间筛选
-        ArrayList<int[]> ans = parseCommunity(community);
-        if (ans.size() < 3) return null; // 没有找到社区
-        int[] communityInfo = ans.get(2);
-        StringUtils.join(communityInfo, ",");
-        try (Transaction tx = db.beginTx()){
-            
+    public static ArrayList<ArrayList<long[]>> parseCommunityString(String community){
+        System.out.println("search result="+community);
+        String[] result = community.split(":");
+        ArrayList<ArrayList<long[]>> list = new ArrayList<>();
+        if (result.length < 6) return list;
+        //todo： 可能查询到多个社区
+        String[] communities = result[5].split("@");
+        for (String s : communities){
+            ArrayList<long[]> curCommunity = new ArrayList<>();
+            //TODO: 处理多个社区
+            String[] split = s.split("#");
+            // 社区节点集合
+            curCommunity.add(strToLongArray(split[0]));
+            // 公共的属性集合
+            curCommunity.add(strToLongArray(split[1]));
+            // 全部的属性集合
+            curCommunity.add(strToLongArray(result[4]));
+            list.add(curCommunity);
         }
-        return null;
+        return list;
     }
 
 
@@ -244,6 +253,23 @@ public class DataUtils {
             ans[i++] = Integer.parseInt(s);
         }
         return ans;
+    }
+
+    public static long[] strToLongArray(String str){
+        String[] split = str.split(",");
+        long[] ans = new long[split.length];
+        int i = 0;
+        for (String s : split){
+            ans[i++] = (long)Integer.parseInt(s);
+        }
+        return ans;
+    }
+
+    public static ArrayList<Long> longArrayToLongList(long[] array){
+        ArrayList<Long> list = new ArrayList<>();
+        for (long l : array)
+            list.add(l);
+        return list;
     }
 
     public static void main(String[] args) {
@@ -263,7 +289,6 @@ public class DataUtils {
 //            }
 //            System.out.println(s);
 //        }
-        int[] a = new int[]{1,2,3,4};
-        System.out.println(StringUtils.join(a, ","));
+
     }
 }

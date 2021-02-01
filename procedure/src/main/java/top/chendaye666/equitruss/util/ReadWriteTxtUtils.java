@@ -1,4 +1,4 @@
-package top.chendaye666.equitruss;
+package top.chendaye666.equitruss.util;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.neo4j.graphdb.Node;

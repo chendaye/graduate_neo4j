@@ -65,6 +65,7 @@ public class SearchTests {
         this.embeddedDatabaseServer = Neo4jBuilders.newInProcessBuilder()
                 .withDisabledServer()
                 .withProcedure(Search.class)
+                .withProcedure(top.chendaye666.example.Search.class)
                 .build();
 
         this.driver = GraphDatabase.driver(embeddedDatabaseServer.boltURI(), driverConfig);
@@ -84,6 +85,7 @@ public class SearchTests {
         }
     }
 
+
     /**
      * We should be getting the correct values when there is only one type in each direction
      */
@@ -94,7 +96,7 @@ public class SearchTests {
             //Create our data in the database.
             session.run(MODEL_STATEMENT);
             //Execute our procedure against it.
-            final Result result = session.run("MATCH (u:Author {authorId:'4'}) CALL top.chendaye666.equitruss.getNeighbor(u) YIELD neighbor, word RETURN neighbor, word");
+            final Result result = session.run("MATCH (u:Author {authorId:'4'}) CALL top.chendaye666.example.getNeighbor(u) YIELD neighbor, word RETURN neighbor, word");
             System.out.println("result-count="+result.hasNext());
             while (result.hasNext()){
                 Record next = result.next();
@@ -114,7 +116,7 @@ public class SearchTests {
             //Create our data in the database.
             session.run(MODEL_STATEMENT);
             //Execute our procedure against it.
-            final Result result = session.run("MATCH (u:Author {authorId:'13'}) CALL top.chendaye666.equitruss.neighborField(u) YIELD authorId, word RETURN authorId, word");
+            final Result result = session.run("MATCH (u:Author {authorId:'13'}) CALL top.chendaye666.example.neighborField(u) YIELD authorId, word RETURN authorId, word");
             while (result.hasNext()){
                 Record next = result.next();
                 Iterator<Value> iterator = next.values().iterator();
@@ -133,7 +135,7 @@ public class SearchTests {
      * match (p:Author) where id(p) in [136251,222871,222872,522503,631176,658499,743606,1038642,1723353,2614998] return p;
      *
      * 查询到多个社区 (节点越多边约密集 对应的 k_query attr_count 设置大一点，缩短搜索时间)
-     * MATCH (u:Author) where id(u) = 881893 CALL top.chendaye666.equitruss.search(u,4,4,1) YIELD id,authorId,name,count,community,words,attribute RETURN id,authorId,name,count,community,words,raw
+     * MATCH (u:Author) where id(u) = 15 CALL top.chendaye666.equitruss.search(u,4,4,1) YIELD id,authorId,name,count,community,words,raw RETURN id,authorId,name,count,community,words,raw
      */
     @Test
     public void search() {
@@ -155,8 +157,31 @@ public class SearchTests {
         }
     }
 
+    /**
+     * MATCH (u:Author) where id(u)=1  CALL top.chendaye666.equitruss.searchall(u,10,4,1) YIELD community,commonWords,allWords RETURN community,commonWords,allWords
+     */
+    @Test
+    public void searchall() {
+        // In a try-block, to make sure we close the session after the test
+        try(Session session = driver.session()) {
+            //Create our data in the database.
+            session.run(MODEL_STATEMENT);
+            //Execute our procedure against it.
+            // MATCH (u:Author) where id(u) = 1 CALL top.chendaye666.equitruss.search(u,15,10,1) YIELD id,authorId,name,count,community,words,raw RETURN id,authorId,name,count,community,words,raw
+            final Result result = session.run("MATCH (u:Author {authorId:'11'})  CALL top.chendaye666.equitruss.searchall(u,4,4,1) YIELD community,commonWords,allWords RETURN community,commonWords,allWords");
+            while (result.hasNext()){
+                Record next = result.next();
+                Iterator<Value> iterator = next.values().iterator();
+                while (iterator.hasNext()){
+                    final Value val = iterator.next();
+                    System.out.println("test="+val.toString());
+                }
+            }
+        }
+    }
+
     public static void main(String[] args) {
-        System.out.println(Integer.parseInt("4@419175"));
+        System.out.println(Integer.parseInt("419175"));
     }
 }
 
