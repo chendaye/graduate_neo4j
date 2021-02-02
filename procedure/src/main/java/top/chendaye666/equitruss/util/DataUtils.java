@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 public class DataUtils {
     public static String[] mutilStepGenerate(GraphDatabaseService db, String query){
@@ -243,14 +244,17 @@ public class DataUtils {
         return list;
     }
 
-
+    public static boolean isNumber(String s){
+        return Pattern.matches("^[0-9\\.]+$", s);
+    }
 
     public static int[] strToIntArray(String str){
         String[] split = str.split(",");
         int[] ans = new int[split.length];
         int i = 0;
         for (String s : split){
-            ans[i++] = Integer.parseInt(s);
+            if (isNumber(s))
+                ans[i++] = Integer.parseInt(s);
         }
         return ans;
     }
@@ -260,7 +264,8 @@ public class DataUtils {
         long[] ans = new long[split.length];
         int i = 0;
         for (String s : split){
-            ans[i++] = (long)Integer.parseInt(s);
+            if (isNumber(s))
+                ans[i++] = (long)Integer.parseInt(s);
         }
         return ans;
     }
@@ -270,6 +275,28 @@ public class DataUtils {
         for (long l : array)
             list.add(l);
         return list;
+    }
+
+    /**
+     * 根据 paperId 查询 paper.id
+     * @param db
+     * @param paperId
+     * @return
+     */
+    public static long getPaperNodeIdByPaperId(GraphDatabaseService db, String paperId){
+        long nodeId = -1;
+        try (Transaction tx = db.beginTx()){
+            Result result = tx.execute("match (p:Paper{paperId:'" + paperId + "'}) return p");
+            while (result.hasNext()){
+                Map<String,Object> row = result.next();
+                for ( Map.Entry<String,Object> column : row.entrySet() ) {
+                    Node paper = (Node) column.getValue();
+                    nodeId = paper.getId();
+                }
+            }
+            tx.commit();
+        }
+        return nodeId;
     }
 
     public static void main(String[] args) {

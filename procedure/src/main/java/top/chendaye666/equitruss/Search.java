@@ -9,6 +9,7 @@ import org.neo4j.procedure.Procedure;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import top.chendaye666.equitruss.streamans.*;
 import top.chendaye666.equitruss.util.DataUtils;
@@ -95,13 +96,15 @@ public class Search {
         ArrayList<Equitrusstime> res = new ArrayList<>();
         String ans = generateGraph(node, k_value, attr_count, selection);
 //        String ans = "881893:4:0.042062:2:1,2,3,4:1,2,3,4,5#1,2,3,4@8,9,10,11#1,2,3,4";
-        if (ans == null) res.stream();
+        if (ans == null) return res.stream();
         ArrayList<ArrayList<long[]>> ansList = DataUtils.parseCommunityString(ans);
-        if (ansList.size() == 0) res.stream();
+        if (ansList.size() == 0) return res.stream();
         try (Transaction tx = db.beginTx()){
             for (ArrayList<long[]> c : ansList){
-                HashSet<Long> articleYearList = new HashSet<>(); // 符合年限要求的文章
+                if (c.size() == 0) continue;
+                HashSet<String> articleYearList = new HashSet<>(); // 符合年限要求的文章
                 HashSet<Long> authorYearList = new HashSet<>(); // 符合年限要求的作者
+                authorYearList.add(node.getId()); // 当前节点要加进来
                 // 遍历每一个社区
                 for (long nid : c.get(0)){
                     String query = "match (p:Author) where id(p)= "+nid+" return p";
@@ -110,14 +113,20 @@ public class Search {
                         Map<String,Object> row = result.next();
                         for ( Map.Entry<String,Object> column : row.entrySet() ){
                             Node author = (Node) column.getValue();
-                            authorYearList.add(author.getId()); // 社区节点
+//                            authorYearList.add(author.getId()); // 社区节点
                             String articles = (String) author.getProperty("articles");
+                            if (articles == null || articles.length() == 0) continue;
                             String[] articleArray = articles.split("@");
                             for (String article :  articleArray){
+                                if (article == null || article.length() == 0) continue;
                                 String[] articleInfo = article.split("#");
-                                long articleId = Integer.parseInt(articleInfo[0]);
-                                long articleYear = articleInfo[3].length() > 0 ? Integer.parseInt(articleInfo[3]) : 0;
+                                if (articleInfo.length < 4) continue;
+                                String articleId = articleInfo[0];
+                                // 年份必须是数字
+                                if (!DataUtils.isNumber(articleInfo[3]) || articleInfo[3].length() < 4) continue; // 年份信息不全的跳过
+                                long articleYear = Integer.parseInt(articleInfo[3].substring(0, 4));
                                 if (articleYear >= year){
+                                    authorYearList.add(author.getId()); // 社区节点
                                     articleYearList.add(articleId);
                                 }
                             }
@@ -127,6 +136,7 @@ public class Search {
                 if (authorYearList.size() > 0 && articleYearList.size() > 0)
                     res.add(new Equitrusstime(new ArrayList<>(authorYearList), new ArrayList<>(articleYearList)));
             }
+            tx.commit();
         }
         return res.stream();
     }
