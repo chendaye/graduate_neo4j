@@ -94,12 +94,22 @@ public class Search {
     @Description("Get community by equitruss.")
     public Stream<Equitrusstime> time(@Name("node") Node node, @Name("k_value") long k_value, @Name("attr_count") long attr_count, @Name("selection") long selection, @Name("year") long year) {
         ArrayList<Equitrusstime> res = new ArrayList<>();
+        // 查询的作者的文章
+        HashSet<String> ownArticles = new HashSet<>();
+        String own = (String) node.getProperty("articles");
+        if (own == null || own.length() == 0) return res.stream();
+        String[] ownSplit = own.split("@");
+        for (String s : ownSplit){
+            String[] sSplit = s.split("#");
+            ownArticles.add(sSplit[0]);
+        }
         String ans = generateGraph(node, k_value, attr_count, selection);
 //        String ans = "881893:4:0.042062:2:1,2,3,4:1,2,3,4,5#1,2,3,4@8,9,10,11#1,2,3,4";
         if (ans == null) return res.stream();
         ArrayList<ArrayList<long[]>> ansList = DataUtils.parseCommunityString(ans);
         if (ansList.size() == 0) return res.stream();
         try (Transaction tx = db.beginTx()){
+            //todo: 每一个社区
             for (ArrayList<long[]> c : ansList){
                 if (c.size() == 0) continue;
                 HashSet<String> articleYearList = new HashSet<>(); // 符合年限要求的文章
@@ -125,7 +135,8 @@ public class Search {
                                 // 年份必须是数字
                                 if (!DataUtils.isNumber(articleInfo[3]) || articleInfo[3].length() < 4) continue; // 年份信息不全的跳过
                                 long articleYear = Integer.parseInt(articleInfo[3].substring(0, 4));
-                                if (articleYear >= year){
+                                // 文章发布时间要符合，同时，文章是和查询点合作的
+                                if (articleYear >= year && ownArticles.contains(articleId)){
                                     authorYearList.add(author.getId()); // 社区节点
                                     articleYearList.add(articleId);
                                 }
