@@ -7,6 +7,7 @@ import org.neo4j.procedure.Name;
 import org.neo4j.procedure.Procedure;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.stream.Stream;
 import top.chendaye666.equitruss.streamans.*;
@@ -93,14 +94,40 @@ public class Search {
     public Stream<Equitrusstime> time(@Name("node") Node node, @Name("k_value") long k_value, @Name("attr_count") long attr_count, @Name("selection") long selection, @Name("year") long year) {
         ArrayList<Equitrusstime> res = new ArrayList<>();
         String ans = generateGraph(node, k_value, attr_count, selection);
+//        String ans = "881893:4:0.042062:2:1,2,3,4:1,2,3,4,5#1,2,3,4@8,9,10,11#1,2,3,4";
         if (ans == null) res.stream();
         ArrayList<ArrayList<long[]>> ansList = DataUtils.parseCommunityString(ans);
         if (ansList.size() == 0) res.stream();
-//        for (ArrayList<long[]> list : ansList) {
-//            long[] community = list.get(0);
-//            //            res.add(new Equitrussall(DataUtils.longArrayToLongList(list.get(0)), DataUtils.longArrayToLongList(list.get(1)), DataUtils.longArrayToLongList(list.get(2))));
-//
-//        }
+        try (Transaction tx = db.beginTx()){
+            for (ArrayList<long[]> c : ansList){
+                HashSet<Long> articleYearList = new HashSet<>(); // 符合年限要求的文章
+                HashSet<Long> authorYearList = new HashSet<>(); // 符合年限要求的作者
+                // 遍历每一个社区
+                for (long nid : c.get(0)){
+                    String query = "match (p:Author) where id(p)= "+nid+" return p";
+                    Result result = tx.execute(query);
+                    while (result.hasNext()){
+                        Map<String,Object> row = result.next();
+                        for ( Map.Entry<String,Object> column : row.entrySet() ){
+                            Node author = (Node) column.getValue();
+                            authorYearList.add(author.getId()); // 社区节点
+                            String articles = (String) author.getProperty("articles");
+                            String[] articleArray = articles.split("@");
+                            for (String article :  articleArray){
+                                String[] articleInfo = article.split("#");
+                                long articleId = Integer.parseInt(articleInfo[0]);
+                                long articleYear = articleInfo[3].length() > 0 ? Integer.parseInt(articleInfo[3]) : 0;
+                                if (articleYear >= year){
+                                    articleYearList.add(articleId);
+                                }
+                            }
+                        }
+                    }
+                }
+                if (authorYearList.size() > 0 && articleYearList.size() > 0)
+                    res.add(new Equitrusstime(new ArrayList<>(authorYearList), new ArrayList<>(articleYearList)));
+            }
+        }
         return res.stream();
     }
 
