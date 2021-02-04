@@ -2,64 +2,59 @@
 ## Makefile for non-Microsoft compilers
 #
 
-DEP = FingerPrint.o FPSR.o gsmanager.o KMSR.o KMSRIndex.o myqueue.o mytime.o NISim.o naiveSR.o OIPSimRank.o OptSimMatSVD.o origNISim.o ParSRSimRank.o PartialSR.o SimMatEVD.o SimMatSVD.o TSF.o
-
+DEP = FingerPrint.o FPSR.o KMSR.o KMSRIndex.o  mytime.o NISim.o naiveSR.o OIPSimRank.o OptSimMatSVD.o origNISim.o ParSRSimRank.o PartialSR.o SimMatEVD.o SimMatSVD.o TSF.o
+VERSION = -std=c++11 -Wall
 
 .PHONY: all
 all: $(SIMRANK)
 
 # other
 FingerPrint.o: FingerPrint.cpp FingerPrint.h
-	$(CC) -c   $(CXXFLAGS) $(CFLAGS)   FingerPrint.cpp -o FingerPrint.o  -I$(INC1) -I$(INC2) -I$(INC3) -I$(GL) -I$(ARM)
+	$(CC) -c $(VERSION)  $(CXXFLAGS) $(CFLAGS)   FingerPrint.cpp -o FingerPrint.o  -I$(INC1) -I$(INC2) -I$(INC3) -I$(GL) -I$(ARM)
 
 FPSR.o: FPSR.cpp FPSR.h
-	$(CC) -c   $(CXXFLAGS) $(CFLAGS)   FPSR.cpp -o FPSR.o  -I$(INC1) -I$(INC2) -I$(INC3) -I$(GL) -I$(ARM)
+	$(CC) -c $(VERSION)  $(CXXFLAGS) $(CFLAGS)   FPSR.cpp -o FPSR.o  -I$(INC1) -I$(INC2) -I$(INC3) -I$(GL) -I$(ARM)
 
-gsmanager.o: gsmanager.cpp gsinterface.h config.h
-	$(CC) -c   $(CXXFLAGS) $(CFLAGS)   gsmanager.cpp -o gsmanager.o  -I$(INC1) -I$(INC2) -I$(INC3) -I$(GL) -I$(ARM)
 
 KMSR.o: KMSR.cpp KMSR.h
-	$(CC) -c   $(CXXFLAGS) $(CFLAGS)   KMSR.cpp -o KMSR.o  -I$(INC1) -I$(INC2) -I$(INC3) -I$(GL) -I$(ARM)
+	$(CC) -c $(VERSION)  $(CXXFLAGS) $(CFLAGS)   KMSR.cpp -o KMSR.o  -I$(INC1) -I$(INC2) -I$(INC3) -I$(GL) -I$(ARM)
 
 KMSRIndex.o: KMSRIndex.cpp KMSRIndex.h
-	$(CC) -c   $(CXXFLAGS) $(CFLAGS)   KMSRIndex.cpp -o KMSRIndex.o  -I$(INC1) -I$(INC2) -I$(INC3) -I$(GL) -I$(ARM)
-
-myqueue.o: myqueue.cpp
-	$(CC) -c   $(CXXFLAGS) $(CFLAGS)   myqueue.cpp -o myqueue.o  -I$(INC1) -I$(INC2) -I$(INC3) -I$(GL) -I$(ARM)
+	$(CC) -c $(VERSION)  $(CXXFLAGS) $(CFLAGS)   KMSRIndex.cpp -o KMSRIndex.o  -I$(INC1) -I$(INC2) -I$(INC3) -I$(GL) -I$(ARM)
 
 
 mytime.o: mytime.cpp mytime.h
-	$(CC) -c   $(CXXFLAGS) $(CFLAGS)   mytime.cpp -o mytime.o  -I$(INC1) -I$(INC2) -I$(INC3) -I$(GL) -I$(ARM)
+	$(CC) -c $(VERSION)  $(CXXFLAGS) $(CFLAGS)   mytime.cpp -o mytime.o  -I$(INC1) -I$(INC2) -I$(INC3) -I$(GL) -I$(ARM)
 
 NISim.o: NISim.cpp NISim.h
-	$(CC) -c   $(CXXFLAGS) $(CFLAGS)   NISim.cpp -o NISim.o  -I$(INC1) -I$(INC2) -I$(INC3) -I$(GL) -I$(ARM)
+	$(CC) -c  $(VERSION) $(CXXFLAGS) $(CFLAGS)   NISim.cpp -o NISim.o  -I$(INC1) -I$(INC2) -I$(INC3) -I$(GL) -I$(ARM)
 
 naiveSR.o: naiveSR.cpp naiveSR.h
-	$(CC) -c   $(CXXFLAGS) $(CFLAGS)   naiveSR.cpp -o naiveSR.o  -I$(INC1) -I$(INC2) -I$(INC3) -I$(GL) -I$(ARM)
+	$(CC) -c $(VERSION)  $(CXXFLAGS) $(CFLAGS)    naiveSR.cpp -o naiveSR.o  -I$(INC1) -I$(INC2) -I$(INC3) -I$(GL) -I$(ARM)
 
 OIPSimRank.o: OIPSimRank.cpp OIPSimRank.h
-	$(CC) -c   $(CXXFLAGS) $(CFLAGS)   OIPSimRank.cpp -o OIPSimRank.o  -I$(INC1) -I$(INC2) -I$(INC3) -I$(GL) -I$(ARM)
+	$(CC) -c  $(VERSION) $(CXXFLAGS) $(CFLAGS)   OIPSimRank.cpp -o OIPSimRank.o  -I$(INC1) -I$(INC2) -I$(INC3) -I$(GL) -I$(ARM)
 
 OptSimMatSVD.o: OptSimMatSVD.cpp OptSimMatSVD.h
-	$(CC) -c   $(CXXFLAGS) $(CFLAGS)   OptSimMatSVD.cpp -o OptSimMatSVD.o  -I$(INC1) -I$(INC2) -I$(INC3) -I$(GL) -I$(ARM)
+	$(CC) -c $(VERSION)  $(CXXFLAGS) $(CFLAGS)   OptSimMatSVD.cpp -o OptSimMatSVD.o  -I$(INC1) -I$(INC2) -I$(INC3) -I$(GL) -I$(ARM)
 
 origNISim.o: origNISim.cpp origNISim.h
-	$(CC) -c   $(CXXFLAGS) $(CFLAGS)   origNISim.cpp -o origNISim.o  -I$(INC1) -I$(INC2) -I$(INC3) -I$(GL) -I$(ARM)
+	$(CC) -c $(VERSION)  $(CXXFLAGS) $(CFLAGS)   origNISim.cpp -o origNISim.o  -I$(INC1) -I$(INC2) -I$(INC3) -I$(GL) -I$(ARM)
 
 ParSRSimRank.o: ParSRSimRank.cpp ParSRSimRank.h
-	$(CC) -c   $(CXXFLAGS) $(CFLAGS)   ParSRSimRank.cpp -o ParSRSimRank.o  -I$(INC1) -I$(INC2) -I$(INC3) -I$(GL) -I$(ARM)
+	$(CC) -c  $(VERSION) $(CXXFLAGS) $(CFLAGS)   ParSRSimRank.cpp -o ParSRSimRank.o  -I$(INC1) -I$(INC2) -I$(INC3) -I$(GL) -I$(ARM)
 
 PartialSR.o: PartialSR.cpp PartialSR.h
-	$(CC) -c   $(CXXFLAGS) $(CFLAGS)   PartialSR.cpp -o PartialSR.o  -I$(INC1) -I$(INC2) -I$(INC3) -I$(GL) -I$(ARM)
+	$(CC) -c $(VERSION)  $(CXXFLAGS) $(CFLAGS)   PartialSR.cpp -o PartialSR.o  -I$(INC1) -I$(INC2) -I$(INC3) -I$(GL) -I$(ARM)
 
 SimMatEVD.o: SimMatEVD.cpp SimMatEVD.h
-	$(CC) -c   $(CXXFLAGS) $(CFLAGS)   SimMatEVD.cpp -o SimMatEVD.o  -I$(INC1) -I$(INC2) -I$(INC3) -I$(GL) -I$(ARM)
+	$(CC) -c $(VERSION)  $(CXXFLAGS) $(CFLAGS)   SimMatEVD.cpp -o SimMatEVD.o  -I$(INC1) -I$(INC2) -I$(INC3) -I$(GL) -I$(ARM)
 
 SimMatSVD.o: SimMatSVD.cpp SimMatSVD.h
-	$(CC) -c   $(CXXFLAGS) $(CFLAGS)   SimMatSVD.cpp -o SimMatSVD.o  -I$(INC1) -I$(INC2) -I$(INC3) -I$(GL) -I$(ARM)
+	$(CC) -c $(VERSION)  $(CXXFLAGS) $(CFLAGS)   SimMatSVD.cpp -o SimMatSVD.o  -I$(INC1) -I$(INC2) -I$(INC3) -I$(GL) -I$(ARM)
 
 TSF.o: TSF.cpp TSF.h
-	$(CC) -c   $(CXXFLAGS) $(CFLAGS)   TSF.cpp -o TSF.o  -I$(INC1) -I$(INC2) -I$(INC3) -I$(GL) -I$(ARM)
+	$(CC) -c  $(VERSION) $(CXXFLAGS) $(CFLAGS) mytime.o   TSF.cpp -o TSF.o  -I$(INC1) -I$(INC2) -I$(INC3) -I$(GL) -I$(ARM)
 
 
 # simrank

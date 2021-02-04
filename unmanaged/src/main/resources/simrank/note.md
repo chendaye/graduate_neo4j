@@ -31,4 +31,6 @@ cmake CMakeList.txt
 make
 
 make all
+
+make install
 ```

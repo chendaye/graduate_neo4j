@@ -1,5 +1,5 @@
 #include "TSF.h"
-#include <mytime.h>
+#include "mytime.h"
 
 void TSF::run(int qv, int k) {
     Time timer;
