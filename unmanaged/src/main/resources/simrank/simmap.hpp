@@ -15,7 +15,8 @@
 #include "google/dense_hash_map"
 
 
-using std::tr1::hash;
+//using std::tr1::hash;
+using std::hash;
 /*
 struct eqint {
     bool operator()(const int a, const int b) const {

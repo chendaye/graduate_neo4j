@@ -21,7 +21,7 @@
 using google::dense_hash_map;
 using std::tr1::hash;
 
-/* method flags. */
+//todo: 不同的计算相似度的算法
 const char NAIVE[10] = "naive";
 const char OIP_DMST[10] = "oipdmst";//Yu Weiren ICDE, OIP_DMST alg
 const char PARTIAL_SR[10] = "partialsr"; //Lizorkin's algorithm
@@ -36,10 +36,10 @@ const char TSF_NAME[10] = "tsf"; //TSF algorithm
 const char TOPSIM[10] = "topsim"; //topsim, type 1: topsim-sm; type 2: trun-topsim-sm; type 3: prio-topsim-sm;
 
 /*default configuration */
-
-char graph_name[125] = "AL";
-char config_file[125] = "config/AL-naive";
-char method[56] = "partialsr";
+//todo:默认配置
+char graph_name[125] = "AL"; // 图数据文件名
+char config_file[125] = "config/AL-naive"; // 配置文件名
+char method[56] = "partialsr"; // 默认算法
 bool isFm = true;
 int usDisk = 0;
 double initValue = 1.0;
@@ -99,13 +99,25 @@ void constructPath(char *graph_name);
 void help();
 
 bool read_config();
+
+/**
+ * todo： 主函数
+ *  argc 是 argument count的缩bai写，表示argv这个二级du指针指向zhi的dao存区域中保存的由zhuanstub写入的有效命shu令行参数的个数.
+ *  argv 是 argument vector的缩写容，表示传入main函数的参数序列或指针，并且第一个参数argv[0]一定是程序的名称，并且包含了程序所在的完整路径，
+ *  所以确切的说需要输入的main函数的参数个数是argc-1个。
+ * @param argc
+ * @param argv
+ * @return
+ */
 int main(int argc, char **argv) {
+    //todo: 使用参数文件获取参数
     if (argc != 2) {
         printf("<Usage: ./SRBenchMark parameters_files>\n");
         exit(1);
     }
     strcpy(config_file, argv[1]);
     if (!read_config()) return 0;
+    // 当前使用的参数
     printf("InputGraph=%s;\n method=%s;\n num_iter=%d;\ndecay_factor=%.4lf\n; sampleNum=%d;"
                    "\nsampleQueryNum=%d;\nis_fm=%s;\nuDisk=%d;\nhasIndex=%d;\nbuildIndex=%d;"
                    "\nneedOrig=%d;\ntopsimtype=%d;\nnisimtype=%d;\nsimmattype=%d;\n rank=%d \n\n",
@@ -118,6 +130,7 @@ int main(int argc, char **argv) {
         printf("failed to open output file\n");
     }
 
+    //todo: 读图数据
     Time timer;
     timer.start();
     readGraph();
@@ -126,6 +139,7 @@ int main(int argc, char **argv) {
 
     SimRankMethod *srm = createSimRankMethod();
     if (srm == NULL) return 0;
+    // buildIndex=false
     if (buildIndex) {
         timer.reset();
         timer.start();
@@ -141,7 +155,7 @@ int main(int argc, char **argv) {
     timer.reset();
     timer.start();
     int qcnt = 0;
-    if (queryInFile) {
+    if (queryInFile) { // queryInFile=false
         char querypath[125];
         sprintf(querypath, "dataset/%s/%s.query", graph_name, graph_name);
         FILE *qfp = fopen(querypath, "rb");
@@ -158,7 +172,9 @@ int main(int argc, char **argv) {
         if (qfp != NULL)
             fclose(qfp);
     } else {
+        // 从窗口输入
         while (scanf("%d %d", &qv, &k) != EOF) {
+            //
             printf("Query(qv=%d, k=%d, nid=%d, deg=%d):\n", qv, k, vertices[qv],
                    graph_src[vertices[qv] + 1] - graph_src[vertices[qv]]);
             doComputation(vertices[qv], k, srm);
@@ -190,6 +206,7 @@ bool getOutPath() {
             default:
                 printf("Invalid type %d of topsim. [valid ones: 0, 1, 2.]\n", tsm_type);
         }
+        // todo: 输出路径
         sprintf(outputpath, "dataset/%s/output/%s", graph_name, method_name);
     } else if (strcmp(method, NI_SIM) == 0) {
         switch (nisim_type) {
@@ -250,6 +267,7 @@ bool getOutPath() {
     return true;
 }
 
+//todo： 用不同的方法计算srm
 SimRankMethod *createSimRankMethod() {
     SimRankMethod *srm = NULL;
     if (strcmp(method, KM_SR) == 0) {
@@ -358,7 +376,7 @@ void readGraph() {
     sprintf(processedGraphPath, "dataset/%s/%s.data.fmt", graph_name, graph_name);
     sprintf(orig_processedGraphPath, "dataset/%s/%s.data.fmt.orig", graph_name, graph_name);
 
-    FILE *fp = fopen(processedGraphPath, "rb");
+    FILE *fp = fopen(processedGraphPath, "rb"); // fp=null
     if (fp != NULL) {
         printf("reading from processed graph path: %s\n", processedGraphPath);
 
@@ -376,6 +394,7 @@ void readGraph() {
             vertices[rvertices[i]] = i;
         }
         fclose(fp);
+        //needOrig=false  default
         if (needOrig == true) {
             fp = fopen(orig_processedGraphPath, "rb");
             if (fp == NULL) {
@@ -448,10 +467,10 @@ void readGraph() {
 
         printf("before reading in graph: meminfo ");
         print_mem_info();
-
+        // dataset/AL/AL.data
         while (fscanf(fp, "%d %d", &a, &b) != EOF) {
             if (vertices.find(a) == vertices.end()) {
-                rvertices[id] = a;
+                rvertices[id] = a; // 节点 重新编号
                 vertices[a] = id++;
             } // relabel
             if (vertices.find(b) == vertices.end()) {
@@ -464,8 +483,8 @@ void readGraph() {
             cnt[vertices[b]]++;
             ecnt++;
         }
-        edgeNum = ecnt;
-        MAX_VERTEX_NUM = id;
+        edgeNum = ecnt; // 边的数量
+        MAX_VERTEX_NUM = id; // 最大顶点ID
         fclose(fp);
 
         printf("reading in graph: meminfo ");

@@ -1,0 +1,65 @@
+# cmake_minimum_required(VERSION <specify CMake version here>)
+project(simrank)
+
+set(CMAKE_CXX_STANDARD 14)
+
+include_directories(.)
+include_directories(include)
+include_directories(include/sparsehash)
+include_directories(include/sparsehash/internal)
+
+add_executable(simrank
+        include/sparsehash/internal/densehashtable.h
+        include/sparsehash/internal/hashtable-common.h
+        include/sparsehash/internal/libc_allocator_with_realloc.h
+        include/sparsehash/internal/sparseconfig.h
+        include/sparsehash/internal/sparsehashtable.h
+        include/sparsehash/template_util.h
+        include/sparsehash/type_traits.h
+        config.h
+        FingerPrint.cpp
+        FingerPrint.h
+        FPSR.cpp
+        FPSR.h
+        gsinterface.h
+        gsmanager.hpp
+        KMSR.cpp
+        KMSR.h
+        KMSRIndex.cpp
+        KMSRIndex.h
+        meminfo.hpp
+        mymkdir.h
+        myqueue.hpp
+        mytime.cpp
+        mytime.h
+        naiveSR.cpp
+        naiveSR.h
+        NISim.cpp
+        NISim.h
+        OIPSimRank.cpp
+        OIPSimRank.h
+        OptSimMatSVD.cpp
+        OptSimMatSVD.h
+        origNISim.cpp
+        origNISim.h
+        ParSRSimRank.cpp
+        ParSRSimRank.h
+        PartialSR.cpp
+        PartialSR.h
+        random.h
+        rgsmanager.hpp
+        rsamplegraph.hpp
+        simmap.hpp
+        SimMat.h
+        SimMatEVD.cpp
+        SimMatEVD.h
+        SimMatSVD.cpp
+        SimMatSVD.h
+        simrank.cpp
+        simrankmethod.h
+        simrankvalue.hpp
+        SRBenchmark.cpp
+        topsim.cpp
+        topsim.h
+        TSF.cpp
+        TSF.h)

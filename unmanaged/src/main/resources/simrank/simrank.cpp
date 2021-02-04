@@ -19,9 +19,10 @@
 #include "naiveSR.h"
 
 using google::dense_hash_map;
-using std::tr1::hash;
+//using std::tr1::hash;
+using std::hash;
 
-/* method flags. */
+//todo: 不同的计算相似度的算法
 const char NAIVE[10] = "naive";
 const char OIP_DMST[10] = "oipdmst";//Yu Weiren ICDE, OIP_DMST alg
 const char PARTIAL_SR[10] = "partialsr"; //Lizorkin's algorithm
@@ -36,29 +37,64 @@ const char TSF_NAME[10] = "tsf"; //TSF algorithm
 const char TOPSIM[10] = "topsim"; //topsim, type 1: topsim-sm; type 2: trun-topsim-sm; type 3: prio-topsim-sm;
 
 /*default configuration */
+//todo: 参数定义
+void help() {
+    printf("App Usage:\n");
+    printf("specify the configuration file:\n");
+    printf("\t-c\t<string>, specify the file of configuration. [config]\n");
 
-char graph_name[125] = "AL";
-char config_file[125] = "config/AL-naive";
-char method[56] = "partialsr";
-bool isFm = true;
-int usDisk = 0;
-double initValue = 1.0;
-int tsm_type = 1;
-int nisim_type = 1;
-int simmat_type = 1;
-bool hasIndex = false;
-bool buildIndex = false;
-bool queryInFile = false;
-int numIter = 10; // default
-double decayFactor = 0.8; // default
-int sampleNum = 100;
-int sampleQueryNum = 20;
-int Rank = 20;
-int parsr_type = 0;
-int DEFAULT_TOPK = 50;
-int verticesNum = 456;
-int edgeNum = 71959;
-bool isHalf = true;
+    printf("\n%s\n", "The following parameters can be specifies in config files.\n");
+    printf("\t-qf\t<string>, indicate query in the file.\n");
+    printf("common parameter For SimRank:\n");
+    printf("\t-T\t<int>, the length of random walk.\n");
+    printf("\t-C\t<double>, decayFactor.\n");
+    printf("\t-fm\t<bool>, specify whether first-meeting guarantee or not. [true]\n");
+    printf("\t-bi\t<bool>, only build index.\n");
+    printf("\t-hi\t<bool>, specify the samples has been built.\n");
+    printf("\t-iv\t<double>, specify the initial values. [1.0]\n");
+
+    printf("%s\n", "parameters for different types of Simrank");
+    printf("\t-sn\t<int>, specify number of global sampling. [100]\n");
+    printf("\t-sqn\t<int>, specify the number of local sampling. [10]\n");
+    printf("\t-rank\t<int>, specify the rank of matrix-based Simrank.[20]\n");
+
+    printf("%s\n", "parameters for input graph");
+    printf("\t-m\t<string>, specify the method of computing SimRank.\n");
+    printf("\t-g\t<string>, the name of input graph.\n");
+    printf("\t-en\t<int>, the number of edges in the input graph.\n");
+    printf("\t-vn\t<int>, the number of vertices in the input graph.\n");
+
+    printf("%s\n", "parameters for different types of methods");
+    printf("\t-ts\t<int>, specify the type of TopSim method [0,1,2].\n");
+    printf("\t-ud\t<int>, specify using disk to store the sampled graph [0=original.\n");
+    printf("\t-ks\t<int>, specify the type of Kronecker SimRank. [0=original,1=optimized]\n");
+    printf("\t-es\t<int>, specify the type of Efficient Simrank. [0=EVD,1=SVD,2=optimized SVD]\n");
+    printf("\t-psrt\t<int>, specify the type of PSR, [0=original, 1=faster]\n");
+}
+
+//todo:默认配置
+char graph_name[125] = "AL"; // -g:the name of input graph.
+char config_file[125] = "/tmp/simrank/config/AL-naive"; // -c: specify the file of configuration. [config]
+char method[56] = "partialsr"; // -m:specify the method of computing SimRank.
+bool isFm = true; // -fm:specify whether first-meeting guarantee or not. [true]
+int usDisk = 0; // -ud:specify using disk to store the sampled graph [0=original.
+double initValue = 1.0; // -iv:specify the initial values.
+int tsm_type = 1; // -ts:specify the type of TopSim method [0,1,2].
+int nisim_type = 1; // -ks:specify the type of Kronecker SimRank. [0=original,1=optimized]
+int simmat_type = 1; // -es: specify the type of Efficient Simrank. [0=EVD,1=SVD,2=optimized SVD]
+bool hasIndex = false; // -hi:specify the samples has been built
+bool buildIndex = false; // -bi:only build index.
+bool queryInFile = false; // -qf: indicate query in the file
+int numIter = 10; // -T:  the length of random walk
+double decayFactor = 0.8; // -C: decayFactor
+int sampleNum = 100; // -sn:specify number of global sampling. [100]
+int sampleQueryNum = 20; // -sqn:specify the number of local sampling. [10]
+int Rank = 20; // -rank:specify the rank of matrix-based Simrank.[20]
+int parsr_type = 0; // -prst:specify the type of PSR, [0=original, 1=faster]
+int DEFAULT_TOPK = 50; // -topk
+int verticesNum = 456; // -vn:the number of vertices in the input graph.
+int edgeNum = 71959; // -en:the number of edges in the input graph.
+bool isHalf = true; // -half
 bool needOrig = false;
 
 struct eqint {
@@ -99,33 +135,43 @@ void constructPath(char *graph_name);
 void help();
 
 bool read_config();
+
+//todo： 主函数
 int main(int argc, char **argv) {
+    //todo: 使用参数文件获取参数
     if (argc != 2) {
         printf("<Usage: ./SRBenchMark parameters_files>\n");
         exit(1);
     }
+    //todo: 设置配置文件
     strcpy(config_file, argv[1]);
+    //todo:读取配置文件
     if (!read_config()) return 0;
+    //todo: 当前参数内容
     printf("InputGraph=%s;\n method=%s;\n num_iter=%d;\ndecay_factor=%.4lf\n; sampleNum=%d;"
-                   "\nsampleQueryNum=%d;\nis_fm=%s;\nuDisk=%d;\nhasIndex=%d;\nbuildIndex=%d;"
-                   "\nneedOrig=%d;\ntopsimtype=%d;\nnisimtype=%d;\nsimmattype=%d;\n rank=%d \n\n",
+           "\nsampleQueryNum=%d;\nis_fm=%s;\nuDisk=%d;\nhasIndex=%d;\nbuildIndex=%d;"
+           "\nneedOrig=%d;\ntopsimtype=%d;\nnisimtype=%d;\nsimmattype=%d;\n rank=%d \n\n",
            graph_name, method, numIter, decayFactor, sampleNum, sampleQueryNum, (isFm == 0 ? "false" : "true"),
            usDisk, hasIndex, buildIndex, needOrig, tsm_type, nisim_type, simmat_type, Rank);
+    //todo: 创建文件夹
     constructPath(graph_name);
+    //todo: 设置输出路径
     getOutPath();
     fout = fopen(outputpath, "wb");
     if (fout == NULL) {
         printf("failed to open output file\n");
     }
 
+    //todo: 读图数据
     Time timer;
     timer.start();
     readGraph();
     timer.stop();
     printf("Time cost for reading graph: %.5lf\n", timer.getElapsedTime());
-
+    //todo: SimRank
     SimRankMethod *srm = createSimRankMethod();
     if (srm == NULL) return 0;
+    // todo:创建索引
     if (buildIndex) {
         timer.reset();
         timer.start();
@@ -141,24 +187,29 @@ int main(int argc, char **argv) {
     timer.reset();
     timer.start();
     int qcnt = 0;
-    if (queryInFile) {
+    //todo:从文件中读取要查询的数据
+    if (queryInFile) { // queryInFile=false
         char querypath[125];
-        sprintf(querypath, "dataset/%s/%s.query", graph_name, graph_name);
+        sprintf(querypath, "/tmp/simrank/%s/%s.query", graph_name, graph_name);
         FILE *qfp = fopen(querypath, "rb");
         printf("querypath=%s\n", querypath);
         if (qfp == NULL) {
             printf("failed to open the query file\n");
         }
+        //todo: 读取每一条查询
         while (fscanf(qfp, "%d\n", &qv) == 1) {
             printf("Query(qv=%d, k=%d, nid=%d, deg=%d):\n", qv, k, vertices[qv],
                    graph_src[vertices[qv] + 1] - graph_src[vertices[qv]]);
+            //todo: 调用simrank算法
             doComputation(vertices[qv], k, srm);
             qcnt++;
         }
         if (qfp != NULL)
             fclose(qfp);
     } else {
+        // 从窗口输入
         while (scanf("%d %d", &qv, &k) != EOF) {
+            //
             printf("Query(qv=%d, k=%d, nid=%d, deg=%d):\n", qv, k, vertices[qv],
                    graph_src[vertices[qv] + 1] - graph_src[vertices[qv]]);
             doComputation(vertices[qv], k, srm);
@@ -190,7 +241,8 @@ bool getOutPath() {
             default:
                 printf("Invalid type %d of topsim. [valid ones: 0, 1, 2.]\n", tsm_type);
         }
-        sprintf(outputpath, "dataset/%s/output/%s", graph_name, method_name);
+        // todo: 输出路径
+        sprintf(outputpath, "/tmp/simrank/%s/output/%s", graph_name, method_name);
     } else if (strcmp(method, NI_SIM) == 0) {
         switch (nisim_type) {
             case 0:
@@ -202,7 +254,7 @@ bool getOutPath() {
             default:
                 printf("Invalid type %d of NISim. [valid ones: 0, 1.]\n", nisim_type);
         }
-        sprintf(outputpath, "dataset/%s/output/%s", graph_name, method_name);
+        sprintf(outputpath, "/tmp/simrank/%s/output/%s", graph_name, method_name);
     } else if (strcmp(method, SIM_MAT) == 0) {
         switch (simmat_type) {
             case 0:
@@ -217,7 +269,7 @@ bool getOutPath() {
             default:
                 printf("Invalid type %d of SimMat. [valid ones: 0, 1, 2.]\n", simmat_type);
         }
-        sprintf(outputpath, "dataset/%s/output/%s", graph_name, method_name);
+        sprintf(outputpath, "/tmp/simrank/%s/output/%s", graph_name, method_name);
     } else if (strcmp(method, TSF_NAME) == 0) {
         switch (usDisk) {
             case 0:
@@ -232,7 +284,7 @@ bool getOutPath() {
             default:
                 printf("Invalid type %d of TSF. [valid ones: 0, 1, 2.]\n", usDisk);
         }
-        sprintf(outputpath, "dataset/%s/output/%s", graph_name, method_name);
+        sprintf(outputpath, "/tmp/simrank/%s/output/%s", graph_name, method_name);
     } else if (strcmp(method, PAR_SR) == 0) {
         switch (parsr_type) {
             case 0:
@@ -244,54 +296,55 @@ bool getOutPath() {
             default:
                 printf("Invalid type %d of ParSR. [valid ones: 0, 1.]\n", parsr_type);
         }
-        sprintf(outputpath, "dataset/%s/output/%s", graph_name, method_name);
+        sprintf(outputpath, "/tmp/simrank/%s/output/%s", graph_name, method_name);
     } else
-        sprintf(outputpath, "dataset/%s/output/%s", graph_name, method);
+        sprintf(outputpath, "/tmp/simrank/%s/output/%s", graph_name, method);
     return true;
 }
 
+//todo： 用不同的方法计算srm
 SimRankMethod *createSimRankMethod() {
     SimRankMethod *srm = NULL;
     if (strcmp(method, KM_SR) == 0) {
         srm = new KMSRIndex(numIter, sampleNum, decayFactor, graph_src, graph_dst,
-                                    MAX_VERTEX_NUM, graph_name, hasIndex, orig_graph_src, orig_graph_dst);
+                            MAX_VERTEX_NUM, graph_name, hasIndex, orig_graph_src, orig_graph_dst);
         //srm = new KMSR(numIter, sampleNum, decayFactor, graph_src, graph_dst, MAX_VERTEX_NUM, graph_name);
     } else if (strcmp(method, TOPSIM) == 0) {
         srm = new TopSimFamily(numIter, sampleNum, decayFactor, graph_src, graph_dst,
                                orig_graph_src, orig_graph_dst, MAX_VERTEX_NUM, tsm_type);
     } else if (strcmp(method, FP_SR) == 0) {
         srm = new FPSR(numIter, sampleNum, decayFactor, graph_src, graph_dst,
-                               MAX_VERTEX_NUM, graph_name, hasIndex);
+                       MAX_VERTEX_NUM, graph_name, hasIndex);
     } else if (strcmp(method, PARTIAL_SR) == 0) {
         srm = new PartialSR(numIter, decayFactor, graph_src, graph_dst, MAX_VERTEX_NUM,
-                                  graph_name, hasIndex, isHalf);
+                            graph_name, hasIndex, isHalf);
     } else if (strcmp(method, NAIVE) == 0) {
         srm = new NaiveSR(numIter, decayFactor, graph_src, graph_dst, MAX_VERTEX_NUM,
                           graph_name, hasIndex, isHalf);
     } else if (strcmp(method, TSF_NAME) == 0) {
         char index_path[125];
-        sprintf(index_path, "dataset/%s/index/%s", graph_name, TSF_NAME);
+        sprintf(index_path, "/tmp/simrank/%s/index/%s", graph_name, TSF_NAME);
         srm = new TSF(numIter, sampleNum, decayFactor, sampleQueryNum, graph_src, graph_dst,
-                       MAX_VERTEX_NUM, usDisk, index_path, hasIndex, isFm);
+                      MAX_VERTEX_NUM, usDisk, index_path, hasIndex, isFm);
     } else if (strcmp(method, NI_SIM) == 0) {
         if (nisim_type == 1)
             srm = new NISim(decayFactor, orig_graph_src, orig_graph_dst, Rank, MAX_VERTEX_NUM,
-                                  hasIndex, graph_name);
+                            hasIndex, graph_name);
         else if (nisim_type == 0)
             srm = new origNISim(decayFactor, orig_graph_src, orig_graph_dst, Rank, MAX_VERTEX_NUM,
-                                      hasIndex, graph_name);
+                                hasIndex, graph_name);
         else
             printf("Invalid NISim types,valid ones are [0,1]\n");
     } else if (strcmp(method, SIM_MAT) == 0) {
         if (simmat_type == 0)
             srm = new SimMatEVD(decayFactor, orig_graph_src, orig_graph_dst, Rank, MAX_VERTEX_NUM,
-                              hasIndex, graph_name);
+                                hasIndex, graph_name);
         else if (simmat_type == 1)
             srm = new SimMatSVD(decayFactor, orig_graph_src, orig_graph_dst, Rank, MAX_VERTEX_NUM,
-                              hasIndex, graph_name);
+                                hasIndex, graph_name);
         else if (simmat_type == 2)
             srm = new OptSimMatSVD(decayFactor, orig_graph_src, orig_graph_dst, Rank, MAX_VERTEX_NUM,
-                                 hasIndex, graph_name);
+                                   hasIndex, graph_name);
         else {
             printf("valid type is [0=SimMatEVD,1=SimMatSVD,2=OptSimMatSVD]\n");
         }
@@ -300,7 +353,7 @@ SimRankMethod *createSimRankMethod() {
                              graph_name, hasIndex, isHalf);
     } else if (strcmp(method, PAR_SR) == 0) {
         srm = new ParSRSimRank(numIter, decayFactor, graph_src, graph_dst, orig_graph_src,
-                             orig_graph_dst, MAX_VERTEX_NUM, parsr_type);
+                               orig_graph_dst, MAX_VERTEX_NUM, parsr_type);
     } else {
         printf("Unsupported Method. %s. Valid ones are [naive, partialsr, oipdmst,\n nisim, parsr, simmat,\nkmsr, fpsr, tsf, topsim].\n",
                method);
@@ -354,11 +407,11 @@ void readGraph() {
     char processedGraphPath[125];
     char orig_processedGraphPath[125];
 
-    sprintf(originalGraphPath, "dataset/%s/%s.data", graph_name, graph_name);
-    sprintf(processedGraphPath, "dataset/%s/%s.data.fmt", graph_name, graph_name);
-    sprintf(orig_processedGraphPath, "dataset/%s/%s.data.fmt.orig", graph_name, graph_name);
+    sprintf(originalGraphPath, "/tmp/simrank/%s/%s.data", graph_name, graph_name);
+    sprintf(processedGraphPath, "/tmp/simrank/%s/%s.data.fmt", graph_name, graph_name);
+    sprintf(orig_processedGraphPath, "/tmp/simrank/%s/%s.data.fmt.orig", graph_name, graph_name);
 
-    FILE *fp = fopen(processedGraphPath, "rb");
+    FILE *fp = fopen(processedGraphPath, "rb"); // fp=null
     if (fp != NULL) {
         printf("reading from processed graph path: %s\n", processedGraphPath);
 
@@ -376,6 +429,7 @@ void readGraph() {
             vertices[rvertices[i]] = i;
         }
         fclose(fp);
+        //needOrig=false  default
         if (needOrig == true) {
             fp = fopen(orig_processedGraphPath, "rb");
             if (fp == NULL) {
@@ -448,10 +502,10 @@ void readGraph() {
 
         printf("before reading in graph: meminfo ");
         print_mem_info();
-
+        // /tmp/simrank/AL/AL.data
         while (fscanf(fp, "%d %d", &a, &b) != EOF) {
             if (vertices.find(a) == vertices.end()) {
-                rvertices[id] = a;
+                rvertices[id] = a; // 节点 重新编号
                 vertices[a] = id++;
             } // relabel
             if (vertices.find(b) == vertices.end()) {
@@ -464,8 +518,8 @@ void readGraph() {
             cnt[vertices[b]]++;
             ecnt++;
         }
-        edgeNum = ecnt;
-        MAX_VERTEX_NUM = id;
+        edgeNum = ecnt; // 边的数量
+        MAX_VERTEX_NUM = id; // 最大顶点ID
         fclose(fp);
 
         printf("reading in graph: meminfo ");
@@ -587,27 +641,29 @@ void readGraph() {
     }
 }
 
+// 建文件夹
 void constructSinglePath(const char *graph_name, const char *method_level1) {
-    /* build a index dir for a method under dir: ./dataset/graph_name/index/methodname/ */
+    /* build a index dir for a method under dir: .//tmp/simrank/graph_name/index/methodname/ */
     char temp[100];
-    sprintf(temp, "dataset/%s/index/%s", graph_name, method_level1);
+    sprintf(temp, "/tmp/simrank/%s/index/%s", graph_name, method_level1);
     light::mkpath(temp);
 }
 
 void constructSinglePath(const char *graph_name, const char *method_level1, const char *method_level2) {
-    /* build a index dir for a method: dataset/graph_name/index/method_level1/method_level2 */
+    /* build a index dir for a method: /tmp/simrank/graph_name/index/method_level1/method_level2 */
     char temp[100];
-    sprintf(temp, "dataset/%s/index/%s/%s", graph_name, method_level1, method_level2);
+    sprintf(temp, "/tmp/simrank/%s/index/%s/%s", graph_name, method_level1, method_level2);
     light::mkpath(temp);
 }
 
+//todo: 创建文件夹
 void constructPath(char *graph_name) {
     char outputpath[100];
-    sprintf(outputpath, "dataset/%s/output/", graph_name);
+    sprintf(outputpath, "/tmp/simrank/%s/output/", graph_name);
     light::mkpath(outputpath);
 
     char indexpath[100];
-    sprintf(indexpath, "dataset/%s/index/", graph_name);
+    sprintf(indexpath, "/tmp/simrank/%s/index/", graph_name);
     light::mkpath(indexpath);
 
     constructSinglePath(graph_name, NAIVE);
@@ -629,42 +685,9 @@ void constructPath(char *graph_name) {
 
 }
 
-void help() {
-    printf("App Usage:\n");
-    printf("specify the configuration file:\n");
-    printf("\t-c\t<string>, specify the file of configuration. [config]\n");
-
-    printf("\n%s\n", "The following parameters can be specifies in config files.\n");
-    printf("\t-qf\t<string>, indicate query in the file.\n");
-    printf("common parameter For SimRank:\n");
-    printf("\t-T\t<int>, the length of random walk.\n");
-    printf("\t-C\t<double>, decayFactor.\n");
-    printf("\t-fm\t<bool>, specify whether first-meeting guarantee or not. [true]\n");
-    printf("\t-bi\t<bool>, only build index.\n");
-    printf("\t-hi\t<bool>, specify the samples has been built.\n");
-    printf("\t-iv\t<double>, specify the initial values. [1.0]\n");
-
-    printf("%s\n", "parameters for different types of Simrank");
-    printf("\t-sn\t<int>, specify number of global sampling. [100]\n");
-    printf("\t-sqn\t<int>, specify the number of local sampling. [10]\n");
-    printf("\t-rank\t<int>, specify the rank of matrix-based Simrank.[20]\n");
-
-    printf("%s\n", "parameters for input graph");
-    printf("\t-m\t<string>, specify the method of computing SimRank.\n");
-    printf("\t-g\t<string>, the name of input graph.\n");
-    printf("\t-en\t<int>, the number of edges in the input graph.\n");
-    printf("\t-vn\t<int>, the number of vertices in the input graph.\n");
-
-    printf("%s\n", "parameters for different types of methods");
-    printf("\t-ts\t<int>, specify the type of TopSim method [0,1,2].\n");
-    printf("\t-ud\t<int>, specify using disk to store the sampled graph [0=original.\n");
-    printf("\t-ks\t<int>, specify the type of Kronecker SimRank. [0=original,1=optimized]\n");
-    printf("\t-es\t<int>, specify the type of Efficient Simrank. [0=EVD,1=SVD,2=optimized SVD]\n");
-    printf("\t-psrt\t<int>, specify the type of PSR, [0=original, 1=faster]\n");
-}
 
 
-//read the default configuration
+//todo:读取配置文件
 bool read_config() {
     bool flag = true;
     FILE *fp = fopen(config_file, "r");
