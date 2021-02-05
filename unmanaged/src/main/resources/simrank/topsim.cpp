@@ -1,10 +1,11 @@
 #include "topsim.h"
-#include <mytime.h>
+#include "mytime.h"
 #include "google/dense_hash_map"
 #include "google/sparse_hash_map"
 
 using google::dense_hash_map;
-using std::tr1::hash;
+//using std::tr1::hash;
+using std::hash;
 
 void TopSimFamily::run(int qv, int k) {
     Time timer;
