@@ -71,7 +71,7 @@ $(SIMRANK): $(SIMRANK).cpp   $(DEP)
 
 # neo4j
 $(NEO4J): $(NEO4J).cpp   $(DEP)
-	$(CC)  $(CXXFLAGS) $(CFLAGS)  -larmadillo  -o $(SIMRANK).o $(SIMRANK).cpp $(DEP)  -I$(INC1) -I$(INC2) -I$(INC3) -I$(GL) -I$(ARM) $(LDFLAGS) $(LIBS)
+	$(CC)  $(CXXFLAGS) $(CFLAGS)  -larmadillo  -o $(NEO4J).o $(NEO4J).cpp $(DEP)  -I$(INC1) -I$(INC2) -I$(INC3) -I$(GL) -I$(ARM) $(LDFLAGS) $(LIBS)
 
 
 	  

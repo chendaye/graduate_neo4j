@@ -204,13 +204,14 @@ string simrank(char *config_path){
             printf("failed to open the query file\n");
         }
         //todo: 读取每一条查询， 计算每一个顶点的中心度
-        while (fscanf(qfp, "%d\n", &qv) == 1) {
-            printf("Query(qv=%d, k=%d, nid=%d, deg=%d):\n", qv, k, vertices[qv],
-                   graph_src[vertices[qv] + 1] - graph_src[vertices[qv]]); // 定点 top-k nid  deg(度)
-            //todo: 调用simrank算法
-            doComputation(vertices[qv], k, srm);
-            qcnt++;
-        }
+//        while (fscanf(qfp, "%d\n", &qv) == 1) {
+//            printf("Query(qv=%d, k=%d, nid=%d, deg=%d):\n", qv, k, vertices[qv],
+//                   graph_src[vertices[qv] + 1] - graph_src[vertices[qv]]); // 定点 top-k nid  deg(度)
+//            //todo: 调用simrank算法
+//            doComputation(vertices[qv], k, srm);
+//            qcnt++;
+//        }
+        doComputation(vertices[80], k, srm);
         if (qfp != NULL)
             fclose(qfp);
     } else {
@@ -391,8 +392,7 @@ void doComputation(int qv, int k, SimRankMethod *srm) {
         if (vid != -1) {
             fwrite(&rvertices[vid], sizeof(int), 1, fout);
             fwrite(&val, sizeof(double), 1, fout);
-            // printf("%d %lf\n", rvertices[vid], val);
-            printf("%d %lf\n", vid, val);
+            printf("%d %d %lf\n", vid, rvertices[vid], val); //new vid, old vid, val
         } else {
             int temp_ID = -1;
             double temp_Score = -1.0;
@@ -669,12 +669,12 @@ void constructSinglePath(const char *graph_name, const char *method_level1, cons
 void constructPath(char *graph_name) {
     char outputpath[100];
     sprintf(outputpath, "/tmp/simrank/%s/output/", graph_name);
-    printf("graph_name=%s, new-path=%s\n", graph_name, outputpath)
+    printf("graph_name=%s, new-path=%s\n", graph_name, outputpath);
     light::mkpath(outputpath);
 
     char indexpath[100];
     sprintf(indexpath, "/tmp/simrank/%s/index/", graph_name);
-    printf("graph_name=%s, new-path=%s\n", graph_name, outputpath)
+    printf("graph_name=%s, new-path=%s\n", graph_name, outputpath);
     light::mkpath(indexpath);
 
     constructSinglePath(graph_name, NAIVE);
@@ -771,5 +771,11 @@ bool read_config() {
 
     fclose(fp);
     return flag;
+}
+
+int main(int argc, char **argv) {
+    string output;
+    output = simrank(argv[1]);
+    printf("output=%s", output.data());
 }
 
