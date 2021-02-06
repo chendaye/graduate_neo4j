@@ -653,8 +653,7 @@ void constructSinglePath(const char *graph_name, const char *method_level1) {
     /* build a index dir for a method under dir: .//tmp/simrank/graph_name/index/methodname/ */
     char temp[100];
     sprintf(temp, "/tmp/simrank/%s/index/%s/", graph_name, method_level1);
-    printf("graph_name=%s,method_level1=%s", graph_name, method_level1);
-//    printf("madir path==%s\n", temp);
+    printf("graph_name=%s,method_level1=%s, new-path=%s\n", graph_name, method_level1,temp);
     light::mkpath(temp);
 }
 
@@ -662,8 +661,7 @@ void constructSinglePath(const char *graph_name, const char *method_level1, cons
     /* build a index dir for a method: /tmp/simrank/graph_name/index/method_level1/method_level2 */
     char temp[100];
     sprintf(temp, "/tmp/simrank/%s/index/%s/%s/", graph_name, method_level1, method_level2);
-    printf("graph_name=%s,method_level1=%s, method_level2=%s", graph_name, method_level1, method_level2);
-//    printf("madir path==%s\n", temp);
+    printf("graph_name=%s,method_level1=%s, method_level2=%s, new-path=%s\n", graph_name, method_level1, method_level2,temp);
     light::mkpath(temp);
 }
 
@@ -671,10 +669,12 @@ void constructSinglePath(const char *graph_name, const char *method_level1, cons
 void constructPath(char *graph_name) {
     char outputpath[100];
     sprintf(outputpath, "/tmp/simrank/%s/output/", graph_name);
+    printf("graph_name=%s, new-path=%s\n", graph_name, outputpath)
     light::mkpath(outputpath);
 
     char indexpath[100];
     sprintf(indexpath, "/tmp/simrank/%s/index/", graph_name);
+    printf("graph_name=%s, new-path=%s\n", graph_name, outputpath)
     light::mkpath(indexpath);
 
     constructSinglePath(graph_name, NAIVE);
