@@ -6,7 +6,7 @@ void PartialSR::run(int qv, int k) {
         initialize();
     } else {
         char filepath[125];
-        sprintf(filepath, "dataset/%s/index/partialsr/partialsr.idx", graphName);
+        sprintf(filepath, "/tmp/simrank/%s/index/partialsr/partialsr.idx", graphName);
         FILE *fp = fopen(filepath, "rb");
         if (fp == NULL) {
             printf("Failed to open the %s file.\n", filepath);
@@ -79,7 +79,7 @@ void PartialSR::initialize() {
     timer.stop();
     printf("time cost for while loop of accur: %.5lf\n", timer.getElapsedTime());
     char filepath[125];
-    sprintf(filepath, "dataset/%s/index/partialsr/partialsr.idx", graphName);
+    sprintf(filepath, "/tmp/simrank/%s/index/partialsr/partialsr.idx", graphName);
     FILE *fp = fopen(filepath, "wb");
     for (int i = 0; i < maxVertexId; ++i) {
         fwrite(srvalue[maxSteps & 1][i], sizeof(double), maxVertexId, fp);

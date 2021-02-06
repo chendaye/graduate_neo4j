@@ -58,15 +58,20 @@ TSF.o: TSF.cpp TSF.h
 topsim.o: topsim.cpp topsim.h
 	$(CC) -c  $(VERSION) $(CXXFLAGS) $(CFLAGS)    topsim.cpp  -o topsim.o  -I$(INC1) -I$(INC2) -I$(INC3) -I$(GL) -I$(ARM)
 
-# const
+# depency
 DEP += FingerPrint.o FPSR.o KMSR.o KMSRIndex.o  mytime.o NISim.o naiveSR.o OIPSimRank.o
 DEP += OptSimMatSVD.o origNISim.o ParSRSimRank.o PartialSR.o SimMatEVD.o SimMatSVD.o TSF.o topsim.o
+# head file
 DEPH +=  config.h TSF.h PartialSR.h FPSR.h KMSR.h KMSRIndex.h topsim.h meminfo.hpp
 DEPH +=  NISim.h origNISim.h SimMatEVD.h SimMatSVD.h OptSimMatSVD.h OIPSimRank.h ParSRSimRank.h mymkdir.h naiveSR.h
 
 # simrank
-$(SIMRANK): $(SIMRANK).cpp  $(DEPH) $(DEP)
-	$(CC)  $(CXXFLAGS) $(CFLAGS) -o $(SIMRANK).o $(SIMRANK).cpp $(DEP)  -I$(INC1) -I$(INC2) -I$(INC3) -I$(GL) -I$(ARM) $(LDFLAGS) $(LIBS)
+$(SIMRANK): $(SIMRANK).cpp   $(DEP)
+	$(CC)  $(CXXFLAGS) $(CFLAGS)  -larmadillo  -o $(SIMRANK).o $(SIMRANK).cpp $(DEP)  -I$(INC1) -I$(INC2) -I$(INC3) -I$(GL) -I$(ARM) $(LDFLAGS) $(LIBS)
+
+# neo4j
+$(NEO4J): $(NEO4J).cpp   $(DEP)
+	$(CC)  $(CXXFLAGS) $(CFLAGS)  -larmadillo  -o $(SIMRANK).o $(SIMRANK).cpp $(DEP)  -I$(INC1) -I$(INC2) -I$(INC3) -I$(GL) -I$(ARM) $(LDFLAGS) $(LIBS)
 
 
 	  

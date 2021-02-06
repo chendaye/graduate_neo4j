@@ -190,7 +190,7 @@ int main(int argc, char **argv) {
     //todo:从文件中读取要查询的数据
     if (queryInFile) { // queryInFile=false
         char querypath[125];
-        sprintf(querypath, "/tmp/simrank/dataset/%s/%s.query", graph_name, graph_name);
+        sprintf(querypath, "/tmp/simrank/%s/%s.query", graph_name, graph_name);
         FILE *qfp = fopen(querypath, "rb");
         printf("querypath=%s\n", querypath);
         if (qfp == NULL) {
@@ -407,9 +407,9 @@ void readGraph() {
     char processedGraphPath[125];
     char orig_processedGraphPath[125];
 
-    sprintf(originalGraphPath, "/tmp/simrank/dataset/%s/%s.data", graph_name, graph_name);
-    sprintf(processedGraphPath, "/tmp/simrank/dataset/%s/%s.data.fmt", graph_name, graph_name);
-    sprintf(orig_processedGraphPath, "/tmp/simrank/dataset/%s/%s.data.fmt.orig", graph_name, graph_name);
+    sprintf(originalGraphPath, "/tmp/simrank/%s/%s.data", graph_name, graph_name);
+    sprintf(processedGraphPath, "/tmp/simrank/%s/%s.data.fmt", graph_name, graph_name);
+    sprintf(orig_processedGraphPath, "/tmp/simrank/%s/%s.data.fmt.orig", graph_name, graph_name);
 
     FILE *fp = fopen(processedGraphPath, "rb"); // fp=null
     if (fp != NULL) {
@@ -645,14 +645,16 @@ void readGraph() {
 void constructSinglePath(const char *graph_name, const char *method_level1) {
     /* build a index dir for a method under dir: .//tmp/simrank/graph_name/index/methodname/ */
     char temp[100];
-    sprintf(temp, "/tmp/simrank/%s/index/%s", graph_name, method_level1);
+    sprintf(temp, "/tmp/simrank/%s/index/%s/", graph_name, method_level1);
+    printf("madir index%s\n", temp);
     light::mkpath(temp);
 }
 
 void constructSinglePath(const char *graph_name, const char *method_level1, const char *method_level2) {
     /* build a index dir for a method: /tmp/simrank/graph_name/index/method_level1/method_level2 */
     char temp[100];
-    sprintf(temp, "/tmp/simrank/%s/index/%s/%s", graph_name, method_level1, method_level2);
+    sprintf(temp, "/tmp/simrank/%s/index/%s/%s/", graph_name, method_level1, method_level2);
+    printf("madir index%s\n", temp);
     light::mkpath(temp);
 }
 

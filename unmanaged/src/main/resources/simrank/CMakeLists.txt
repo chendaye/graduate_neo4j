@@ -7,6 +7,7 @@ include_directories(.)
 include_directories(include)
 include_directories(include/sparsehash)
 include_directories(include/sparsehash/internal)
+include_directories(/usr/local/armadillo-10.2.1)
 
 add_executable(simrank
         include/sparsehash/internal/densehashtable.h
@@ -16,6 +17,7 @@ add_executable(simrank
         include/sparsehash/internal/sparsehashtable.h
         include/sparsehash/template_util.h
         include/sparsehash/type_traits.h
+        /usr/local/armadillo-10.2.1
         config.h
         FingerPrint.cpp
         FingerPrint.h

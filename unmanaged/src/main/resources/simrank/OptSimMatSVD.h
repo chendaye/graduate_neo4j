@@ -14,14 +14,14 @@ public:
     OptSimMatSVD(double decayfactor, int *orig_graph_src, int *orig_graph_dst, int rank, int mvid, bool isInit,
                  char *inpath) :
             SimMat(decayfactor, orig_graph_src, orig_graph_dst, rank, mvid, isInit, inpath) {
-        sprintf(Lpath, "dataset/%s/index/simmat/optsvd/%s.L", graphName, graphName);
-        sprintf(Rpath, "dataset/%s/index/simmat/optsvd/%s.R", graphName, graphName);
-        sprintf(l_path, "dataset/%s/index/simmat/optsvd/%s.l_", graphName, graphName);
-        sprintf(r_path, "dataset/%s/index/simmat/optsvd/%s.r_", graphName, graphName);
-        sprintf(l_devpath, "dataset/%s/index/simmat/optsvd/%s.l_dev", graphName, graphName);
-        sprintf(r_devpath, "dataset/%s/index/simmat/optsvd/%s.r_dev", graphName, graphName);
-        sprintf(indexpath, "dataset/%s/index/simmat/optsvd/%s.index", graphName, graphName);
-        sprintf(revIndexpath, "dataset/%s/index/simmat/optsvd/%s.revindex", graphName, graphName);
+        sprintf(Lpath, "/tmp/simrank/%s/index/simmat/optsvd/%s.L", graphName, graphName);
+        sprintf(Rpath, "/tmp/simrank/%s/index/simmat/optsvd/%s.R", graphName, graphName);
+        sprintf(l_path, "/tmp/simrank/%s/index/simmat/optsvd/%s.l_", graphName, graphName);
+        sprintf(r_path, "/tmp/simrank/%s/index/simmat/optsvd/%s.r_", graphName, graphName);
+        sprintf(l_devpath, "/tmp/simrank/%s/index/simmat/optsvd/%s.l_dev", graphName, graphName);
+        sprintf(r_devpath, "/tmp/simrank/%s/index/simmat/optsvd/%s.r_dev", graphName, graphName);
+        sprintf(indexpath, "/tmp/simrank/%s/index/simmat/optsvd/%s.index", graphName, graphName);
+        sprintf(revIndexpath, "/tmp/simrank/%s/index/simmat/optsvd/%s.revindex", graphName, graphName);
         index = new int[maxVertexId];
         revIndex = new int[maxVertexId];
     }

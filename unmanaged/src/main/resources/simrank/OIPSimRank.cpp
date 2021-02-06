@@ -6,7 +6,7 @@ void OIPSimRank::run(int qv, int k) {
         initialize();
     } else {
         char filepath[125];
-        sprintf(filepath, "dataset/%s/index/oipdmst/oip.idx", graphName);
+        sprintf(filepath, "/tmp/simrank/%s/index/oipdmst/oip.idx", graphName);
         FILE *fp = fopen(filepath, "rb");
         if (fp == NULL) {
             printf("Failed to open the %s file.\n", filepath);
@@ -98,7 +98,8 @@ void OIPSimRank::initialize() {
     timer.stop();
     printf("time cost for while loop of OIP: %.5lf\n", timer.getElapsedTime());
     char filepath[125];
-    sprintf(filepath, "dataset/%s/index/oipdmst/oip.idx", graphName);
+    sprintf(filepath, "/tmp/simrank/%s/index/oipdmst/oip.idx", graphName);
+    printf("index path=%s\n", filepath);
     FILE *fp = fopen(filepath, "wb");
     for (int i = 0; i < maxVertexId; ++i) {
         fwrite(srvalue[maxSteps & 1][i], sizeof(double), maxVertexId, fp);

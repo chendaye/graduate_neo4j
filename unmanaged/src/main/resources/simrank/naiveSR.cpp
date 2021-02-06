@@ -6,7 +6,7 @@ void NaiveSR::run(int qv, int k) {
         initialize();
     } else {
         char filepath[125];
-        sprintf(filepath, "dataset/%s/index/naive/naiveSR.idx", graphName);
+        sprintf(filepath, "/tmp/simrank/%s/index/naive/naiveSR.idx", graphName);
         FILE *fp = fopen(filepath, "rb");
         if (fp == NULL) {
             printf("Failed to open the %s file.\n", filepath);
@@ -69,7 +69,8 @@ void NaiveSR::initialize() {
     timer.stop();
     printf("time cost for while loop of naiveSR: %.5lf\n", timer.getElapsedTime());
     char filepath[125];
-    sprintf(filepath, "dataset/%s/index/naive/naiveSR.idx", graphName);
+    sprintf(filepath, "/tmp/simrank/%s/index/naive/naiveSR.idx", graphName);
+    printf("index/= %s\n", filepath);
     FILE *fp = fopen(filepath, "wb");
     for (int i = 0; i < maxVertexId; ++i) {
         fwrite(srvalue[maxSteps & 1][i], sizeof(double), maxVertexId, fp);
