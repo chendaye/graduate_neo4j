@@ -140,7 +140,7 @@ void help();
 bool read_config();
 
 //
-string simrank(char *config_path){
+string simrank(char *config_path, int node_id){
     //todo: 使用参数文件获取参数
     if (config_path == nullptr) {
         printf("config_path not found\n");
@@ -189,7 +189,7 @@ string simrank(char *config_path){
         return 0;
     }
 
-    int qv; // 查询顶点
+    int qv = node_id; //todo: 查询顶点
     int k = DEFAULT_TOPK;
     timer.reset();
     timer.start();
@@ -211,7 +211,7 @@ string simrank(char *config_path){
 //            doComputation(vertices[qv], k, srm);
 //            qcnt++;
 //        }
-        doComputation(vertices[80], k, srm);
+        doComputation(vertices[qv], k, srm);
         if (qfp != NULL)
             fclose(qfp);
     } else {
@@ -370,6 +370,7 @@ SimRankMethod *createSimRankMethod() {
 }
 
 void doComputation(int qv, int k, SimRankMethod *srm) {
+    string ans;
     Time timer;
     timer.start();
     srm->run(qv, k); // 中心度
@@ -392,16 +393,25 @@ void doComputation(int qv, int k, SimRankMethod *srm) {
         if (vid != -1) {
             fwrite(&rvertices[vid], sizeof(int), 1, fout);
             fwrite(&val, sizeof(double), 1, fout);
+            ans.append(vid);
+            ans.append(",");
+            ans.append(rvertices[vid]);
+            ans.append(",");
+            ans.append(val);
+            ans.append("@");
             printf("%d %d %lf\n", vid, rvertices[vid], val); //new vid, old vid, val
-        } else {
+        } else { // 没有邻居节点
             int temp_ID = -1;
             double temp_Score = -1.0;
             fwrite(&temp_ID, sizeof(int), 1, fout);
             fwrite(&temp_Score, sizeof(double), 1, fout);
             fprintf(stderr, " -1");
             printf("-1 -1\n");
+            ans.append("-1,-1,-1.0@");
         }
     }
+    ans.pop_back();
+    printf("ans=%s\n", ans.data());
 }
 
 int cmp(const void *a, const void *b) {
@@ -775,7 +785,8 @@ bool read_config() {
 
 int main(int argc, char **argv) {
     string output;
-    output = simrank(argv[1]);
+    int node_id = 80;
+    output = simrank(argv[1], node_id);
     printf("output=%s", output.data());
 }
 
