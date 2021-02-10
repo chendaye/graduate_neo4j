@@ -1,4 +1,5 @@
-package top.chendaye666.equitruss.streamans;
+package top.chendaye666.simrank.streams;
+
 
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
@@ -30,22 +31,14 @@ import java.util.Map;
  *     <li>{@link Object}, meaning any of the valid field types</li>
  * </ul>
  */
-public class Equitruss {
-    public Long id;
-    public String authorId;
-    public String name;
-    public Long count;
-    public String community;
-    public String words;
-    public String raw;
+public class Center {
+    public String nid;
+    public String oid;
+    public String value;
 
-    public Equitruss(Long id, String authorId, String name, Long count, String community, String words, String raw) {
-        this.id = id;
-        this.authorId = authorId;
-        this.name = name;
-        this.count = count;
-        this.community = community;
-        this.words = words;
-        this.raw = raw;
+    public Center(String nid, String oid, String value){
+        this.nid = nid;
+        this.oid = oid;
+        this.value = value;
     }
 }

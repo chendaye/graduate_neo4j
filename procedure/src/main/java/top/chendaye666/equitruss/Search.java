@@ -9,9 +9,8 @@ import org.neo4j.procedure.Procedure;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.regex.Pattern;
 import java.util.stream.Stream;
-import top.chendaye666.equitruss.streamans.*;
+import top.chendaye666.equitruss.streams.*;
 import top.chendaye666.equitruss.util.DataUtils;
 
 /**

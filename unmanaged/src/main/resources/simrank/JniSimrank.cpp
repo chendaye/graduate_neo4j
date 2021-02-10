@@ -17,6 +17,7 @@
 #include "ParSRSimRank.h"
 #include "mymkdir.h"
 #include "naiveSR.h"
+#include "top_chendaye666_simrank_JniUtil.h"
 
 using google::dense_hash_map;
 //using std::tr1::hash;
@@ -125,7 +126,7 @@ void readGraph();
 
 bool getOutPath();
 
-void doComputation(int vid, int k, SimRankMethod *srm);
+string doComputation(int vid, int k, SimRankMethod *srm);
 
 SimRankMethod *createSimRankMethod();
 
@@ -189,47 +190,18 @@ string simrank(char *config_path, int node_id){
         return 0;
     }
 
-    int qv = node_id; //todo: 查询顶点
-    int k = DEFAULT_TOPK;
+    string result; // 计算结果
     timer.reset();
     timer.start();
     int qcnt = 0;
     //todo:从文件中读取要查询的数据
-    if (queryInFile) { // queryInFile=false
-//        char querypath[125];
-//        sprintf(querypath, "/tmp/simrank/%s/%s.query", graph_name, graph_name);
-//        FILE *qfp = fopen(querypath, "rb"); // 打开查询文件
-//        printf("querypath=%s\n", querypath);
-//        if (qfp == NULL) {
-//            printf("failed to open the query file\n");
-//        }
-        //todo: 读取每一条查询， 计算每一个顶点的中心度
-//        while (fscanf(qfp, "%d\n", &qv) == 1) {
-//            printf("Query(qv=%d, k=%d, nid=%d, deg=%d):\n", qv, k, vertices[qv],
-//                   graph_src[vertices[qv] + 1] - graph_src[vertices[qv]]); // 定点 top-k nid  deg(度)
-//            //todo: 调用simrank算法
-//            doComputation(vertices[qv], k, srm);
-//            qcnt++;
-//        }
-        doComputation(vertices[qv], k, srm);
-//        if (qfp != NULL)
-//            fclose(qfp);
-    } else {
-        // 从窗口输入
-        while (scanf("%d %d", &qv, &k) != EOF) {
-            //
-            printf("Query(qv=%d, k=%d, nid=%d, deg=%d):\n", qv, k, vertices[qv],
-                   graph_src[vertices[qv] + 1] - graph_src[vertices[qv]]);
-            doComputation(vertices[qv], k, srm);
-            qcnt++;
-        }
-    }
+    result = doComputation(vertices[node_id], DEFAULT_TOPK, srm);
     timer.stop();
     printf("Time cost for executing %d queires: %.5lf\n", qcnt, timer.getElapsedTime());
 
     delete srm;
     fclose(fout);
-    return string(outputpath); // 结果文件
+    return result; // 结果文件
 }
 
 bool getOutPath() {
@@ -369,13 +341,13 @@ SimRankMethod *createSimRankMethod() {
     return srm;
 }
 
-void doComputation(int qv, int k, SimRankMethod *srm) {
+string doComputation(int qv, int k, SimRankMethod *srm) {
     string ans;
     Time timer;
     timer.start();
     srm->run(qv, k); // 中心度
     timer.stop();
-    printf("SRBenchMark::time for query(%d, %d): %.5lf\n", qv, k, timer.getElapsedTime());
+
     if (strcmp(method, FP_SR) == 0 || strcmp(method, PARTIAL_SR) == 0) {
         hasIndex = true;
     } else if (strcmp(method, TSF_NAME) == 0 && (usDisk == 1 || usDisk == 2)) {
@@ -383,10 +355,9 @@ void doComputation(int qv, int k, SimRankMethod *srm) {
     } else if (strcmp(method, NI_SIM) == 0 || strcmp(method, SIM_MAT) == 0) {
         hasIndex = true;
     }
-
+    printf("Jni:SRBenchMark::time for query(%d, %d): %.5lf\n", qv, k, timer.getElapsedTime());
     fwrite(&rvertices[qv], sizeof(int), 1, fout);
     fwrite(&k, sizeof(int), 1, fout);
-
     for (int i = 0; i < k; ++i) {
         int vid = srm->getRes(i).getVid();
         double val = srm->getRes(i).getValue();
@@ -406,12 +377,13 @@ void doComputation(int qv, int k, SimRankMethod *srm) {
             fwrite(&temp_ID, sizeof(int), 1, fout);
             fwrite(&temp_Score, sizeof(double), 1, fout);
             fprintf(stderr, " -1");
-            printf("-1 -1\n");
+            printf("-1  -1\n");
             ans.append("-1,-1,-1.0@");
         }
     }
     ans.pop_back();
-    printf("ans=%s\n", ans.data());
+//    printf("ans=%s\n", ans.data());
+    return ans;
 }
 
 int cmp(const void *a, const void *b) {
@@ -783,10 +755,30 @@ bool read_config() {
     return flag;
 }
 
-int main(int argc, char **argv) {
-    string output;
-    int node_id = 80;
-    output = simrank(argv[1], node_id);
-    printf("output=%s", output.data());
+
+/*
+ * Class:     top_chendaye666_simrank_JniUtil
+ * Method:    getRank
+ * Signature: (Ljava/lang/String;I)Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_top_chendaye666_simrank_JniUtil_getRank
+        (JNIEnv *env, jobject obj, jstring config_path, jint node_id){
+    // 边文件路径
+    const char *cp = env->GetStringUTFChars(config_path, nullptr);
+    if (cp == nullptr) return nullptr;
+    char config[128] = {0}; // 复制字符串
+    strcpy(config, cp);
+    // simrank
+    string output = simrank(config, node_id);
+    printf("config=%s\n", config);
+    // 删除引用
+    env->ReleaseStringUTFChars(config_path, cp);
+    // 自动转为 Unicode
+    return env->NewStringUTF(output.data());
+//    return env->NewStringUTF(config);
 }
 
+int main(int argc, char **argv) {
+    string test = simrank(argv[1], 1);
+    printf("test dilib=%s\n", test.data());
+}

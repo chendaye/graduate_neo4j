@@ -5,7 +5,7 @@
 VERSION = -std=c++11 -Wall
 
 .PHONY: all
-all: $(SIMRANK)
+all: $(SIMRANK) $(Neo4j) $(JNI)
 
 # other
 FingerPrint.o: FingerPrint.cpp FingerPrint.h
@@ -73,6 +73,13 @@ $(SIMRANK): $(SIMRANK).cpp   $(DEP)
 $(NEO4J): $(NEO4J).cpp   $(DEP)
 	$(CC)  $(CXXFLAGS) $(CFLAGS)  -larmadillo  -o $(NEO4J).o $(NEO4J).cpp $(DEP)  -I$(INC1) -I$(INC2) -I$(INC3) -I$(GL) -I$(ARM) $(LDFLAGS) $(LIBS)
 
+# JniSimrank
+$(JNI): $(JNI).cpp   $(DEP)
+	$(CC) -c  -fPIC $(CXXFLAGS) $(CFLAGS)  -larmadillo  -o $(JNI).o $(JNI).cpp $(DEP)  -I$(INC1) -I$(INC2) -I$(INC3) -I$(GL) -I$(ARM) $(LDFLAGS) $(LIBS)
+
+test: $(JNI).cpp   $(DEP)
+	$(CC)  $(CXXFLAGS) $(CFLAGS)  -larmadillo  -o test.o $(JNI).cpp $(DEP)  -I$(INC1) -I$(INC2) -I$(INC3) -I$(GL) -I$(ARM) $(LDFLAGS) $(LIBS)
+
 
 	  
 clean:
@@ -85,7 +92,7 @@ clean:
 # 编译动态链接库
 dylib:
 ifeq ($(UNAME), Darwin)
-	$(CC) -dynamiclib -o libEquitruss.dylib neo4j.o fptree.o common.o algo.o  EquiTrussAttribute.o  
+	$(CC) -dynamiclib  -larmadillo  -o libSimrank.dylib JniSimrank.o $(DEP)
 else
-	$(CC) -shared neo4j.o fptree.o common.o algo.o  EquiTrussAttribute.o   -o libEquitruss.so
+	$(CC) -shared JniSimrank.o $(DEP) -larmadillo   -o libSimramk.so
 endif

@@ -1,4 +1,4 @@
-package top.chendaye666.equitruss.streamans;
+package top.chendaye666.equitruss.streams;
 
 import java.util.List;
 
