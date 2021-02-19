@@ -66,6 +66,7 @@ public class DataUtils {
 //                        for (Relationship r : otherNode.getRelationships(Direction.BOTH, RelationshipTypes.Article)){
 //                            dealRelationShip(r, relationshipOutputStream, relationships);
 //                        }
+                        if (nodes.size() > 2000) continue;
                     }
                 }
             }
