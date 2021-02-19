@@ -80,22 +80,14 @@ public class SearchTests {
 
 
     /**
-     * 选边少的点测试
-     * 15
-     * 743606 4-4-1 6-4-1
-     * match (p:Author) where id(p) in [136251,222871,222872,522503,631176,658499,743606,1038642,1723353,2614998] return p;
-     *
-     * 查询到多个社区 (节点越多边约密集 对应的 k_query attr_count 设置大一点，缩短搜索时间)
-     * MATCH (u:Author) where id(u) = 15 CALL top.chendaye666.equitruss.search(u,4,4,1) YIELD id,authorId,name,count,community,words,raw RETURN id,authorId,name,count,community,words,raw
-     *
-     * 272,330,0.010986@264,119,0.010538@198,92,0.008876@247,374,0.008503
+     * id= 4,119
      */
     @Test
     public void search() {
         try(Session session = driver.session()) {
             session.run(MODEL_STATEMENT);
             //Execute our procedure against it.
-            // MATCH (u:Author) where id(u) = 1 CALL top.chendaye666.equitruss.search(u,15,10,1) YIELD id,authorId,name,count,community,words,raw RETURN id,authorId,name,count,community,words,raw
+            // MATCH (u:Author) where id(u) = 15  CALL top.chendaye666.simrank.search(u, 'AL-naive') YIELD nid,oid,value RETURN nid,oid,value
             final Result result = session.run("MATCH (u:Author {authorId:'4'})  CALL top.chendaye666.simrank.search(u, 'AL-naive') YIELD nid,oid,value RETURN nid,oid,value");
             while (result.hasNext()){
                 Record next = result.next();

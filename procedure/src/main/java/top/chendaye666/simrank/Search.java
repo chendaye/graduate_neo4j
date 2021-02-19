@@ -63,7 +63,7 @@ public class Search {
         if (node == null) return null;
         int node_id = (int) node.getId(); // 查询的节点id
         // 获取数据
-        String query = "match res=(p:Author)-[r1:Article]-(p1:Author) where id(p)="+node_id+" return p1";
+        String query = "match res=(p:Author)-[r1:Article]-(p1) where id(p)="+node_id+" return p1,p";
         // 修改配置
         System.out.println("node_id="+node_id+";config="+config);
         int[] ints = DataUtils.communityGenerate(db, query);

@@ -45,7 +45,7 @@ public class DataUtils {
         HashSet<Long> relationships = new HashSet<>();
         HashSet<Long> nodes = new HashSet<>();
         try (Transaction tx = db.beginTx() ) {
-            // match res=(p:Author)-[r1:Article]-(p1:Author) where id(p)="+node_id+" return p,p1
+            // match res=(p:Author)-[r1:Article]-(p1:Author) where id(p)="+node_id+" return p1
             Result result = tx.execute(query);
             // p的所有邻接点
             while (result.hasNext()){
@@ -57,6 +57,7 @@ public class DataUtils {
                     nodes.add(author.getId());
                     // node 直接相连的边
                     for (Relationship relationship : author.getRelationships(Direction.BOTH, RelationshipTypes.Article)){
+                        if (relationships.contains(relationship.getId())) continue; // todo:同样的边不重复访问
                         // 当前节点的边
                         dealRelationShip(relationship, relationshipOutputStream, relationships);
                         // 边的另一个节点
@@ -66,7 +67,6 @@ public class DataUtils {
 //                        for (Relationship r : otherNode.getRelationships(Direction.BOTH, RelationshipTypes.Article)){
 //                            dealRelationShip(r, relationshipOutputStream, relationships);
 //                        }
-                        if (nodes.size() > 2000) continue;
                     }
                 }
             }
