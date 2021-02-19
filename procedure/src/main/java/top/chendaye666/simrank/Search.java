@@ -69,8 +69,9 @@ public class Search {
         int[] ints = DataUtils.communityGenerate(db, query);
         if (ints == null) return null;
         HashMap<String, String> kv = new HashMap<>();
-        kv.put("-en", ints[0]+"");
-        kv.put("-vn", ints[1]+"");
+        kv.put("-vn", ints[0]+"");
+        kv.put("-en", ints[1]+"");
+        kv.put("-topk", "10");
         try {
             ReadWriteTxtUtils.replaceContent(config, kv);
         }catch (IOException e){

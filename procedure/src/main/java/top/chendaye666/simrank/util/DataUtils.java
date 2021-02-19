@@ -32,6 +32,7 @@ public class DataUtils {
             if(nodeOutputStream != null) {
                 // 处理数据
                 ans = depthOne(db, query, nodeOutputStream);
+                if (ans[0]== 0 || ans[1] == 0) return null;
                 nodeOutputStream.flush();
                 nodeOutputStream.close();
             }
@@ -73,8 +74,8 @@ public class DataUtils {
             tx.commit();
         }
         int[] ans = new int[2];
-        ans[0] = nodes.size();
-        ans[1] = relationships.size();
+        ans[0] = nodes.size(); // vn
+        ans[1] = relationships.size(); // en
         return ans;
     }
 

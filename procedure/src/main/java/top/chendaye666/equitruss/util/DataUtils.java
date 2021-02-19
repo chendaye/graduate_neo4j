@@ -137,6 +137,7 @@ public class DataUtils {
                     dealNode(author, nodeOutputStream, nodes);
                     // node 直接相连的边
                     for (Relationship relationship : author.getRelationships(Direction.BOTH, RelationshipTypes.Article)){
+                        if (relationships.contains(relationship.getId())) continue; //todo:不要重复访问边
                         // 当前节点的边
                         dealRelationShip(relationship, relationshipOutputStream, relationships);
                         // 边的另一个节点
