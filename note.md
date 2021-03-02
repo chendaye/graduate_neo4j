@@ -84,7 +84,9 @@ sed -i '1i physicianId' ./providers.csv
 sed -i '1i startId,endId,transactions,patients,max_day' ./shared_members.csv
 
 # 建立节点
-LOAD CSV WITH HEADERS  FROM 'file:///node_1.csv' AS row CREATE (:Author {authorId:row.author_id,name:row.node,articles:row.articles,words:row.words,attribute:row.attribute});
+LOAD CSV WITH HEADERS  FROM 'file:///node_1.csv' AS row CREATE 
+(:Author {authorId:row.author_id,name:row.node,articles:row.articles,words:row.words,attribute:row.attribute});
+
 LOAD CSV WITH HEADERS  FROM 'file:///node_2.csv' AS row CREATE (:Author {authorId:row.author_id,name:row.node,articles:row.articles,words:row.words,attribute:row.attribute});
 LOAD CSV WITH HEADERS  FROM 'file:///node_3.csv' AS row CREATE (:Author {authorId:row.author_id,name:row.node,articles:row.articles,words:row.words,attribute:row.attribute});
 LOAD CSV WITH HEADERS  FROM 'file:///node_4.csv' AS row CREATE (:Author {authorId:row.author_id,name:row.node,articles:row.articles,words:row.words,attribute:row.attribute});

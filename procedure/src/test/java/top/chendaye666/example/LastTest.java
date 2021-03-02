@@ -42,4 +42,11 @@ public class LastTest {
             assertThat(result).isEqualTo( 10L );
         }
     }
+
+    @Test
+    public void lib() {
+
+        String property = System.getProperty("java.library.path");
+        System.out.println(property);
+    }
 }
