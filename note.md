@@ -9,7 +9,7 @@
 
 [cypher 数据导入](https://neo4j.com/developer/guide-import-csv/)
 
-[cypher 语法](https://neo4j.com/docs/cypher-manual/4.2/clauses/create/#create-create-a-relationship-between-two-nodes)
+[cypher 语法](https://neo4j.com/docs/cypher-manual/4.1/syntax/#query-syntax)
 
 ## neo4j-admin
 ```html
@@ -93,8 +93,11 @@ CALL db.indexes
 
 [B-Tree索引](https://neo4j.com/docs/cypher-manual/4.1/administration/indexes-for-search-performance/)
 ```bash
+CREATE INDEX index_name IF NOT EXISTS FOR (n:Author) ON (n.authorId)
+CREATE INDEX index_name IF NOT EXISTS FOR (n:Author) ON (n.name)
 
-CREATE INDEX index_name IF NOT EXISTS FOR (n:Person) ON (n.surname)
+CREATE INDEX index_name IF NOT EXISTS FOR (n:Paper) ON (n.paperId)
+CREATE INDEX index_name IF NOT EXISTS FOR (n:Paper) ON (n.title)
 ```
 
 ## shell数据预处理
