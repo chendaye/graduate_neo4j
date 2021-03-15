@@ -134,3 +134,33 @@ vim
 
 
 
+match res=(u:Author {name:'Mark F. Hornick'})-[:AuthorPaper]->(p:Paper) 
+where id(p) = 3768185 or id(p)=3697993 or id(p)=4425960 or id(p)=3009778 
+or id(p)=2881361 or id(p)=2881368 or id(p)=4031609 or id(p)=3009329 or id(p)=4569647 
+or id(p)=5484490 or id(p)=3023305 or id(p)=4031828 return res
+
+
+
+match (p:Paper) where id(p) = 3768185  return p
+union
+match (p:Paper) where id(p)=3697993  return p
+union
+match (p:Paper) where id(p)=4425960  return p
+union
+match (p:Paper) where (p)=3009778  return p
+union
+match (p:Paper) where id(p)=2881361 return p
+union
+match (p:Paper) where id(p)=2881368 return p
+union
+match (p:Paper) where id(p)=4031609  return p
+union
+match (p:Paper) where id(p)=3009329  return p
+union
+match (p:Paper) where id(p)=4569647  return p
+union
+match (p:Paper) where id(p)=5484490  return p
+union
+match (p:Paper) where id(p)=3023305  return p
+union
+match (p:Paper) where id(p)=4031828 return p
