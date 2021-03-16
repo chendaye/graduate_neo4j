@@ -34,10 +34,10 @@ sed -i '1i physicianId' ./providers.csv
 sed -i '1i startId,endId,transactions,patients,max_day' ./shared_members.csv
 
 # 建立Author节点
-LOAD CSV WITH HEADERS  FROM 'file:///node_1.csv' AS row CREATE (:Author {authorId:row.author_id,name:row.node,articles:row.articles,words:row.words,attribute:row.attribute});
+LOAD CSV WITH HEADERS  FROM 'file:///node_0.csv' AS row CREATE (:Author {authorId:row.author_id,name:row.node,articles:row.articles,words:row.words,attribute:row.attribute});
 
 # 建立Paper节点
-LOAD CSV WITH HEADERS  FROM 'file:///node_0.csv' AS row CREATE (:Paper {paperId:row.paper_id,title:row.title,journal:row.journal,year:row.year,ee:row.ee,mdate:row.mdate,key:row.key,publtype:row.publtype,reviewid:row.reviewid,rating:row.rating});
+LOAD CSV WITH HEADERS  FROM 'file:///node_0.csv' AS row CREATE (:Paper {paperId:row.paper_id,title:row.title,journal:row.journal,year:row.year,mdate:row.mdate,key:row.key,publtype:row.publtype,reviewid:row.reviewid,rating:row.rating});
 
 
 
@@ -45,12 +45,14 @@ LOAD CSV WITH HEADERS  FROM 'file:///node_0.csv' AS row CREATE (:Paper {paperId:
 CREATE INDEX index_authorId FOR (n:Author) ON (n.authorId);
 CREATE INDEX index_paperId FOR (n:Paper) ON (n.paperId);
 
+CREATE INDEX index_name FOR (n:Author) ON (n.name);
+CREATE INDEX index_title FOR (n:Paper) ON (n.title);
+
 
 # 建立边 Article
 LOAD CSV WITH HEADERS FROM 'file:///relationship_0.csv' AS row MATCH (e:Author {authorId: row.start}),(c:Author {authorId: row.end}) MERGE  (e)-[:Article { weight:toInteger(row.weight)}]-(c);
-
 # 建立边 AuthorPaper
-LOAD CSV WITH HEADERS FROM 'file:///relationship_10.csv' AS row MATCH (e:Author {authorId: row.author_id}),(c:Paper {paperId: row.paper_id}) MERGE  (e)-[:AuthorPaper]-(c);
+LOAD CSV WITH HEADERS FROM 'file:///relationship_0.csv' AS row MATCH (e:Author {authorId: row.author_id}),(c:Paper {paperId: row.paper_id}) MERGE  (e)-[:AuthorPaper]-(c);
 
 # 去除自环
 match (n:Author)-[r:Article]-(m:Author) where n.authorId=m.authorId delete r;
@@ -79,58 +81,4 @@ RETURN node.id,node.authorId,node.name, score
 CALL db.index.fulltext.queryNodes("AuthorName",'"Jean-Marc Cadiou"') YIELD node, score
 RETURN node.id,node.authorId,node.name, score
 
-CALL db.index.fulltext.queryNodes("AuthorName",'"Jean-Marc Cadiou"') YIELD node, score
-RETURN node
-
-# 删除全文索引
-CALL db.index.fulltext.drop("AuthorName")
-
-# 查看索引
-CALL db.indexes
 ```
-
-## B-Tree索引
-
-[B-Tree索引](https://neo4j.com/docs/cypher-manual/4.1/administration/indexes-for-search-performance/)
-```bash
-CREATE INDEX index_name IF NOT EXISTS FOR (n:Author) ON (n.authorId)
-CREATE INDEX index_name IF NOT EXISTS FOR (n:Author) ON (n.name)
-
-CREATE INDEX index_name IF NOT EXISTS FOR (n:Paper) ON (n.paperId)
-CREATE INDEX index_name IF NOT EXISTS FOR (n:Paper) ON (n.title)
-```
-
-## shell数据预处理
-
-
-```bash
-# 去除重复的节点
-awk -F ',' '{print $1}' physician-shared-patient-patterns-2015-days30.txt > nodes.txt
-
-awk -F ',' '{print $2}' physician-shared-patient-patterns-2015-days30.txt >> nodes.txt
- 
-perl -ne 'print unless $seen{$_}++' nodes.txt > providers.csv
-
-# 添加shcame: npi:ID(Provider)
-sed -i -e '1i\
-            npi:ID(Provider)
-            ' providers.csv
-
-# 去掉多余空格
-sed -e "s/ //g" physician-shared-patient-patterns-2015-days30.txt > shared_members.csv
-
-
-# 添加第一行
-sed -i '1i Id' ./providers.csv
-
-# 删除第二行
-sed -i '2d' providers.csv
-
-# or
-vim
-:2d
-
-```
-
-
-
