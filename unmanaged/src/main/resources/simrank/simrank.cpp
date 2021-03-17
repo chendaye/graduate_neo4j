@@ -74,7 +74,8 @@ void help() {
 
 //todo:默认配置
 char graph_name[125] = "AL"; // -g:the name of input graph.
-char config_file[125] = "/tmp/simrank/config/AL-naive"; // -c: specify the file of configuration. [config]
+//char config_file[125] = "/tmp/simrank/config/AL-naive"; // -c: specify the file of configuration. [config]
+char config_file[125] = CONFIG_FILE.data(); // -c: specify the file of configuration. [config]
 char method[56] = "partialsr"; // -m:specify the method of computing SimRank.
 bool isFm = true; // -fm:specify whether first-meeting guarantee or not. [true]
 int usDisk = 0; // -ud:specify using disk to store the sampled graph [0=original.
@@ -190,7 +191,7 @@ int main(int argc, char **argv) {
     //todo:从文件中读取要查询的数据
     if (queryInFile) { // queryInFile=false
         char querypath[125];
-        sprintf(querypath, "/tmp/simrank/%s/%s.query", graph_name, graph_name);
+        sprintf(querypath, "%s/%s/%s.query", BASE_PATH.data(), graph_name, graph_name);
         FILE *qfp = fopen(querypath, "rb");
         printf("querypath=%s\n", querypath);
         if (qfp == NULL) {
@@ -242,7 +243,7 @@ bool getOutPath() {
                 printf("Invalid type %d of topsim. [valid ones: 0, 1, 2.]\n", tsm_type);
         }
         // todo: 输出路径
-        sprintf(outputpath, "/tmp/simrank/%s/output/%s", graph_name, method_name);
+        sprintf(outputpath, "%s/%s/output/%s", BASE_PATH.data(), graph_name, method_name);
     } else if (strcmp(method, NI_SIM) == 0) {
         switch (nisim_type) {
             case 0:
@@ -254,7 +255,7 @@ bool getOutPath() {
             default:
                 printf("Invalid type %d of NISim. [valid ones: 0, 1.]\n", nisim_type);
         }
-        sprintf(outputpath, "/tmp/simrank/%s/output/%s", graph_name, method_name);
+        sprintf(outputpath, "%s/%s/output/%s", BASE_PATH.data(), graph_name, method_name);
     } else if (strcmp(method, SIM_MAT) == 0) {
         switch (simmat_type) {
             case 0:
@@ -269,7 +270,7 @@ bool getOutPath() {
             default:
                 printf("Invalid type %d of SimMat. [valid ones: 0, 1, 2.]\n", simmat_type);
         }
-        sprintf(outputpath, "/tmp/simrank/%s/output/%s", graph_name, method_name);
+        sprintf(outputpath, "%s/%s/output/%s", BASE_PATH.data(), graph_name, method_name);
     } else if (strcmp(method, TSF_NAME) == 0) {
         switch (usDisk) {
             case 0:
@@ -284,7 +285,7 @@ bool getOutPath() {
             default:
                 printf("Invalid type %d of TSF. [valid ones: 0, 1, 2.]\n", usDisk);
         }
-        sprintf(outputpath, "/tmp/simrank/%s/output/%s", graph_name, method_name);
+        sprintf(outputpath, "%s/%s/output/%s", BASE_PATH.data(), graph_name, method_name);
     } else if (strcmp(method, PAR_SR) == 0) {
         switch (parsr_type) {
             case 0:
@@ -296,9 +297,9 @@ bool getOutPath() {
             default:
                 printf("Invalid type %d of ParSR. [valid ones: 0, 1.]\n", parsr_type);
         }
-        sprintf(outputpath, "/tmp/simrank/%s/output/%s", graph_name, method_name);
+        sprintf(outputpath, "%s/%s/output/%s", BASE_PATH.data(), graph_name, method_name);
     } else
-        sprintf(outputpath, "/tmp/simrank/%s/output/%s", graph_name, method);
+        sprintf(outputpath, "%s/%s/output/%s",BASE_PATH.data(),  graph_name, method);
     return true;
 }
 
@@ -323,7 +324,7 @@ SimRankMethod *createSimRankMethod() {
                           graph_name, hasIndex, isHalf);
     } else if (strcmp(method, TSF_NAME) == 0) {
         char index_path[125];
-        sprintf(index_path, "/tmp/simrank/%s/index/%s", graph_name, TSF_NAME);
+        sprintf(index_path, "%s/%s/index/%s", BASE_PATH.data(), graph_name, TSF_NAME);
         srm = new TSF(numIter, sampleNum, decayFactor, sampleQueryNum, graph_src, graph_dst,
                       MAX_VERTEX_NUM, usDisk, index_path, hasIndex, isFm);
     } else if (strcmp(method, NI_SIM) == 0) {
@@ -406,9 +407,9 @@ void readGraph() {
     char processedGraphPath[125];
     char orig_processedGraphPath[125];
 
-    sprintf(originalGraphPath, "/tmp/simrank/%s/%s.data", graph_name, graph_name);
-    sprintf(processedGraphPath, "/tmp/simrank/%s/%s.data.fmt", graph_name, graph_name);
-    sprintf(orig_processedGraphPath, "/tmp/simrank/%s/%s.data.fmt.orig", graph_name, graph_name);
+    sprintf(originalGraphPath, "%s/%s/%s.data", BASE_PATH.data(), graph_name, graph_name);
+    sprintf(processedGraphPath, "%s/%s/%s.data.fmt", BASE_PATH.data(), graph_name, graph_name);
+    sprintf(orig_processedGraphPath, "%s/%s/%s.data.fmt.orig", BASE_PATH.data(), graph_name, graph_name);
 
     FILE *fp = fopen(processedGraphPath, "rb"); // fp=null
     if (fp != NULL) {
@@ -642,17 +643,17 @@ void readGraph() {
 
 // 建文件夹
 void constructSinglePath(const char *graph_name, const char *method_level1) {
-    /* build a index dir for a method under dir: .//tmp/simrank/graph_name/index/methodname/ */
+    /* build a index dir for a method under dir: ./%s/graph_name/index/methodname/ */
     char temp[100];
-    sprintf(temp, "/tmp/simrank/%s/index/%s/", graph_name, method_level1);
+    sprintf(temp, "%s/%s/index/%s/", BASE_PATH.data(), graph_name, method_level1);
     printf("madir index%s\n", temp);
     light::mkpath(temp);
 }
 
 void constructSinglePath(const char *graph_name, const char *method_level1, const char *method_level2) {
-    /* build a index dir for a method: /tmp/simrank/graph_name/index/method_level1/method_level2 */
+    /* build a index dir for a method: %s/graph_name/index/method_level1/method_level2 */
     char temp[100];
-    sprintf(temp, "/tmp/simrank/%s/index/%s/%s/", graph_name, method_level1, method_level2);
+    sprintf(temp, "%s/%s/index/%s/%s/", BASE_PATH.data(), graph_name, method_level1, method_level2);
     printf("madir index%s\n", temp);
     light::mkpath(temp);
 }
@@ -660,11 +661,11 @@ void constructSinglePath(const char *graph_name, const char *method_level1, cons
 //todo: 创建文件夹
 void constructPath(char *graph_name) {
     char outputpath[100];
-    sprintf(outputpath, "/tmp/simrank/%s/output/", graph_name);
+    sprintf(outputpath, "%s/%s/output/", BASE_PATH.data(), graph_name);
     light::mkpath(outputpath);
 
     char indexpath[100];
-    sprintf(indexpath, "/tmp/simrank/%s/index/", graph_name);
+    sprintf(indexpath, "%s/%s/index/", BASE_PATH.data(), graph_name);
     light::mkpath(indexpath);
 
     constructSinglePath(graph_name, NAIVE);

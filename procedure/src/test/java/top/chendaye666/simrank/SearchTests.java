@@ -5,8 +5,13 @@ import org.junit.jupiter.api.*;
 import org.neo4j.driver.*;
 import org.neo4j.harness.Neo4j;
 import org.neo4j.harness.Neo4jBuilders;
+import top.chendaye666.simrank.util.GetProperties;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Iterator;
+import java.util.Properties;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class SearchTests {
@@ -98,6 +103,15 @@ public class SearchTests {
                 }
             }
         }
+    }
+
+    @Test
+    public void properties() throws IOException {
+//        Properties props = new Properties();
+//        BufferedReader bufferedReader = new BufferedReader(new FileReader("src/main/java/top/chendaye666/simrank/simrank.properties"));
+//        props.load(bufferedReader);
+//        System.out.println(props.getProperty("test"));
+        System.out.println(GetProperties.getInstance().getConfig("simrank_data"));
     }
 }
 

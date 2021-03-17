@@ -21,8 +21,8 @@ public class DataUtils {
     public static int[] communityGenerate(GraphDatabaseService db, String query){
         int[] ans = null;
         try {
-            String simrankPath = "/tmp/simrank/AL/";
-            String dataPath = "/tmp/simrank/AL/AL.data";
+            String simrankPath = GetProperties.getInstance().getConfig("simrank_path");
+            String dataPath = GetProperties.getInstance().getConfig("simrank_data");
             ReadWriteTxtUtils.dictExist(simrankPath);
             ReadWriteTxtUtils.folderClear(simrankPath);
             ReadWriteTxtUtils.fileExist(dataPath);

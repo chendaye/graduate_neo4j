@@ -21,10 +21,10 @@ public:
             SimRankMethod(0, 0, decayfactor),
             origGraphSrc(orig_graph_src), origGraphDst(orig_graph_dst), maxVertexId(mvid), Rank(rank), isInit(isinit) {
         strcpy(graphName, inpath);
-        sprintf(Kupath, "/tmp/simrank/%s/index/nisim/OrigKron/%s.Ku", graphName, graphName);
-        sprintf(Kvpath, "/tmp/simrank/%s/index/nisim/OrigKron/%s.Kv", graphName, graphName);
-        sprintf(V_rpath, "/tmp/simrank/%s/index/nisim/OrigKron/%s.V_r", graphName, graphName);
-        sprintf(Apath, "/tmp/simrank/%s/index/nisim/OrigKron/%s.A", graphName, graphName);
+        sprintf(Kupath, "%s/%s/index/nisim/OrigKron/%s.Ku", BASE_PATH.data(), graphName, graphName);
+        sprintf(Kvpath, "%s/%s/index/nisim/OrigKron/%s.Kv", BASE_PATH.data(), graphName, graphName);
+        sprintf(V_rpath, "%s/%s/index/nisim/OrigKron/%s.V_r", BASE_PATH.data(), graphName, graphName);
+        sprintf(Apath, "%s/%s/index/nisim/OrigKron/%s.A", BASE_PATH.data(), graphName, graphName);
     }
 
     ~origNISim() {};

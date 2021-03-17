@@ -11,12 +11,12 @@ class SimMatEVD: public SimMat{
 	public:
 	SimMatEVD(double decayfactor,int* orig_graph_src,int* orig_graph_dst, int rank, int mvid, bool isInit,char* inpath):
 		SimMat(decayfactor,orig_graph_src,orig_graph_dst,rank, mvid, isInit,inpath){
-		sprintf(Lpath,"/tmp/simrank/%s/index/simmat/evd/%s.L",graphName,graphName);
-        	sprintf(Rpath,"/tmp/simrank/%s/index/simmat/evd/%s.R",graphName,graphName);
-        	sprintf(l_path,"/tmp/simrank/%s/index/simmat/evd/%s.l_",graphName,graphName);
-		sprintf(r_path,"/tmp/simrank/%s/index/simmat/evd/%s.r_",graphName,graphName);
-        	sprintf(l_devpath,"/tmp/simrank/%s/index/simmat/evd/%s.l_dev",graphName,graphName);
-     	   	sprintf(r_devpath,"/tmp/simrank/%s/index/simmat/evd/%s.r_dev",graphName,graphName);
+		sprintf(Lpath,"%s/%s/index/simmat/evd/%s.L",BASE_PATH.data(), graphName,graphName);
+        	sprintf(Rpath,"%s/%s/index/simmat/evd/%s.R",BASE_PATH.data(), graphName,graphName);
+        	sprintf(l_path,"%s/%s/index/simmat/evd/%s.l_",BASE_PATH.data(), graphName,graphName);
+		sprintf(r_path,"%s/%s/index/simmat/evd/%s.r_",BASE_PATH.data(), graphName,graphName);
+        	sprintf(l_devpath,"%s/%s/index/simmat/evd/%s.l_dev",BASE_PATH.data(), graphName,graphName);
+     	   	sprintf(r_devpath,"%s/%s/index/simmat/evd/%s.r_dev",BASE_PATH.data(), graphName,graphName);
 		}
 		
 		~SimMatEVD(){ }

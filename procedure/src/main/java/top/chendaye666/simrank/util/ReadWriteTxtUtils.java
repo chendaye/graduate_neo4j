@@ -289,7 +289,7 @@ public class ReadWriteTxtUtils {
         config.put("-en", 111L+"");
         config.put("-vn", 222L+"");
         config.put("-m", "simrank");
-        String path = "/tmp/simrank/config/AL-naive";
+        String path = "/config/AL-naive";
         replaceContent(path, config);
     }
 

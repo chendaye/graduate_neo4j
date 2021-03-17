@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 import top.chendaye666.simrank.util.DataUtils;
 import top.chendaye666.simrank.streams.Center;
+import top.chendaye666.simrank.util.GetProperties;
 import top.chendaye666.simrank.util.ReadWriteTxtUtils;
 
 /**
@@ -37,7 +38,7 @@ public class Search {
     public Stream<Center> search(@Name("node") Node node, @Name("config") String config) {
         ArrayList<Center> res = new ArrayList<>();
         // 计算中心度
-        String configPath = "/tmp/simrank/config/"+config;
+        String configPath = GetProperties.getInstance().getConfig("simrank_config")+config;
         if (!ReadWriteTxtUtils.fileExist(configPath)) return res.stream();
         String ans = generateGraph(node, configPath);
         System.out.println("JniSimrank="+ans);
