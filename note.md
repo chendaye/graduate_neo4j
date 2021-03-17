@@ -35,9 +35,30 @@ sed -i '1i startId,endId,transactions,patients,max_day' ./shared_members.csv
 
 # 建立Author节点
 LOAD CSV WITH HEADERS  FROM 'file:///node_0.csv' AS row CREATE (:Author {authorId:row.author_id,name:row.node,articles:row.articles,words:row.words,attribute:row.attribute});
+LOAD CSV WITH HEADERS  FROM 'file:///node_1.csv' AS row CREATE (:Author {authorId:row.author_id,name:row.node,articles:row.articles,words:row.words,attribute:row.attribute});
+LOAD CSV WITH HEADERS  FROM 'file:///node_2.csv' AS row CREATE (:Author {authorId:row.author_id,name:row.node,articles:row.articles,words:row.words,attribute:row.attribute});
+LOAD CSV WITH HEADERS  FROM 'file:///node_3.csv' AS row CREATE (:Author {authorId:row.author_id,name:row.node,articles:row.articles,words:row.words,attribute:row.attribute});
+LOAD CSV WITH HEADERS  FROM 'file:///node_4.csv' AS row CREATE (:Author {authorId:row.author_id,name:row.node,articles:row.articles,words:row.words,attribute:row.attribute});
+LOAD CSV WITH HEADERS  FROM 'file:///node_5.csv' AS row CREATE (:Author {authorId:row.author_id,name:row.node,articles:row.articles,words:row.words,attribute:row.attribute});
+LOAD CSV WITH HEADERS  FROM 'file:///node_6.csv' AS row CREATE (:Author {authorId:row.author_id,name:row.node,articles:row.articles,words:row.words,attribute:row.attribute});
+LOAD CSV WITH HEADERS  FROM 'file:///node_7.csv' AS row CREATE (:Author {authorId:row.author_id,name:row.node,articles:row.articles,words:row.words,attribute:row.attribute});
 
 # 建立Paper节点
 LOAD CSV WITH HEADERS  FROM 'file:///node_0.csv' AS row CREATE (:Paper {paperId:row.paper_id,title:row.title,journal:row.journal,year:row.year,mdate:row.mdate,key:row.key,publtype:row.publtype,reviewid:row.reviewid,rating:row.rating});
+LOAD CSV WITH HEADERS  FROM 'file:///node_1.csv' AS row CREATE (:Paper {paperId:row.paper_id,title:row.title,journal:row.journal,year:row.year,mdate:row.mdate,key:row.key,publtype:row.publtype,reviewid:row.reviewid,rating:row.rating});
+LOAD CSV WITH HEADERS  FROM 'file:///node_2.csv' AS row CREATE (:Paper {paperId:row.paper_id,title:row.title,journal:row.journal,year:row.year,mdate:row.mdate,key:row.key,publtype:row.publtype,reviewid:row.reviewid,rating:row.rating});
+LOAD CSV WITH HEADERS  FROM 'file:///node_3.csv' AS row CREATE (:Paper {paperId:row.paper_id,title:row.title,journal:row.journal,year:row.year,mdate:row.mdate,key:row.key,publtype:row.publtype,reviewid:row.reviewid,rating:row.rating});
+LOAD CSV WITH HEADERS  FROM 'file:///node_4.csv' AS row CREATE (:Paper {paperId:row.paper_id,title:row.title,journal:row.journal,year:row.year,mdate:row.mdate,key:row.key,publtype:row.publtype,reviewid:row.reviewid,rating:row.rating});
+LOAD CSV WITH HEADERS  FROM 'file:///node_5.csv' AS row CREATE (:Paper {paperId:row.paper_id,title:row.title,journal:row.journal,year:row.year,mdate:row.mdate,key:row.key,publtype:row.publtype,reviewid:row.reviewid,rating:row.rating});
+LOAD CSV WITH HEADERS  FROM 'file:///node_6.csv' AS row CREATE (:Paper {paperId:row.paper_id,title:row.title,journal:row.journal,year:row.year,mdate:row.mdate,key:row.key,publtype:row.publtype,reviewid:row.reviewid,rating:row.rating});
+LOAD CSV WITH HEADERS  FROM 'file:///node_7.csv' AS row CREATE (:Paper {paperId:row.paper_id,title:row.title,journal:row.journal,year:row.year,mdate:row.mdate,key:row.key,publtype:row.publtype,reviewid:row.reviewid,rating:row.rating});
+LOAD CSV WITH HEADERS  FROM 'file:///node_8.csv' AS row CREATE (:Paper {paperId:row.paper_id,title:row.title,journal:row.journal,year:row.year,mdate:row.mdate,key:row.key,publtype:row.publtype,reviewid:row.reviewid,rating:row.rating});
+LOAD CSV WITH HEADERS  FROM 'file:///node_9.csv' AS row CREATE (:Paper {paperId:row.paper_id,title:row.title,journal:row.journal,year:row.year,mdate:row.mdate,key:row.key,publtype:row.publtype,reviewid:row.reviewid,rating:row.rating});
+LOAD CSV WITH HEADERS  FROM 'file:///node_10.csv' AS row CREATE (:Paper {paperId:row.paper_id,title:row.title,journal:row.journal,year:row.year,mdate:row.mdate,key:row.key,publtype:row.publtype,reviewid:row.reviewid,rating:row.rating});
+LOAD CSV WITH HEADERS  FROM 'file:///node_11.csv' AS row CREATE (:Paper {paperId:row.paper_id,title:row.title,journal:row.journal,year:row.year,mdate:row.mdate,key:row.key,publtype:row.publtype,reviewid:row.reviewid,rating:row.rating});
+LOAD CSV WITH HEADERS  FROM 'file:///node_12.csv' AS row CREATE (:Paper {paperId:row.paper_id,title:row.title,journal:row.journal,year:row.year,mdate:row.mdate,key:row.key,publtype:row.publtype,reviewid:row.reviewid,rating:row.rating});
+LOAD CSV WITH HEADERS  FROM 'file:///node_13.csv' AS row CREATE (:Paper {paperId:row.paper_id,title:row.title,journal:row.journal,year:row.year,mdate:row.mdate,key:row.key,publtype:row.publtype,reviewid:row.reviewid,rating:row.rating});
+LOAD CSV WITH HEADERS  FROM 'file:///node_14.csv' AS row CREATE (:Paper {paperId:row.paper_id,title:row.title,journal:row.journal,year:row.year,mdate:row.mdate,key:row.key,publtype:row.publtype,reviewid:row.reviewid,rating:row.rating});
 
 
 
@@ -51,8 +72,37 @@ CREATE INDEX index_title FOR (n:Paper) ON (n.title);
 
 # 建立边 Article
 LOAD CSV WITH HEADERS FROM 'file:///relationship_0.csv' AS row MATCH (e:Author {authorId: row.start}),(c:Author {authorId: row.end}) MERGE  (e)-[:Article { weight:toInteger(row.weight)}]-(c);
+LOAD CSV WITH HEADERS FROM 'file:///relationship_1.csv' AS row MATCH (e:Author {authorId: row.start}),(c:Author {authorId: row.end}) MERGE  (e)-[:Article { weight:toInteger(row.weight)}]-(c);
+LOAD CSV WITH HEADERS FROM 'file:///relationship_2.csv' AS row MATCH (e:Author {authorId: row.start}),(c:Author {authorId: row.end}) MERGE  (e)-[:Article { weight:toInteger(row.weight)}]-(c);
+LOAD CSV WITH HEADERS FROM 'file:///relationship_3.csv' AS row MATCH (e:Author {authorId: row.start}),(c:Author {authorId: row.end}) MERGE  (e)-[:Article { weight:toInteger(row.weight)}]-(c);
+LOAD CSV WITH HEADERS FROM 'file:///relationship_4.csv' AS row MATCH (e:Author {authorId: row.start}),(c:Author {authorId: row.end}) MERGE  (e)-[:Article { weight:toInteger(row.weight)}]-(c);
+LOAD CSV WITH HEADERS FROM 'file:///relationship_5.csv' AS row MATCH (e:Author {authorId: row.start}),(c:Author {authorId: row.end}) MERGE  (e)-[:Article { weight:toInteger(row.weight)}]-(c);
+LOAD CSV WITH HEADERS FROM 'file:///relationship_6.csv' AS row MATCH (e:Author {authorId: row.start}),(c:Author {authorId: row.end}) MERGE  (e)-[:Article { weight:toInteger(row.weight)}]-(c);
+LOAD CSV WITH HEADERS FROM 'file:///relationship_7.csv' AS row MATCH (e:Author {authorId: row.start}),(c:Author {authorId: row.end}) MERGE  (e)-[:Article { weight:toInteger(row.weight)}]-(c);
+LOAD CSV WITH HEADERS FROM 'file:///relationship_8.csv' AS row MATCH (e:Author {authorId: row.start}),(c:Author {authorId: row.end}) MERGE  (e)-[:Article { weight:toInteger(row.weight)}]-(c);
+LOAD CSV WITH HEADERS FROM 'file:///relationship_9.csv' AS row MATCH (e:Author {authorId: row.start}),(c:Author {authorId: row.end}) MERGE  (e)-[:Article { weight:toInteger(row.weight)}]-(c);
+
 # 建立边 AuthorPaper
 LOAD CSV WITH HEADERS FROM 'file:///relationship_0.csv' AS row MATCH (e:Author {authorId: row.author_id}),(c:Paper {paperId: row.paper_id}) MERGE  (e)-[:AuthorPaper]-(c);
+LOAD CSV WITH HEADERS FROM 'file:///relationship_1.csv' AS row MATCH (e:Author {authorId: row.author_id}),(c:Paper {paperId: row.paper_id}) MERGE  (e)-[:AuthorPaper]-(c);
+LOAD CSV WITH HEADERS FROM 'file:///relationship_2.csv' AS row MATCH (e:Author {authorId: row.author_id}),(c:Paper {paperId: row.paper_id}) MERGE  (e)-[:AuthorPaper]-(c);
+LOAD CSV WITH HEADERS FROM 'file:///relationship_3.csv' AS row MATCH (e:Author {authorId: row.author_id}),(c:Paper {paperId: row.paper_id}) MERGE  (e)-[:AuthorPaper]-(c);
+LOAD CSV WITH HEADERS FROM 'file:///relationship_4.csv' AS row MATCH (e:Author {authorId: row.author_id}),(c:Paper {paperId: row.paper_id}) MERGE  (e)-[:AuthorPaper]-(c);
+LOAD CSV WITH HEADERS FROM 'file:///relationship_5.csv' AS row MATCH (e:Author {authorId: row.author_id}),(c:Paper {paperId: row.paper_id}) MERGE  (e)-[:AuthorPaper]-(c);
+LOAD CSV WITH HEADERS FROM 'file:///relationship_6.csv' AS row MATCH (e:Author {authorId: row.author_id}),(c:Paper {paperId: row.paper_id}) MERGE  (e)-[:AuthorPaper]-(c);
+LOAD CSV WITH HEADERS FROM 'file:///relationship_7.csv' AS row MATCH (e:Author {authorId: row.author_id}),(c:Paper {paperId: row.paper_id}) MERGE  (e)-[:AuthorPaper]-(c);
+LOAD CSV WITH HEADERS FROM 'file:///relationship_8.csv' AS row MATCH (e:Author {authorId: row.author_id}),(c:Paper {paperId: row.paper_id}) MERGE  (e)-[:AuthorPaper]-(c);
+LOAD CSV WITH HEADERS FROM 'file:///relationship_9.csv' AS row MATCH (e:Author {authorId: row.author_id}),(c:Paper {paperId: row.paper_id}) MERGE  (e)-[:AuthorPaper]-(c);
+LOAD CSV WITH HEADERS FROM 'file:///relationship_10.csv' AS row MATCH (e:Author {authorId: row.author_id}),(c:Paper {paperId: row.paper_id}) MERGE  (e)-[:AuthorPaper]-(c);
+LOAD CSV WITH HEADERS FROM 'file:///relationship_11.csv' AS row MATCH (e:Author {authorId: row.author_id}),(c:Paper {paperId: row.paper_id}) MERGE  (e)-[:AuthorPaper]-(c);
+LOAD CSV WITH HEADERS FROM 'file:///relationship_12.csv' AS row MATCH (e:Author {authorId: row.author_id}),(c:Paper {paperId: row.paper_id}) MERGE  (e)-[:AuthorPaper]-(c);
+LOAD CSV WITH HEADERS FROM 'file:///relationship_13.csv' AS row MATCH (e:Author {authorId: row.author_id}),(c:Paper {paperId: row.paper_id}) MERGE  (e)-[:AuthorPaper]-(c);
+LOAD CSV WITH HEADERS FROM 'file:///relationship_14.csv' AS row MATCH (e:Author {authorId: row.author_id}),(c:Paper {paperId: row.paper_id}) MERGE  (e)-[:AuthorPaper]-(c);
+LOAD CSV WITH HEADERS FROM 'file:///relationship_15.csv' AS row MATCH (e:Author {authorId: row.author_id}),(c:Paper {paperId: row.paper_id}) MERGE  (e)-[:AuthorPaper]-(c);
+LOAD CSV WITH HEADERS FROM 'file:///relationship_16.csv' AS row MATCH (e:Author {authorId: row.author_id}),(c:Paper {paperId: row.paper_id}) MERGE  (e)-[:AuthorPaper]-(c);
+LOAD CSV WITH HEADERS FROM 'file:///relationship_17.csv' AS row MATCH (e:Author {authorId: row.author_id}),(c:Paper {paperId: row.paper_id}) MERGE  (e)-[:AuthorPaper]-(c);
+LOAD CSV WITH HEADERS FROM 'file:///relationship_18.csv' AS row MATCH (e:Author {authorId: row.author_id}),(c:Paper {paperId: row.paper_id}) MERGE  (e)-[:AuthorPaper]-(c);
+LOAD CSV WITH HEADERS FROM 'file:///relationship_19.csv' AS row MATCH (e:Author {authorId: row.author_id}),(c:Paper {paperId: row.paper_id}) MERGE  (e)-[:AuthorPaper]-(c);
 
 # 去除自环
 match (n:Author)-[r:Article]-(m:Author) where n.authorId=m.authorId delete r;
@@ -70,8 +120,8 @@ match (n:Author)-[r:Article]-(m:Author) where n.authorId=m.authorId delete r;
 
 ```bash
 # 在 Author节点的 name上建立全文索引
-CALL db.index.fulltext.createNodeIndex("AuthorName", ["Author"], ["name"])
-CALL db.index.fulltext.createNodeIndex("PaperTitle", ["Paper"], ["title"])
+CALL db.index.fulltext.createNodeIndex("AuthorName", ["Author"], ["name"]);
+CALL db.index.fulltext.createNodeIndex("PaperTitle", ["Paper"], ["title"]);
 
 # 利用全文索引（模糊）搜索
 CALL db.index.fulltext.queryNodes("AuthorName", "Jean-Marc Cadiou") YIELD node, score
