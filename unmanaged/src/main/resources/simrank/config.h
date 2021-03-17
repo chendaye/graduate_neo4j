@@ -2,6 +2,7 @@
 #define _CONFIG_H_
 #include "mytime.h"
 #include "random.h"
+#include "configpath.h"
 #include <cstring>
 #include <cstdlib>
 #include <cstdio>
@@ -13,9 +14,6 @@
 #include <cmath>
 #include <utility>
 using namespace std;
-/* simrank data base path*/
-const string BASE_PATH = "/tmp/simrank";
-const string CONFIG_FILE = "/tmp/simrank/config/AL-naive"
 
 
 #endif

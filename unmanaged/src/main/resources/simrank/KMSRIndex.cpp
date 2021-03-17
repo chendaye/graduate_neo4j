@@ -33,7 +33,7 @@ void KMSRIndex::initialize() {
         preprocess(); /* compute bipartite graph and gamma */
         timer.stop();
         char sgpath[125];
-        sprintf(sgpath, "%s/%s/index/kmsr/kmsr.index", BASE_PATH.data(), graphName);
+        sprintf(sgpath, "%s/%s/index/kmsr/kmsr.index", BASE_PATH, graphName);
         FILE *fp = fopen(sgpath, "wb");
         /* save bipartite graph */
         fwrite(&maxVertexId, sizeof(int), 1, fp);
@@ -50,7 +50,7 @@ void KMSRIndex::initialize() {
     } else if (sampleBipartite == NULL) {
         /* read from file. */
         char sgpath[125];
-        sprintf(sgpath, "%s/%s/index/kmsr/kmsr.index", BASE_PATH.data(), graphName);
+        sprintf(sgpath, "%s/%s/index/kmsr/kmsr.index", BASE_PATH, graphName);
         FILE *fp = fopen(sgpath, "rb");
         fread(&maxVertexId, sizeof(int), 1, fp);
         fread(&T, sizeof(int), 1, fp);

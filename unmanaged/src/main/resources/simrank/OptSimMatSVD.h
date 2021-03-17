@@ -9,19 +9,20 @@
 
 #include "SimMat.h"
 
+
 class OptSimMatSVD : public SimMat {
 public:
     OptSimMatSVD(double decayfactor, int *orig_graph_src, int *orig_graph_dst, int rank, int mvid, bool isInit,
                  char *inpath) :
             SimMat(decayfactor, orig_graph_src, orig_graph_dst, rank, mvid, isInit, inpath) {
-        sprintf(Lpath, "%s/%s/index/simmat/optsvd/%s.L", BASE_PATH.data(), graphName, graphName);
-        sprintf(Rpath, "%s/%s/index/simmat/optsvd/%s.R", BASE_PATH.data(), graphName, graphName);
-        sprintf(l_path, "%s/%s/index/simmat/optsvd/%s.l_", BASE_PATH.data(), graphName, graphName);
-        sprintf(r_path, "%s/%s/index/simmat/optsvd/%s.r_", BASE_PATH.data(), graphName, graphName);
-        sprintf(l_devpath, "%s/%s/index/simmat/optsvd/%s.l_dev", BASE_PATH.data(), graphName, graphName);
-        sprintf(r_devpath, "%s/%s/index/simmat/optsvd/%s.r_dev", BASE_PATH.data(), graphName, graphName);
-        sprintf(indexpath, "%s/%s/index/simmat/optsvd/%s.index",BASE_PATH.data(),  graphName, graphName);
-        sprintf(revIndexpath, "%s/%s/index/simmat/optsvd/%s.revindex", BASE_PATH.data(), graphName, graphName);
+        sprintf(Lpath, "%s/%s/index/simmat/optsvd/%s.L", BASE_PATH, graphName, graphName);
+        sprintf(Rpath, "%s/%s/index/simmat/optsvd/%s.R", BASE_PATH, graphName, graphName);
+        sprintf(l_path, "%s/%s/index/simmat/optsvd/%s.l_", BASE_PATH, graphName, graphName);
+        sprintf(r_path, "%s/%s/index/simmat/optsvd/%s.r_", BASE_PATH, graphName, graphName);
+        sprintf(l_devpath, "%s/%s/index/simmat/optsvd/%s.l_dev", BASE_PATH, graphName, graphName);
+        sprintf(r_devpath, "%s/%s/index/simmat/optsvd/%s.r_dev", BASE_PATH, graphName, graphName);
+        sprintf(indexpath, "%s/%s/index/simmat/optsvd/%s.index",BASE_PATH,  graphName, graphName);
+        sprintf(revIndexpath, "%s/%s/index/simmat/optsvd/%s.revindex", BASE_PATH, graphName, graphName);
         index = new int[maxVertexId];
         revIndex = new int[maxVertexId];
     }

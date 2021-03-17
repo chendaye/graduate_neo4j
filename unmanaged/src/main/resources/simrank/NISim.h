@@ -12,6 +12,7 @@
 #include <armadillo>
 #include "simrankmethod.h"
 
+
 using namespace arma;
 
 class NISim : public SimRankMethod {
@@ -21,9 +22,9 @@ public:
             SimRankMethod(0, 0, decayfactor),
             origGraphSrc(orig_graph_src), origGraphDst(orig_graph_dst), maxVertexId(mvid), Rank(rank), isInit(isinit) {
         strcpy(graphName, inpath);
-        sprintf(Upath, "%s/%s/index/nisim/OptKron/%s.U", BASE_PATH.data(), graphName, graphName);
-        sprintf(V_rpath, "%s/%s/index/nisim/OptKron/%s.V_r", BASE_PATH.data(), graphName, graphName);
-        sprintf(Apath, "%s/%s/index/nisim/OptKron/%s.A", BASE_PATH.data(), graphName, graphName);
+        sprintf(Upath, "%s/%s/index/nisim/OptKron/%s.U", BASE_PATH, graphName, graphName);
+        sprintf(V_rpath, "%s/%s/index/nisim/OptKron/%s.V_r", BASE_PATH, graphName, graphName);
+        sprintf(Apath, "%s/%s/index/nisim/OptKron/%s.A", BASE_PATH, graphName, graphName);
     }
 
     ~NISim() {};

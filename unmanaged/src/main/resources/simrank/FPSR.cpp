@@ -70,7 +70,7 @@ void FPSR::initialize() {
         Time timer;
         double saveCost = 0.0;
         for (int i = 0; i < sampleNum; ++i) {
-            sprintf(sgpath, "%s/%s/index/fpsr/fingerprint_%d", BASE_PATH.data(), graphName, i);
+            sprintf(sgpath, "%s/%s/index/fpsr/fingerprint_%d", BASE_PATH, graphName, i);
             indexBuilder(i);
             timer.reset();
             timer.start();
@@ -83,7 +83,7 @@ void FPSR::initialize() {
         isLoad = true;
     } else if (isLoad == false) {
         for (int i = 0; i < sampleNum; ++i) {
-            sprintf(sgpath, "%s/%s/index/fpsr/fingerprint_%d", BASE_PATH.data(), graphName, i);
+            sprintf(sgpath, "%s/%s/index/fpsr/fingerprint_%d", BASE_PATH, graphName, i);
             index[i]->read(sgpath);
         }
         isLoad = true;
