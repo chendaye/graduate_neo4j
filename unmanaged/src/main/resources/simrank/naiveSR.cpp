@@ -1,12 +1,16 @@
 #include "naiveSR.h"
 
 void NaiveSR::run(int qv, int k) {
+    printf("fuck-%s.\n", graphName);
     if (isInit == false) {
         isInit = true;
         initialize();
+        printf("naiveSR222-%s.\n", graphName);
     } else {
+        printf("naiveSR333-%s.\n", graphName);
         char filepath[125];
         sprintf(filepath, "/tmp/simrank/%s/index/naive/naiveSR.idx", graphName);
+        printf("filepath-%s.\n", filepath);
         FILE *fp = fopen(filepath, "rb");
         if (fp == NULL) {
             printf("Failed to open the %s file.\n", filepath);
@@ -14,6 +18,7 @@ void NaiveSR::run(int qv, int k) {
         for (int i = 0; i < maxVertexId; ++i) {
             fread(srvalue[maxSteps & 1][i], sizeof(double), maxVertexId, fp);
         }
+        printf("naiveSR444-%s.\n", graphName);
         fclose(fp);
     }
 
@@ -73,7 +78,9 @@ void NaiveSR::initialize() {
     printf("index/= %s\n", filepath);
     FILE *fp = fopen(filepath, "wb");
     for (int i = 0; i < maxVertexId; ++i) {
+        printf("write naiveSR index.\n", graphName);
         fwrite(srvalue[maxSteps & 1][i], sizeof(double), maxVertexId, fp);
     }
+    printf("naiveSR111-%s.\n", graphName);
     fclose(fp);
 }
