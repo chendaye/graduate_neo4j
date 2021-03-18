@@ -24,7 +24,10 @@ public class DataUtils {
             String simrankPath = "/tmp/simrank/AL/";
             String dataPath = "/tmp/simrank/AL/AL.data";
             ReadWriteTxtUtils.dictExist(simrankPath);
-//            ReadWriteTxtUtils.folderClear(simrankPath);
+//            ReadWriteTxtUtils.folderClear("/tmp/simrank/AL/index");
+//            ReadWriteTxtUtils.folderClear("/tmp/simrank/AL/output");
+            ReadWriteTxtUtils.fileDel("/tmp/simrank/AL/AL.data.fmt");
+            ReadWriteTxtUtils.fileDel("/tmp/simrank/AL/AL.data.fmt.orig");
             ReadWriteTxtUtils.fileExist(dataPath);
             final File nodeFile = new File(dataPath);
             FileOutputStream nodeOutputStream = new FileOutputStream(nodeFile);
