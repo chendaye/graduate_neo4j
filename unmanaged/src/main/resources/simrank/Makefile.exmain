@@ -4,6 +4,12 @@
 
 VERSION = -std=c++11 -Wall
 
+ifeq ($(UNAME), Darwin)
+	VERSION +=
+else
+	VERSION += -fPIC
+endif
+
 .PHONY: all
 all: $(SIMRANK) $(Neo4j) $(JNI)
 
@@ -26,7 +32,7 @@ mytime.o: mytime.cpp mytime.h
 	$(CC) -c $(VERSION)  $(CXXFLAGS) $(CFLAGS)   mytime.cpp -o mytime.o  -I$(INC1) -I$(INC2) -I$(INC3) -I$(GL) -I$(ARM)
 
 NISim.o: NISim.cpp NISim.h
-	$(CC) -c  $(VERSION) $(CXXFLAGS) $(CFLAGS)   NISim.cpp -o NISim.o  -I$(INC1) -I$(INC2) -I$(INC3) -I$(GL) -I$(ARM)
+	$(CC) -c   $(VERSION) $(CXXFLAGS) $(CFLAGS)   NISim.cpp -o NISim.o  -I$(INC1) -I$(INC2) -I$(INC3) -I$(GL) -I$(ARM)
 
 naiveSR.o: naiveSR.cpp naiveSR.h
 	$(CC) -c $(VERSION)  $(CXXFLAGS) $(CFLAGS)    naiveSR.cpp -o naiveSR.o  -I$(INC1) -I$(INC2) -I$(INC3) -I$(GL) -I$(ARM)
@@ -94,5 +100,5 @@ dylib:
 ifeq ($(UNAME), Darwin)
 	$(CC) -dynamiclib  -larmadillo  -o libSimrank.dylib JniSimrank.o $(DEP)
 else
-	$(CC) -shared JniSimrank.o $(DEP) -larmadillo   -o libSimramk.so
+	$(CC) -shared  JniSimrank.o $(DEP)  -larmadillo   -o libSimrank.so
 endif
