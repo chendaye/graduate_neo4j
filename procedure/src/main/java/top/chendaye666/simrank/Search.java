@@ -34,12 +34,12 @@ public class Search {
      */
     @Procedure(value = "top.chendaye666.simrank.search")
     @Description("center simrank.")
-    public Stream<Center> search(@Name("node") Node node, @Name("config") String config) {
+    public Stream<Center> search(@Name("node") Node node, @Name("config") String config, @Name('nodeLabel') String nodeLabel, @Name('relationshipLabel') String relationshipLabel) {
         ArrayList<Center> res = new ArrayList<>();
         // 计算中心度
         String configPath = "/tmp/simrank/config/"+config;
         if (!ReadWriteTxtUtils.fileExist(configPath)) return res.stream();
-        String ans = generateGraph(node, configPath);
+        String ans = generateGraph(node, configPath, nodeLabel, relationshipLabel);
         System.out.println("JniSimrank="+ans);
         if (ans == null) return res.stream();
         //todo：new vid, old vid, val
@@ -59,14 +59,14 @@ public class Search {
      * @param config
      * @return
      */
-    public String generateGraph(Node node, String config){
+    public String generateGraph(Node node, String config, String nodeLabel, String relationshipLabel){
         if (node == null) return null;
         int node_id = (int) node.getId(); // 查询的节点id
         // 获取数据
-        String query = "match res=(p:Author)-[r1:Article]-(p1) where id(p)="+node_id+" return p1,p";
+        String query = "match res=(p:"+nodeLabel+")-[r1:"+relationshipLabel+"]-(p1) where id(p)="+node_id+" return p1,p";
         // 修改配置
         System.out.println("node_id="+node_id+";config="+config);
-        int[] ints = DataUtils.communityGenerate(db, query);
+        int[] ints = DataUtils.communityGenerate(db, query, String nodeLabel, String relationshipLabel);
         if (ints == null) return null;
         HashMap<String, String> kv = new HashMap<>();
         kv.put("-vn", ints[0]+"");

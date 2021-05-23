@@ -18,7 +18,7 @@ public class DataUtils {
      * @param query
      * @return
      */
-    public static int[] communityGenerate(GraphDatabaseService db, String query){
+    public static int[] communityGenerate(GraphDatabaseService db, String query, String nodeLabel, String relationshipLabel){
         int[] ans = null;
         try {
             String simrankPath = "/tmp/simrank/AL/";
@@ -35,7 +35,7 @@ public class DataUtils {
             // (没有缓存数据)处理生成数据
             if(nodeOutputStream != null) {
                 // 处理数据
-                ans = depthOne(db, query, nodeOutputStream);
+                ans = depthOne(db, query, nodeOutputStream, nodeLabel, relationshipLabel);
                 if (ans[0]== 0 || ans[1] == 0) return null;
                 nodeOutputStream.flush();
                 nodeOutputStream.close();
@@ -46,7 +46,7 @@ public class DataUtils {
         return ans;
     }
 
-    public static int[] depthOne(GraphDatabaseService db, String query, FileOutputStream relationshipOutputStream) throws IOException {
+    public static int[] depthOne(GraphDatabaseService db, String query, FileOutputStream relationshipOutputStream, String nodeLabel, String relationshipLabel) throws IOException {
         HashSet<Long> relationships = new HashSet<>();
         HashSet<Long> nodes = new HashSet<>();
         try (Transaction tx = db.beginTx() ) {
@@ -61,7 +61,7 @@ public class DataUtils {
                     //todo： 处理node, 耗费时间的点（考虑写入图中）
                     nodes.add(author.getId());
                     // node 直接相连的边
-                    for (Relationship relationship : author.getRelationships(Direction.BOTH, RelationshipTypes.Article)){
+                    for (Relationship relationship : author.getRelationships(Direction.BOTH, relationshipLabel)){
                         if (relationships.contains(relationship.getId())) continue; // todo:同样的边不重复访问
                         // 当前节点的边
                         dealRelationShip(relationship, relationshipOutputStream, relationships);
